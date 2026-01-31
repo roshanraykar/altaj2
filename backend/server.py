@@ -308,6 +308,120 @@ class PaymentVerification(BaseModel):
 # AUTHENTICATION ROUTES
 # ============================================================================
 
+@api_router.post("/auth/send-otp")
+async def send_otp(otp_request: OTPRequest):
+    """Send OTP to phone number"""
+    # Clean and validate phone number
+    phone = otp_request.phone.replace(" ", "").replace("-", "")
+    if not phone.startswith("+91"):
+        if phone.startswith("91"):
+            phone = "+" + phone
+        elif len(phone) == 10:
+            phone = "+91" + phone
+        else:
+            phone = "+91" + phone
+    
+    # Validate Indian phone format
+    import re
+    if not re.match(r"^\+91[6-9]\d{9}$", phone):
+        raise HTTPException(status_code=400, detail="Invalid Indian phone number")
+    
+    # Generate OTP
+    otp = generate_otp()
+    
+    # Store OTP in database with 5 minute expiry
+    expiry_time = datetime.now(timezone.utc) + timedelta(minutes=5)
+    
+    await db.otps.update_one(
+        {"phone": phone},
+        {
+            "$set": {
+                "phone": phone,
+                "otp": otp,
+                "expiry": expiry_time.isoformat(),
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        },
+        upsert=True
+    )
+    
+    # TODO: Send SMS via Twilio/MSG91
+    # For now, log OTP (in production, send via SMS)
+    logger.info(f"OTP for {phone}: {otp}")
+    
+    return {
+        "message": "OTP sent successfully",
+        "phone": phone,
+        "expiry": 300,  # 5 minutes in seconds
+        "otp": otp if os.environ.get('ENV') == 'development' else None  # Only show in dev
+    }
+
+@api_router.post("/auth/verify-otp", response_model=AuthResponse)
+async def verify_otp(otp_verify: OTPVerify):
+    """Verify OTP and login/register user"""
+    # Clean phone number
+    phone = otp_verify.phone.replace(" ", "").replace("-", "")
+    if not phone.startswith("+91"):
+        if phone.startswith("91"):
+            phone = "+" + phone
+        else:
+            phone = "+91" + phone
+    
+    # Get OTP from database
+    otp_doc = await db.otps.find_one({"phone": phone})
+    
+    if not otp_doc:
+        raise HTTPException(status_code=400, detail="No OTP found for this phone number")
+    
+    # Check expiry
+    expiry = datetime.fromisoformat(otp_doc["expiry"])
+    if datetime.now(timezone.utc) > expiry:
+        raise HTTPException(status_code=400, detail="OTP expired. Please request a new one")
+    
+    # Verify OTP
+    if otp_doc["otp"] != otp_verify.otp:
+        raise HTTPException(status_code=400, detail="Invalid OTP")
+    
+    # Delete OTP after successful verification
+    await db.otps.delete_one({"phone": phone})
+    
+    # Check if user exists
+    user = await db.users.find_one({"phone": phone}, {"_id": 0})
+    
+    if user:
+        # Existing user - login
+        if isinstance(user['created_at'], str):
+            user['created_at'] = datetime.fromisoformat(user['created_at'])
+        
+        user_obj = User(**{k: v for k, v in user.items() if k != "hashed_password"})
+        access_token = create_access_token(data={"sub": user_obj.id, "role": user_obj.role})
+        
+        return AuthResponse(access_token=access_token, user=user_obj)
+    else:
+        # New user - register
+        if not otp_verify.name:
+            raise HTTPException(status_code=400, detail="Name is required for new user registration")
+        
+        # Create new customer account
+        user_data = {
+            "email": f"{phone.replace('+', '')}@altaj.temp",  # Temporary email
+            "name": otp_verify.name,
+            "phone": phone,
+            "role": "customer",
+            "is_active": True
+        }
+        
+        user = User(**user_data)
+        doc = user.model_dump()
+        doc["created_at"] = doc["created_at"].isoformat()
+        doc["hashed_password"] = ""  # No password for OTP users
+        
+        await db.users.insert_one(doc)
+        
+        access_token = create_access_token(data={"sub": user.id, "role": user.role})
+        
+        return AuthResponse(access_token=access_token, user=user)
+
 @api_router.post("/auth/register", response_model=AuthResponse)
 async def register(user_data: UserCreate):
     # Check if user already exists
