@@ -270,7 +270,7 @@ const LandingPage = () => {
         {/* Order Type Selection - Enhanced */}
         <Card className="mb-8 border-2 border-orange-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="order-type-card">
           <CardContent className="pt-6">
-            <Tabs value={orderType} onValueChange={setOrderType} className="w-full">
+            <Tabs value={orderType} onValueChange={handleOrderTypeChange} className="w-full">
               <TabsList className="grid w-full grid-cols-3 h-14 bg-gradient-to-r from-orange-100 to-red-100">
                 <TabsTrigger 
                   value="dine_in" 
@@ -290,14 +290,61 @@ const LandingPage = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="delivery" 
-                  className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
+                  className={`data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2 ${!deliveryAvailable ? 'opacity-50' : ''}`}
                   data-testid="order-type-delivery"
+                  disabled={!deliveryAvailable}
                 >
                   {orderTypeIcons.delivery}
                   Delivery
+                  {!deliveryAvailable && <span className="text-xs text-red-500 ml-1">(Unavailable)</span>}
                 </TabsTrigger>
               </TabsList>
             </Tabs>
+            
+            {/* Table Selection for Dine-in */}
+            {orderType === 'dine_in' && (
+              <div className="mt-6" data-testid="table-selection">
+                <h4 className="font-semibold mb-3 flex items-center gap-2">
+                  <Store className="h-5 w-5 text-orange-600" />
+                  Select Your Table
+                </h4>
+                {getAvailableTables().length === 0 ? (
+                  <p className="text-gray-500 text-sm">No tables available at the moment. Please try takeaway or delivery.</p>
+                ) : (
+                  <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+                    {getAvailableTables().map(table => (
+                      <button
+                        key={table.id}
+                        onClick={() => setSelectedTable(table)}
+                        className={`p-3 rounded-lg border-2 text-center transition-all ${
+                          selectedTable?.id === table.id
+                            ? 'bg-orange-500 text-white border-orange-500 shadow-lg'
+                            : 'bg-white border-gray-200 hover:border-orange-300'
+                        }`}
+                        data-testid={`table-${table.id}`}
+                      >
+                        <span className="font-bold text-sm">{table.table_number}</span>
+                        <span className="block text-xs opacity-75">{table.capacity}P</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {selectedTable && (
+                  <p className="mt-3 text-sm text-green-600 font-medium">
+                    ✓ Table {selectedTable.table_number} selected (Capacity: {selectedTable.capacity})
+                  </p>
+                )}
+              </div>
+            )}
+
+            {/* Delivery unavailable notice */}
+            {orderType === 'delivery' && !deliveryAvailable && (
+              <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-red-600 text-sm">
+                  ⚠️ Delivery is currently unavailable. All delivery partners are busy. Please try again later or choose takeaway.
+                </p>
+              </div>
+            )}
           </CardContent>
         </Card>
 
