@@ -375,18 +375,29 @@ const LandingPage = () => {
                       className="group hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-orange-300 bg-white overflow-hidden" 
                       data-testid={`menu-item-${item.id}`}
                     >
-                      <CardContent className="pt-6">
-                        <div className="flex justify-between items-start mb-3">
-                          <h4 className="font-bold text-xl text-gray-800 group-hover:text-orange-600 transition-colors">{item.name}</h4>
+                      {/* Food Image */}
+                      {item.image_url && (
+                        <div className="h-40 overflow-hidden">
+                          <img 
+                            src={item.image_url} 
+                            alt={item.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                          />
+                        </div>
+                      )}
+                      <CardContent className="pt-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <h4 className="font-bold text-lg text-gray-800 group-hover:text-orange-600 transition-colors">{item.name}</h4>
                           {item.is_vegetarian && (
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 font-semibold">
                               <Leaf className="h-3 w-3 mr-1" />Veg
                             </Badge>
                           )}
                         </div>
-                        <p className="text-sm text-gray-600 mb-6 line-clamp-2">{item.description}</p>
-                        <div className="flex justify-between items-center pt-4 border-t border-gray-100">
-                          <span className="text-2xl font-bold text-orange-600 flex items-center">
+                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{item.description}</p>
+                        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+                          <span className="text-xl font-bold text-orange-600 flex items-center">
                             ₹{item.base_price.toFixed(0)}
                           </span>
                           <Button
