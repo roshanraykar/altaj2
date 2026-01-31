@@ -93,6 +93,43 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchUsers = async () => {
+    try {
+      const response = await axios.get(`${API}/users`, { headers });
+      setAllUsers(response.data);
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    }
+  };
+
+  const handleCreateUser = async () => {
+    try {
+      // Validate required fields
+      if (!newUser.email || !newUser.password || !newUser.name || !newUser.phone) {
+        toast({ title: 'Validation Error', description: 'Please fill all required fields', variant: 'destructive' });
+        return;
+      }
+
+      // Validate branch_id for branch-specific roles
+      if (['waiter', 'kitchen_staff', 'branch_manager'].includes(newUser.role) && !newUser.branch_id) {
+        toast({ title: 'Validation Error', description: 'Please select a branch for this role', variant: 'destructive' });
+        return;
+      }
+
+      await axios.post(`${API}/auth/register`, newUser, { headers });
+      toast({ title: 'Success', description: `${newUser.role} created successfully!` });
+      setShowAddUserDialog(false);
+      setNewUser({ email: '', password: '', name: '', phone: '', role: 'waiter', branch_id: '' });
+      fetchUsers();
+    } catch (error) {
+      toast({ 
+        title: 'Failed to create user', 
+        description: error.response?.data?.detail || 'Please try again', 
+        variant: 'destructive' 
+      });
+    }
+  };
+
   const getStatusColor = (status) => {
     const colors = {
       pending: 'bg-yellow-500',
