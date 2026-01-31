@@ -879,12 +879,69 @@ async def update_order_status(order_id: str, status_update: OrderStatusUpdate):
     
     await db.orders.update_one({"id": order_id}, {"$set": update_data})
     
-    # If order is completed and was dine-in, free up the table
-    if status_update.status == "completed" and existing_order.get("table_id"):
-        await db.tables.update_one(
-            {"id": existing_order["table_id"]},
-            {"$set": {"is_occupied": False, "current_order_id": None}}
-        )
+    # Handle table status changes for dine-in orders
+    if existing_order.get("table_id"):
+        if status_update.status == "served":
+            # Order served but table still occupied until completed
+            pass
+        elif status_update.status == "completed":
+            # Mark table as cleaning (waiter will mark vacant after cleaning)
+            await db.tables.update_one(
+                {"id": existing_order["table_id"]},
+                {"$set": {"status": "cleaning", "current_order_id": None}}
+            )
+    
+    # Handle delivery partner status changes for delivery orders
+    if existing_order.get("order_type") == "delivery" and existing_order.get("delivery_partner_id"):
+        if status_update.status == "delivered":
+            # Free up the delivery partner
+            await db.delivery_partners.update_one(
+                {"id": existing_order["delivery_partner_id"]},
+                {"$set": {"status": "available", "current_order_id": None}}
+            )
+    
+    updated_order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if isinstance(updated_order['created_at'], str):
+        updated_order['created_at'] = datetime.fromisoformat(updated_order['created_at'])
+    if isinstance(updated_order['updated_at'], str):
+        updated_order['updated_at'] = datetime.fromisoformat(updated_order['updated_at'])
+    return updated_order
+
+@api_router.put("/orders/{order_id}/assign-delivery", response_model=Order)
+async def assign_delivery_partner(order_id: str, assignment: DeliveryAssignment, current_user: dict = Depends(get_current_user)):
+    """Assign a delivery partner to an order"""
+    existing_order = await db.orders.find_one({"id": order_id}, {"_id": 0})
+    if not existing_order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    if existing_order.get("order_type") != "delivery":
+        raise HTTPException(status_code=400, detail="Order is not a delivery order")
+    
+    if existing_order.get("status") != "ready":
+        raise HTTPException(status_code=400, detail="Order must be ready for delivery assignment")
+    
+    # Validate delivery partner exists and is available
+    partner = await db.delivery_partners.find_one({"id": assignment.delivery_partner_id}, {"_id": 0})
+    if not partner:
+        raise HTTPException(status_code=400, detail="Delivery partner not found")
+    if partner.get("status") != "available":
+        raise HTTPException(status_code=400, detail="Delivery partner is not available")
+    
+    # Update order with delivery partner
+    await db.orders.update_one(
+        {"id": order_id},
+        {"$set": {
+            "delivery_partner_id": assignment.delivery_partner_id,
+            "status": "picked_up",
+            "updated_at": datetime.now(timezone.utc).isoformat()
+        }}
+    )
+    
+    # Mark delivery partner as busy
+    await db.delivery_partners.update_one(
+        {"id": assignment.delivery_partner_id},
+        {"$set": {"status": "busy", "current_order_id": order_id}}
+    )
     
     updated_order = await db.orders.find_one({"id": order_id}, {"_id": 0})
     if isinstance(updated_order['created_at'], str):
