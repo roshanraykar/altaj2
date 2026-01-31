@@ -6,15 +6,19 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { ChefHat, Loader2 } from 'lucide-react';
+import { ChefHat, Loader2, Smartphone, Mail, ArrowLeft } from 'lucide-react';
+import axios from 'axios';
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-  const [registerData, setRegisterData] = useState({ email: '', password: '', name: '', phone: '', role: 'customer' });
+  const [mobileData, setMobileData] = useState({ phone: '', otp: '', name: '' });
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(0);
   const [loading, setLoading] = useState(false);
-  const { login, register } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -32,15 +36,77 @@ const LoginPage = () => {
     }
   };
 
-  const handleRegister = async (e) => {
-    e.preventDefault();
+  const handleSendOTP = async () => {
+    if (!mobileData.phone || mobileData.phone.length < 10) {
+      toast({ title: 'Invalid phone', description: 'Please enter a valid 10-digit mobile number', variant: 'destructive' });
+      return;
+    }
+
     setLoading(true);
     try {
-      const user = await register(registerData);
-      toast({ title: 'Registration successful', description: `Welcome, ${user.name}!` });
-      redirectBasedOnRole(user.role);
+      const response = await axios.post(`${API}/auth/send-otp`, {
+        phone: mobileData.phone
+      });
+      
+      setOtpSent(true);
+      setOtpTimer(300); // 5 minutes
+      
+      // Start countdown
+      const interval = setInterval(() => {
+        setOtpTimer(prev => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      
+      toast({ 
+        title: 'OTP sent!', 
+        description: response.data.otp ? `Your OTP: ${response.data.otp}` : 'Please check your phone for OTP'
+      });
     } catch (error) {
-      toast({ title: 'Registration failed', description: error.response?.data?.detail || 'Registration error', variant: 'destructive' });
+      toast({ title: 'Failed to send OTP', description: error.response?.data?.detail || 'Please try again', variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (e) => {
+    e.preventDefault();
+    
+    if (!mobileData.otp || mobileData.otp.length !== 6) {
+      toast({ title: 'Invalid OTP', description: 'Please enter 6-digit OTP', variant: 'destructive' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await axios.post(`${API}/auth/verify-otp`, {
+        phone: mobileData.phone,
+        otp: mobileData.otp,
+        name: mobileData.name || undefined
+      });
+      
+      const { access_token, user } = response.data;
+      
+      // Store token
+      localStorage.setItem('token', access_token);
+      
+      toast({ title: 'Login successful', description: `Welcome, ${user.name}!` });
+      
+      // Reload to trigger auth context
+      window.location.href = '/';
+    } catch (error) {
+      const errorMsg = error.response?.data?.detail || 'Invalid OTP';
+      
+      // If name is required, show input
+      if (errorMsg.includes('Name is required')) {
+        toast({ title: 'Welcome!', description: 'Please enter your name to complete registration' });
+      } else {
+        toast({ title: 'Verification failed', description: errorMsg, variant: 'destructive' });
+      }
     } finally {
       setLoading(false);
     }
@@ -68,26 +134,141 @@ const LoginPage = () => {
     }
   };
 
+  const formatTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-red-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-2xl" data-testid="login-card">
-        <CardHeader className="text-center">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-2xl border-emerald-100" data-testid="login-card">
+        <CardHeader className="text-center border-b border-emerald-50 pb-6">
           <div className="flex justify-center mb-4">
-            <div className="bg-gradient-to-r from-orange-600 to-red-600 p-4 rounded-full">
-              <ChefHat className="h-12 w-12 text-white" />
+            <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 p-4 rounded-2xl shadow-lg">
+              <ChefHat className="h-10 w-10 text-white" />
             </div>
           </div>
-          <CardTitle className="text-3xl font-bold">Al Taj Restaurant</CardTitle>
-          <CardDescription>Sign in to access your account</CardDescription>
+          <CardTitle className="text-3xl font-light">Welcome Back</CardTitle>
+          <CardDescription className="text-base">Sign in to your Al Taj account</CardDescription>
         </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login" data-testid="login-tab">Login</TabsTrigger>
-              <TabsTrigger value="register" data-testid="register-tab">Register</TabsTrigger>
+        <CardContent className="pt-6">
+          <Tabs defaultValue="mobile" className="w-full">
+            <TabsList className="grid w-full grid-cols-2 mb-6">
+              <TabsTrigger value="mobile" className="flex items-center gap-2" data-testid="mobile-tab">
+                <Smartphone className="h-4 w-4" />
+                Mobile
+              </TabsTrigger>
+              <TabsTrigger value="email" className="flex items-center gap-2" data-testid="email-tab">
+                <Mail className="h-4 w-4" />
+                Email
+              </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="login">
+            {/* Mobile OTP Login */}
+            <TabsContent value="mobile">
+              <form onSubmit={handleVerifyOTP} className="space-y-4" data-testid="mobile-form">
+                <div>
+                  <Label htmlFor="mobile-phone">Mobile Number</Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="mobile-phone"
+                      type="tel"
+                      placeholder="9876543210"
+                      value={mobileData.phone}
+                      onChange={(e) => setMobileData({ ...mobileData, phone: e.target.value })}
+                      disabled={otpSent}
+                      className="flex-1"
+                      data-testid="mobile-phone-input"
+                      maxLength={10}
+                    />
+                    {!otpSent && (
+                      <Button 
+                        type="button" 
+                        onClick={handleSendOTP} 
+                        disabled={loading}
+                        className="bg-emerald-700 hover:bg-emerald-800"
+                        data-testid="send-otp-button"
+                      >
+                        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send OTP'}
+                      </Button>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Enter 10-digit mobile number</p>
+                </div>
+
+                {otpSent && (
+                  <>
+                    <div>
+                      <Label htmlFor="mobile-otp">Enter OTP</Label>
+                      <Input
+                        id="mobile-otp"
+                        type="text"
+                        placeholder="6-digit OTP"
+                        value={mobileData.otp}
+                        onChange={(e) => setMobileData({ ...mobileData, otp: e.target.value.replace(/\D/g, '').slice(0, 6) })}
+                        maxLength={6}
+                        className="text-center text-2xl tracking-widest"
+                        data-testid="otp-input"
+                      />
+                      <div className="flex justify-between items-center mt-2">
+                        <p className="text-xs text-gray-500">OTP sent to +91-{mobileData.phone}</p>
+                        {otpTimer > 0 ? (
+                          <p className="text-xs text-emerald-600 font-medium">{formatTime(otpTimer)}</p>
+                        ) : (
+                          <Button 
+                            type="button" 
+                            variant="link" 
+                            onClick={() => { setOtpSent(false); handleSendOTP(); }}
+                            className="text-xs p-0 h-auto"
+                          >
+                            Resend OTP
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label htmlFor="mobile-name">Your Name (for new users)</Label>
+                      <Input
+                        id="mobile-name"
+                        type="text"
+                        placeholder="Rajesh Kumar"
+                        value={mobileData.name}
+                        onChange={(e) => setMobileData({ ...mobileData, name: e.target.value })}
+                        data-testid="mobile-name-input"
+                      />
+                      <p className="text-xs text-gray-500 mt-1">Required only for first-time login</p>
+                    </div>
+
+                    <Button 
+                      type="submit" 
+                      className="w-full h-12 bg-emerald-700 hover:bg-emerald-800" 
+                      disabled={loading || !mobileData.otp || mobileData.otp.length !== 6}
+                      data-testid="verify-otp-button"
+                    >
+                      {loading ? (
+                        <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Verifying...</>
+                      ) : (
+                        'Verify & Continue'
+                      )}
+                    </Button>
+
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      onClick={() => { setOtpSent(false); setMobileData({ phone: '', otp: '', name: '' }); }}
+                      className="w-full"
+                    >
+                      <ArrowLeft className="mr-2 h-4 w-4" /> Change Number
+                    </Button>
+                  </>
+                )}
+              </form>
+            </TabsContent>
+
+            {/* Email/Password Login */}
+            <TabsContent value="email">
               <form onSubmit={handleLogin} className="space-y-4" data-testid="login-form">
                 <div>
                   <Label htmlFor="login-email">Email</Label>
@@ -113,87 +294,20 @@ const LoginPage = () => {
                     data-testid="login-password-input"
                   />
                 </div>
-                <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700" disabled={loading} data-testid="login-submit-button">
+                <Button 
+                  type="submit" 
+                  className="w-full h-12 bg-emerald-700 hover:bg-emerald-800" 
+                  disabled={loading} 
+                  data-testid="login-submit-button"
+                >
                   {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Logging in...</> : 'Login'}
-                </Button>
-              </form>
-              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                <p className="text-sm font-semibold mb-2">Demo Credentials:</p>
-                <p className="text-xs text-gray-600">Admin: admin@altaj.com / admin123</p>
-                <p className="text-xs text-gray-600">Customer: john.doe@email.com / customer123</p>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="register">
-              <form onSubmit={handleRegister} className="space-y-4" data-testid="register-form">
-                <div>
-                  <Label htmlFor="register-name">Full Name</Label>
-                  <Input
-                    id="register-name"
-                    type="text"
-                    placeholder="John Doe"
-                    value={registerData.name}
-                    onChange={(e) => setRegisterData({ ...registerData, name: e.target.value })}
-                    required
-                    data-testid="register-name-input"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="register-email">Email</Label>
-                  <Input
-                    id="register-email"
-                    type="email"
-                    placeholder="your.email@example.com"
-                    value={registerData.email}
-                    onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })}
-                    required
-                    data-testid="register-email-input"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="register-phone">Phone</Label>
-                  <Input
-                    id="register-phone"
-                    type="tel"
-                    placeholder="+971-50-XXX-XXXX"
-                    value={registerData.phone}
-                    onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })}
-                    required
-                    data-testid="register-phone-input"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="register-password">Password</Label>
-                  <Input
-                    id="register-password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={registerData.password}
-                    onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                    required
-                    data-testid="register-password-input"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="register-role">Role</Label>
-                  <Select value={registerData.role} onValueChange={(value) => setRegisterData({ ...registerData, role: value })} data-testid="register-role-select">
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select role" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="customer">Customer</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button type="submit" className="w-full bg-orange-600 hover:bg-orange-700" disabled={loading} data-testid="register-submit-button">
-                  {loading ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Registering...</> : 'Register'}
                 </Button>
               </form>
             </TabsContent>
           </Tabs>
 
           <div className="mt-6 text-center">
-            <Button variant="link" onClick={() => navigate('/')} data-testid="back-to-home-button">
+            <Button variant="link" onClick={() => navigate('/')} data-testid="back-to-home-button" className="text-emerald-700">
               Back to Home
             </Button>
           </div>
