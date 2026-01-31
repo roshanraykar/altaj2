@@ -138,11 +138,15 @@ const DeliveryDashboard = () => {
       
       if (newStatus === 'delivered') {
         setCurrentOrder(null);
-        fetchDeliveryProfile();
+        // Refresh delivery partner profile to clear current_order_id
+        await fetchDeliveryProfile();
+      } else {
+        // Update current order state immediately
+        setCurrentOrder(prev => prev ? {...prev, status: newStatus} : null);
       }
       fetchOrders();
     } catch (error) {
-      toast({ title: 'Error', description: 'Failed to update status', variant: 'destructive' });
+      toast({ title: 'Error', description: error.response?.data?.detail || 'Failed to update status', variant: 'destructive' });
     }
   };
 
