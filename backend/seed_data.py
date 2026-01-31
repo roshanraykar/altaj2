@@ -347,8 +347,34 @@ async def seed_data():
                 "branch_id": branch_id
             }
             response = requests.post(f"{BASE_URL}/auth/register", json=kitchen_data)
+        
+        # Create delivery partners for each branch
+        delivery_user_ids = []
+        for delivery_num in range(1, 4):
+            delivery_data = {
+                "email": f"delivery{delivery_num}.{branch_name}@altaj.com",
+                "password": "delivery123",
+                "name": f"Delivery {delivery_num} - {branches[idx]['name']}",
+                "role": "delivery_partner",
+                "phone": f"+91-836-{idx}2{delivery_num}-0001",
+                "branch_id": branch_id
+            }
+            response = requests.post(f"{BASE_URL}/auth/register", json=delivery_data)
+            if response.status_code == 200:
+                delivery_user_ids.append(response.json().get("user", {}).get("id"))
+        
+        # Create delivery partner profiles
+        for d_idx, user_id in enumerate(delivery_user_ids):
+            if user_id:
+                partner_data = {
+                    "user_id": user_id,
+                    "branch_id": branch_id,
+                    "vehicle_type": "bike" if d_idx % 2 == 0 else "scooter",
+                    "vehicle_number": f"KA-25-{idx}{d_idx}123"
+                }
+                requests.post(f"{BASE_URL}/delivery-partners", json=partner_data, headers=headers)
     
-    print(f"✅ Created staff for all branches")
+    print(f"✅ Created staff for all branches (including delivery partners)")
     
     # 7. Create Sample Customers
     print("\n7️⃣ Creating sample customers...")
