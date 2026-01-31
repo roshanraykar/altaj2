@@ -14,7 +14,7 @@ async def seed_data():
         "password": "admin123",
         "name": "Admin Al Taj",
         "role": "admin",
-        "phone": "+971-50-123-4567"
+        "phone": "+91-836-2245678"
     }
     
     response = requests.post(f"{BASE_URL}/auth/register", json=admin_data)
@@ -65,15 +65,20 @@ async def seed_data():
         else:
             print(f"❌ Failed to create branch: {response.json()}")
     
-    # 3. Create Menu Categories
+    # 3. Create Menu Categories (Based on actual Al Taj Menu Card)
     print("\n3️⃣ Creating menu categories...")
     categories = [
-        {"name": "Appetizers", "description": "Start your meal right", "display_order": 1},
-        {"name": "Main Course", "description": "Hearty and delicious", "display_order": 2},
-        {"name": "Biryani", "description": "Aromatic rice dishes", "display_order": 3},
-        {"name": "Breads", "description": "Freshly baked", "display_order": 4},
-        {"name": "Beverages", "description": "Refresh yourself", "display_order": 5},
-        {"name": "Desserts", "description": "Sweet endings", "display_order": 6}
+        {"name": "Chinese Thrillers", "description": "Indo-Chinese specialties", "display_order": 1},
+        {"name": "Tandoori Karishma", "description": "Tandoor grilled delicacies", "display_order": 2},
+        {"name": "Starters", "description": "Appetizers to begin your meal", "display_order": 3},
+        {"name": "Indian Dishes - Chicken", "description": "Authentic chicken curries", "display_order": 4},
+        {"name": "Indian Dishes - Mutton", "description": "Rich mutton preparations", "display_order": 5},
+        {"name": "Biryani & Rice", "description": "Aromatic rice dishes", "display_order": 6},
+        {"name": "Egg Items", "description": "Egg specialties", "display_order": 7},
+        {"name": "Veg", "description": "Vegetarian delights", "display_order": 8},
+        {"name": "Gravy", "description": "Rich gravies and curries", "display_order": 9},
+        {"name": "Dal", "description": "Lentil preparations", "display_order": 10},
+        {"name": "Extras", "description": "Sides and accompaniments", "display_order": 11}
     ]
     
     category_ids = {}
@@ -84,49 +89,204 @@ async def seed_data():
             category_ids[cat_data["name"]] = cat_id
             print(f"✅ Created category: {cat_data['name']} (ID: {cat_id})")
     
-    # 4. Create Menu Items
+    # 4. Create Menu Items (Actual Al Taj Menu)
     print("\n4️⃣ Creating menu items...")
     menu_items = [
-        # Appetizers
-        {"name": "Chicken Tikka", "description": "Marinated chicken grilled to perfection", "category": "Appetizers", "price": 180.00, "vegetarian": False},
-        {"name": "Samosa (Veg)", "description": "Crispy pastry filled with spiced vegetables", "category": "Appetizers", "price": 40.00, "vegetarian": True},
-        {"name": "Paneer Tikka", "description": "Cottage cheese marinated in spices", "category": "Appetizers", "price": 160.00, "vegetarian": True},
+        # Chinese Thrillers
+        {"name": "Chicken Manchuri (Boneless)", "category": "Chinese Thrillers", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Chilly", "category": "Chinese Thrillers", "price": 220.00, "vegetarian": False},
+        {"name": "Chicken Chilly (Boneless)", "category": "Chinese Thrillers", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Satay (Boneless)", "category": "Chinese Thrillers", "price": 310.00, "vegetarian": False},
+        {"name": "Chicken Drum Stick", "category": "Chinese Thrillers", "price": 290.00, "vegetarian": False},
+        {"name": "Chicken Sizzler", "category": "Chinese Thrillers", "price": 320.00, "vegetarian": False},
+        {"name": "Chicken Barbeque", "category": "Chinese Thrillers", "price": 320.00, "vegetarian": False},
+        {"name": "Chicken Honey Garlic (10 Pcs)", "category": "Chinese Thrillers", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Shangal (10 Pcs)", "category": "Chinese Thrillers", "price": 260.00, "vegetarian": False},
+        {"name": "Korean Chicken Wings (10 Pcs)", "category": "Chinese Thrillers", "price": 270.00, "vegetarian": False},
+        {"name": "Guntur Chilly (10 Pcs)", "category": "Chinese Thrillers", "price": 240.00, "vegetarian": False},
         
-        # Main Course
-        {"name": "Butter Chicken", "description": "Creamy tomato-based curry with tender chicken", "category": "Main Course", "price": 280.00, "vegetarian": False},
-        {"name": "Lamb Rogan Josh", "description": "Aromatic lamb curry with Kashmiri spices", "category": "Main Course", "price": 340.00, "vegetarian": False},
-        {"name": "Paneer Butter Masala", "description": "Cottage cheese in rich tomato gravy", "category": "Main Course", "price": 230.00, "vegetarian": True},
-        {"name": "Dal Makhani", "description": "Black lentils cooked overnight with butter", "category": "Main Course", "price": 190.00, "vegetarian": True},
+        # Tandoori Karishma
+        {"name": "Tandoori Kabab (Half) 6 Pc", "category": "Tandoori Karishma", "price": 220.00, "vegetarian": False},
+        {"name": "Tandoori Kabab (Full) 12 Pc", "category": "Tandoori Karishma", "price": 430.00, "vegetarian": False},
+        {"name": "Tandoori Chicken (Half)", "category": "Tandoori Karishma", "price": 210.00, "vegetarian": False},
+        {"name": "Tandoori Chicken (Full)", "category": "Tandoori Karishma", "price": 410.00, "vegetarian": False},
+        {"name": "Alfam (Full)", "category": "Tandoori Karishma", "price": 450.00, "vegetarian": False},
+        {"name": "Bhatti Chicken (Half)", "category": "Tandoori Karishma", "price": 230.00, "vegetarian": False},
+        {"name": "Bhatti Chicken (Full)", "category": "Tandoori Karishma", "price": 450.00, "vegetarian": False},
+        {"name": "Chicken Tikka", "category": "Tandoori Karishma", "price": 260.00, "vegetarian": False},
+        {"name": "Reshmi Kabab", "category": "Tandoori Karishma", "price": 270.00, "vegetarian": False},
+        {"name": "Malai Kabab Boneless", "category": "Tandoori Karishma", "price": 260.00, "vegetarian": False},
+        {"name": "Afghani Kabab", "category": "Tandoori Karishma", "price": 270.00, "vegetarian": False},
+        {"name": "Leg Piece Single", "category": "Tandoori Karishma", "price": 100.00, "vegetarian": False},
+        {"name": "Leg Piece (2 Pc)", "category": "Tandoori Karishma", "price": 200.00, "vegetarian": False},
+        {"name": "Chatpata Kabab", "category": "Tandoori Karishma", "price": 260.00, "vegetarian": False},
+        {"name": "Lasuni Tikka", "category": "Tandoori Karishma", "price": 260.00, "vegetarian": False},
+        {"name": "Haryali Kabab", "category": "Tandoori Karishma", "price": 250.00, "vegetarian": False},
+        {"name": "Banjara Kabab", "category": "Tandoori Karishma", "price": 260.00, "vegetarian": False},
+        {"name": "Badami Tikka", "category": "Tandoori Karishma", "price": 260.00, "vegetarian": False},
         
-        # Biryani
-        {"name": "Chicken Biryani", "description": "Fragrant basmati rice with succulent chicken", "category": "Biryani", "price": 260.00, "vegetarian": False},
-        {"name": "Mutton Biryani", "description": "Tender mutton layered with aromatic rice", "category": "Biryani", "price": 320.00, "vegetarian": False},
-        {"name": "Vegetable Biryani", "description": "Mixed vegetables with saffron rice", "category": "Biryani", "price": 210.00, "vegetarian": True},
+        # Starters
+        {"name": "Chicken Kabab (10 Pcs)", "category": "Starters", "price": 190.00, "vegetarian": False},
+        {"name": "Chicken Kabab Boneless (10 Pcs)", "category": "Starters", "price": 220.00, "vegetarian": False},
+        {"name": "Chicken 65 (Boneless)", "category": "Starters", "price": 250.00, "vegetarian": False},
+        {"name": "Pepper Chicken (Boneless)", "category": "Starters", "price": 280.00, "vegetarian": False},
+        {"name": "Chicken Tikka Kabab (Boneless)", "category": "Starters", "price": 250.00, "vegetarian": False},
+        {"name": "Chicken Lollipop (6 Pcs)", "category": "Starters", "price": 200.00, "vegetarian": False},
         
-        # Breads
-        {"name": "Naan", "description": "Soft leavened flatbread", "category": "Breads", "price": 40.00, "vegetarian": True},
-        {"name": "Garlic Naan", "description": "Naan topped with garlic and butter", "category": "Breads", "price": 50.00, "vegetarian": True},
-        {"name": "Tandoori Roti", "description": "Whole wheat flatbread from tandoor", "category": "Breads", "price": 35.00, "vegetarian": True},
+        # Indian Dishes - Chicken (Half portions)
+        {"name": "Chicken Masala (Half)", "category": "Indian Dishes - Chicken", "price": 170.00, "vegetarian": False},
+        {"name": "Chicken Masala (Full)", "category": "Indian Dishes - Chicken", "price": 340.00, "vegetarian": False},
+        {"name": "Chicken Kolhapuri (Half)", "category": "Indian Dishes - Chicken", "price": 190.00, "vegetarian": False},
+        {"name": "Chicken Kolhapuri (Full)", "category": "Indian Dishes - Chicken", "price": 380.00, "vegetarian": False},
+        {"name": "Chicken Hyderabadi (Half)", "category": "Indian Dishes - Chicken", "price": 190.00, "vegetarian": False},
+        {"name": "Chicken Hyderabadi (Full)", "category": "Indian Dishes - Chicken", "price": 380.00, "vegetarian": False},
+        {"name": "Butter Chicken (Half)", "category": "Indian Dishes - Chicken", "price": 200.00, "vegetarian": False},
+        {"name": "Butter Chicken (Full)", "category": "Indian Dishes - Chicken", "price": 400.00, "vegetarian": False},
+        {"name": "Chicken Maharaja (Half)", "category": "Indian Dishes - Chicken", "price": 220.00, "vegetarian": False},
+        {"name": "Chicken Maharaja (Full)", "category": "Indian Dishes - Chicken", "price": 430.00, "vegetarian": False},
+        {"name": "Chicken Kadai (Half)", "category": "Indian Dishes - Chicken", "price": 220.00, "vegetarian": False},
+        {"name": "Chicken Kadai (Full)", "category": "Indian Dishes - Chicken", "price": 440.00, "vegetarian": False},
+        {"name": "Chicken Peshawari (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Peshawari (Full)", "category": "Indian Dishes - Chicken", "price": 510.00, "vegetarian": False},
+        {"name": "Chicken Nawabi (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Nawabi (Full)", "category": "Indian Dishes - Chicken", "price": 510.00, "vegetarian": False},
+        {"name": "Chicken Afghani (Half)", "category": "Indian Dishes - Chicken", "price": 340.00, "vegetarian": False},
+        {"name": "Chicken Afghani (Full)", "category": "Indian Dishes - Chicken", "price": 680.00, "vegetarian": False},
+        {"name": "Andhra Chicken (Half)", "category": "Indian Dishes - Chicken", "price": 280.00, "vegetarian": False},
+        {"name": "Andhra Chicken (Full)", "category": "Indian Dishes - Chicken", "price": 560.00, "vegetarian": False},
+        {"name": "Chicken Do Pyaza (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Do Pyaza (Full)", "category": "Indian Dishes - Chicken", "price": 510.00, "vegetarian": False},
+        {"name": "Chicken Makhanwala (Half)", "category": "Indian Dishes - Chicken", "price": 300.00, "vegetarian": False},
+        {"name": "Chicken Makhanwala (Full)", "category": "Indian Dishes - Chicken", "price": 600.00, "vegetarian": False},
+        {"name": "Chicken Mumtaz (Half)", "category": "Indian Dishes - Chicken", "price": 370.00, "vegetarian": False},
+        {"name": "Chicken Mumtaz (Full)", "category": "Indian Dishes - Chicken", "price": 740.00, "vegetarian": False},
+        {"name": "Chicken Rana (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Rana (Full)", "category": "Indian Dishes - Chicken", "price": 520.00, "vegetarian": False},
+        {"name": "Chicken Malwani (Half)", "category": "Indian Dishes - Chicken", "price": 290.00, "vegetarian": False},
+        {"name": "Chicken Malwani (Full)", "category": "Indian Dishes - Chicken", "price": 570.00, "vegetarian": False},
+        {"name": "Chicken Pondicherry (Half)", "category": "Indian Dishes - Chicken", "price": 270.00, "vegetarian": False},
+        {"name": "Chicken Pondicherry (Full)", "category": "Indian Dishes - Chicken", "price": 540.00, "vegetarian": False},
+        {"name": "Chicken Hundi (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Hundi (Full)", "category": "Indian Dishes - Chicken", "price": 510.00, "vegetarian": False},
+        {"name": "Chicken Taj Special (Half)", "category": "Indian Dishes - Chicken", "price": 270.00, "vegetarian": False},
+        {"name": "Chicken Taj Special (Full)", "category": "Indian Dishes - Chicken", "price": 540.00, "vegetarian": False},
+        {"name": "Murg Mussalam (Half)", "category": "Indian Dishes - Chicken", "price": 270.00, "vegetarian": False},
+        {"name": "Murg Mussalam (Full)", "category": "Indian Dishes - Chicken", "price": 540.00, "vegetarian": False},
+        {"name": "Chicken Tikka Masala (Half)", "category": "Indian Dishes - Chicken", "price": 280.00, "vegetarian": False},
+        {"name": "Chicken Tikka Masala (Full)", "category": "Indian Dishes - Chicken", "price": 580.00, "vegetarian": False},
+        {"name": "Punjabi Chicken (Half)", "category": "Indian Dishes - Chicken", "price": 270.00, "vegetarian": False},
+        {"name": "Punjabi Chicken (Full)", "category": "Indian Dishes - Chicken", "price": 540.00, "vegetarian": False},
+        {"name": "Chicken Golkunda (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Golkunda (Full)", "category": "Indian Dishes - Chicken", "price": 520.00, "vegetarian": False},
+        {"name": "Chicken Sultani (Half)", "category": "Indian Dishes - Chicken", "price": 260.00, "vegetarian": False},
+        {"name": "Chicken Sultani (Full)", "category": "Indian Dishes - Chicken", "price": 520.00, "vegetarian": False},
         
-        # Beverages
-        {"name": "Mango Lassi", "description": "Sweet yogurt drink with mango", "category": "Beverages", "price": 80.00, "vegetarian": True},
-        {"name": "Masala Chai", "description": "Spiced Indian tea", "category": "Beverages", "price": 30.00, "vegetarian": True},
-        {"name": "Fresh Lime Soda", "description": "Refreshing lime with soda", "category": "Beverages", "price": 60.00, "vegetarian": True},
+        # Indian Dishes - Mutton
+        {"name": "Mutton Masala (Half)", "category": "Indian Dishes - Mutton", "price": 230.00, "vegetarian": False},
+        {"name": "Mutton Masala (Full)", "category": "Indian Dishes - Mutton", "price": 460.00, "vegetarian": False},
+        {"name": "Mutton Kolhapuri (Half)", "category": "Indian Dishes - Mutton", "price": 260.00, "vegetarian": False},
+        {"name": "Mutton Kolhapuri (Full)", "category": "Indian Dishes - Mutton", "price": 520.00, "vegetarian": False},
+        {"name": "Mutton Hyderabadi (Half)", "category": "Indian Dishes - Mutton", "price": 260.00, "vegetarian": False},
+        {"name": "Mutton Hyderabadi (Full)", "category": "Indian Dishes - Mutton", "price": 520.00, "vegetarian": False},
+        {"name": "Mutton Maharaja (Half)", "category": "Indian Dishes - Mutton", "price": 280.00, "vegetarian": False},
+        {"name": "Mutton Maharaja (Full)", "category": "Indian Dishes - Mutton", "price": 560.00, "vegetarian": False},
+        {"name": "Mutton Kadai (Half)", "category": "Indian Dishes - Mutton", "price": 280.00, "vegetarian": False},
+        {"name": "Mutton Kadai (Full)", "category": "Indian Dishes - Mutton", "price": 550.00, "vegetarian": False},
+        {"name": "Mutton Peshawari (Half)", "category": "Indian Dishes - Mutton", "price": 290.00, "vegetarian": False},
+        {"name": "Mutton Peshawari (Full)", "category": "Indian Dishes - Mutton", "price": 570.00, "vegetarian": False},
+        {"name": "Mutton Makhanwala (Half)", "category": "Indian Dishes - Mutton", "price": 340.00, "vegetarian": False},
+        {"name": "Mutton Makhanwala (Full)", "category": "Indian Dishes - Mutton", "price": 680.00, "vegetarian": False},
+        {"name": "Mutton Rana (Half)", "category": "Indian Dishes - Mutton", "price": 290.00, "vegetarian": False},
+        {"name": "Mutton Rana (Full)", "category": "Indian Dishes - Mutton", "price": 570.00, "vegetarian": False},
+        {"name": "Mutton Hundi (Half)", "category": "Indian Dishes - Mutton", "price": 290.00, "vegetarian": False},
+        {"name": "Mutton Hundi (Full)", "category": "Indian Dishes - Mutton", "price": 570.00, "vegetarian": False},
+        {"name": "Mutton Pondicherry (Half)", "category": "Indian Dishes - Mutton", "price": 300.00, "vegetarian": False},
+        {"name": "Mutton Pondicherry (Full)", "category": "Indian Dishes - Mutton", "price": 600.00, "vegetarian": False},
+        {"name": "Mutton Rogan Josh (Half)", "category": "Indian Dishes - Mutton", "price": 310.00, "vegetarian": False},
+        {"name": "Mutton Rogan Josh (Full)", "category": "Indian Dishes - Mutton", "price": 610.00, "vegetarian": False},
+        {"name": "Mutton Malwani (Half)", "category": "Indian Dishes - Mutton", "price": 330.00, "vegetarian": False},
+        {"name": "Mutton Malwani (Full)", "category": "Indian Dishes - Mutton", "price": 630.00, "vegetarian": False},
+        {"name": "Mutton Chilly (Half)", "category": "Indian Dishes - Mutton", "price": 410.00, "vegetarian": False},
+        {"name": "Mutton Chilly (Full)", "category": "Indian Dishes - Mutton", "price": 820.00, "vegetarian": False},
+        {"name": "Mutton Pepper Dry (Half)", "category": "Indian Dishes - Mutton", "price": 400.00, "vegetarian": False},
+        {"name": "Mutton Pepper Dry (Full)", "category": "Indian Dishes - Mutton", "price": 800.00, "vegetarian": False},
+        {"name": "Mutton Andhra (Half)", "category": "Indian Dishes - Mutton", "price": 360.00, "vegetarian": False},
+        {"name": "Mutton Andhra (Full)", "category": "Indian Dishes - Mutton", "price": 570.00, "vegetarian": False},
+        {"name": "Mutton Taj Special", "category": "Indian Dishes - Mutton", "price": 1020.00, "vegetarian": False},
         
-        # Desserts
-        {"name": "Gulab Jamun", "description": "Sweet milk balls in sugar syrup", "category": "Desserts", "price": 100.00, "vegetarian": True},
-        {"name": "Ras Malai", "description": "Cottage cheese dumplings in sweet milk", "category": "Desserts", "price": 120.00, "vegetarian": True}
+        # Biryani & Rice
+        {"name": "Chicken Biryani (Half)", "category": "Biryani & Rice", "price": 170.00, "vegetarian": False},
+        {"name": "Chicken Biryani (Full)", "category": "Biryani & Rice", "price": 320.00, "vegetarian": False},
+        {"name": "Kuska", "category": "Biryani & Rice", "price": 120.00, "vegetarian": True},
+        {"name": "Mutton Biryani", "category": "Biryani & Rice", "price": 240.00, "vegetarian": False},
+        {"name": "Egg Biryani", "category": "Biryani & Rice", "price": 150.00, "vegetarian": False},
+        {"name": "Veg Biryani", "category": "Biryani & Rice", "price": 150.00, "vegetarian": True},
+        {"name": "Paneer Biryani", "category": "Biryani & Rice", "price": 190.00, "vegetarian": True},
+        {"name": "Ghee Rice", "category": "Biryani & Rice", "price": 150.00, "vegetarian": True},
+        {"name": "Zeera Rice", "category": "Biryani & Rice", "price": 140.00, "vegetarian": True},
+        {"name": "Chicken Fried Rice", "category": "Biryani & Rice", "price": 180.00, "vegetarian": False},
+        {"name": "Egg Fried Rice", "category": "Biryani & Rice", "price": 160.00, "vegetarian": False},
+        
+        # Egg Items
+        {"name": "Egg Masala (Half)", "category": "Egg Items", "price": 140.00, "vegetarian": False},
+        {"name": "Egg Kolhapuri (Half)", "category": "Egg Items", "price": 150.00, "vegetarian": False},
+        {"name": "Egg Hyderabadi (Half)", "category": "Egg Items", "price": 150.00, "vegetarian": False},
+        {"name": "Egg Maharaja (Half)", "category": "Egg Items", "price": 180.00, "vegetarian": False},
+        {"name": "Egg Makhanwala (Half)", "category": "Egg Items", "price": 190.00, "vegetarian": False},
+        {"name": "Egg Peshawari (Half)", "category": "Egg Items", "price": 200.00, "vegetarian": False},
+        {"name": "Egg Pondicherry (Half)", "category": "Egg Items", "price": 200.00, "vegetarian": False},
+        {"name": "Egg Chilly (Half)", "category": "Egg Items", "price": 170.00, "vegetarian": False},
+        {"name": "Egg Manchurian (Half)", "category": "Egg Items", "price": 180.00, "vegetarian": False},
+        {"name": "Egg Burji (Half)", "category": "Egg Items", "price": 90.00, "vegetarian": False},
+        {"name": "Boiled Egg", "category": "Egg Items", "price": 10.00, "vegetarian": False},
+        {"name": "Omelette", "category": "Egg Items", "price": 70.00, "vegetarian": False},
+        
+        # Veg
+        {"name": "Gobi Manchuri (Half)", "category": "Veg", "price": 150.00, "vegetarian": True},
+        {"name": "Gobi Chilly (Half)", "category": "Veg", "price": 150.00, "vegetarian": True},
+        {"name": "Gobi 65 (Half)", "category": "Veg", "price": 150.00, "vegetarian": True},
+        {"name": "Veg Masala (Half)", "category": "Veg", "price": 150.00, "vegetarian": True},
+        {"name": "Veg Kolhapuri (Half)", "category": "Veg", "price": 160.00, "vegetarian": True},
+        {"name": "Veg Hyderabadi (Half)", "category": "Veg", "price": 160.00, "vegetarian": True},
+        {"name": "Veg Kadai (Half)", "category": "Veg", "price": 180.00, "vegetarian": True},
+        {"name": "Veg Malwani (Half)", "category": "Veg", "price": 230.00, "vegetarian": True},
+        {"name": "Veg Rana (Half)", "category": "Veg", "price": 180.00, "vegetarian": True},
+        {"name": "Veg Afghani (Half)", "category": "Veg", "price": 260.00, "vegetarian": True},
+        {"name": "Veg Pondicherry (Half)", "category": "Veg", "price": 200.00, "vegetarian": True},
+        
+        # Gravy
+        {"name": "Gravy Masala (Half)", "category": "Gravy", "price": 120.00, "vegetarian": True},
+        {"name": "Gravy Kolhapuri (Half)", "category": "Gravy", "price": 140.00, "vegetarian": True},
+        {"name": "Gravy Hyderabadi (Half)", "category": "Gravy", "price": 140.00, "vegetarian": True},
+        {"name": "Gravy Maharaja (Half)", "category": "Gravy", "price": 160.00, "vegetarian": True},
+        {"name": "Gravy Peshawari (Half)", "category": "Gravy", "price": 170.00, "vegetarian": True},
+        {"name": "Gravy Makhanwala (Half)", "category": "Gravy", "price": 170.00, "vegetarian": True},
+        {"name": "Kaju Masala (Half)", "category": "Gravy", "price": 210.00, "vegetarian": True},
+        {"name": "Kaju Kolhapuri (Half)", "category": "Gravy", "price": 210.00, "vegetarian": True},
+        {"name": "Kaju Hyderabadi (Half)", "category": "Gravy", "price": 210.00, "vegetarian": True},
+        {"name": "Kaju Kadai (Half)", "category": "Gravy", "price": 240.00, "vegetarian": True},
+        
+        # Dal
+        {"name": "Dal Fry (Half)", "category": "Dal", "price": 130.00, "vegetarian": True},
+        {"name": "Dal Kolhapuri (Half)", "category": "Dal", "price": 140.00, "vegetarian": True},
+        {"name": "Dal Tadka (Half)", "category": "Dal", "price": 150.00, "vegetarian": True},
+        
+        # Extras
+        {"name": "Plain Papad", "category": "Extras", "price": 25.00, "vegetarian": True},
+        {"name": "Masala Papad", "category": "Extras", "price": 50.00, "vegetarian": True},
+        {"name": "Veg Manchow Soup", "category": "Extras", "price": 120.00, "vegetarian": True},
+        {"name": "Chicken Manchow Soup", "category": "Extras", "price": 210.00, "vegetarian": False},
     ]
     
     for item_data in menu_items:
         menu_item_payload = {
             "name": item_data["name"],
-            "description": item_data["description"],
+            "description": f"Authentic {item_data['name']} - a house specialty",
             "category_id": category_ids[item_data["category"]],
             "base_price": item_data["price"],
             "is_vegetarian": item_data["vegetarian"],
             "is_available": True,
-            "branch_ids": None  # Available at all branches
+            "branch_ids": None
         }
         
         response = requests.post(f"{BASE_URL}/menu/items", json=menu_item_payload, headers=headers)
@@ -137,12 +297,11 @@ async def seed_data():
     print("\n5️⃣ Creating tables for branches...")
     for idx, branch_id in enumerate(branch_ids):
         branch_name = branches[idx]["name"]
-        # Create 10 tables per branch
         for table_num in range(1, 11):
             table_data = {
                 "branch_id": branch_id,
                 "table_number": f"T{table_num:02d}",
-                "capacity": 4 if table_num <= 6 else 6,  # Tables 1-6 for 4 people, 7-10 for 6 people
+                "capacity": 4 if table_num <= 6 else 6,
                 "location": "Main Hall" if table_num <= 5 else "Window Side"
             }
             response = requests.post(f"{BASE_URL}/tables", json=table_data, headers=headers)
@@ -155,7 +314,6 @@ async def seed_data():
     for idx, branch_id in enumerate(branch_ids):
         branch_name = branches[idx]["name"].replace("Al Taj ", "").lower().replace(" ", "")
         
-        # Branch Manager
         manager_data = {
             "email": f"manager.{branch_name}@altaj.com",
             "password": "manager123",
@@ -168,7 +326,6 @@ async def seed_data():
         if response.status_code == 200:
             print(f"✅ Created manager for {branches[idx]['name']}")
         
-        # Waiters
         for waiter_num in range(1, 4):
             waiter_data = {
                 "email": f"waiter{waiter_num}.{branch_name}@altaj.com",
@@ -180,7 +337,6 @@ async def seed_data():
             }
             response = requests.post(f"{BASE_URL}/auth/register", json=waiter_data)
         
-        # Kitchen Staff
         for kitchen_num in range(1, 3):
             kitchen_data = {
                 "email": f"kitchen{kitchen_num}.{branch_name}@altaj.com",
