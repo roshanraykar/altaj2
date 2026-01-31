@@ -281,7 +281,7 @@ class Order(BaseModel):
     subtotal: float
     tax: float
     total: float
-    status: str = "pending"  # pending, confirmed, preparing, ready, out_for_delivery, completed, cancelled
+    status: str = "pending"  # pending, confirmed, preparing, ready, picked_up, on_the_way, delivered, served, completed, cancelled
     payment_method: str = "cod"  # cod or online
     payment_status: str = "pending"  # pending, completed, failed
     delivery_address: Optional[str] = None
