@@ -18,6 +18,9 @@ const LandingPage = () => {
   const [cart, setCart] = useState([]);
   const [orderType, setOrderType] = useState('delivery');
   const [showCart, setShowCart] = useState(false);
+  const [tables, setTables] = useState([]);
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [deliveryAvailable, setDeliveryAvailable] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -29,6 +32,8 @@ const LandingPage = () => {
   useEffect(() => {
     if (selectedBranch) {
       fetchMenuItems(selectedBranch.id);
+      fetchTables(selectedBranch.id);
+      checkDeliveryAvailability(selectedBranch.id);
     }
   }, [selectedBranch]);
 
@@ -59,6 +64,25 @@ const LandingPage = () => {
       setMenuItems(response.data);
     } catch (error) {
       console.error('Failed to fetch menu items:', error);
+    }
+  };
+
+  const fetchTables = async (branchId) => {
+    try {
+      const response = await axios.get(`${API}/tables?branch_id=${branchId}`);
+      setTables(response.data);
+    } catch (error) {
+      console.error('Failed to fetch tables:', error);
+    }
+  };
+
+  const checkDeliveryAvailability = async (branchId) => {
+    try {
+      const response = await axios.get(`${API}/delivery-partners/availability/${branchId}`);
+      setDeliveryAvailable(response.data.available);
+    } catch (error) {
+      console.error('Failed to check delivery availability:', error);
+      setDeliveryAvailable(false);
     }
   };
 
