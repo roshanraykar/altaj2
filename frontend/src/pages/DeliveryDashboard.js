@@ -86,10 +86,6 @@ const DeliveryDashboard = () => {
       console.error('Failed to fetch orders:', error);
     }
   };
-    } catch (error) {
-      console.error('Failed to fetch orders:', error);
-    }
-  };
 
   const handleAvailabilityToggle = async (checked) => {
     try {
