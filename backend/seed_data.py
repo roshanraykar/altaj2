@@ -162,7 +162,7 @@ async def seed_data():
     # 6. Create Branch Staff
     print("\n6️⃣ Creating branch staff...")
     for idx, branch_id in enumerate(branch_ids):
-        branch_name = branches[idx]["name"].replace("Al Taj ", "").lower()
+        branch_name = branches[idx]["name"].replace("Al Taj ", "").lower().replace(" ", "")
         
         # Branch Manager
         manager_data = {
@@ -170,7 +170,7 @@ async def seed_data():
             "password": "manager123",
             "name": f"{branches[idx]['name']} Manager",
             "role": "branch_manager",
-            "phone": f"+971-50-{idx}00-0001",
+            "phone": f"+91-836-{idx}00-0001",
             "branch_id": branch_id
         }
         response = requests.post(f"{BASE_URL}/auth/register", json=manager_data)
@@ -184,7 +184,7 @@ async def seed_data():
                 "password": "waiter123",
                 "name": f"Waiter {waiter_num} - {branches[idx]['name']}",
                 "role": "waiter",
-                "phone": f"+971-50-{idx}0{waiter_num}-0001",
+                "phone": f"+91-836-{idx}0{waiter_num}-0001",
                 "branch_id": branch_id
             }
             response = requests.post(f"{BASE_URL}/auth/register", json=waiter_data)
@@ -196,7 +196,7 @@ async def seed_data():
                 "password": "kitchen123",
                 "name": f"Chef {kitchen_num} - {branches[idx]['name']}",
                 "role": "kitchen_staff",
-                "phone": f"+971-50-{idx}1{kitchen_num}-0001",
+                "phone": f"+91-836-{idx}1{kitchen_num}-0001",
                 "branch_id": branch_id
             }
             response = requests.post(f"{BASE_URL}/auth/register", json=kitchen_data)
