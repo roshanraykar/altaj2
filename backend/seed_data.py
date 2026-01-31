@@ -242,13 +242,15 @@ async def seed_data():
     print("\n🎉 Data seeding completed successfully!")
     print("\n📋 Summary:")
     print(f"   - Admin User: admin@altaj.com (password: admin123)")
-    print(f"   - Branches: {len(branches)}")
+    print(f"   - Branches: {len(branches)} (Real Al Taj locations in Hubli, Karnataka)")
     print(f"   - Menu Categories: {len(categories)}")
     print(f"   - Menu Items: {len(menu_items)}")
     print(f"   - Tables per Branch: 10")
     print(f"   - Staff per Branch: 1 Manager, 3 Waiters, 2 Kitchen Staff")
     print(f"   - Sample Customers: {len(customers)}")
     print(f"   - Active Offers: {len(offers)}")
+    print(f"\n   🇮🇳 Currency: Indian Rupee (₹)")
+    print(f"   📍 Location: Hubballi, Karnataka, India")
 
 if __name__ == "__main__":
     asyncio.run(seed_data())
