@@ -763,6 +763,136 @@ async def get_dashboard_stats(
     }
 
 # ============================================================================
+# PAYMENT ROUTES (RAZORPAY)
+# ============================================================================
+
+@api_router.post("/payment/create-order")
+async def create_payment_order(payment_data: PaymentOrderCreate):
+    """Create a Razorpay payment order"""
+    try:
+        # Verify our order exists
+        order = await db.orders.find_one({"id": payment_data.order_id}, {"_id": 0})
+        if not order:
+            raise HTTPException(status_code=404, detail="Order not found")
+        
+        # Create Razorpay order
+        razorpay_order = razorpay_client.order.create({
+            "amount": payment_data.amount,
+            "currency": payment_data.currency,
+            "payment_capture": 1,
+            "notes": {
+                "order_id": payment_data.order_id,
+                "order_number": order.get("order_number")
+            }
+        })
+        
+        # Store payment details in order
+        await db.orders.update_one(
+            {"id": payment_data.order_id},
+            {"$set": {
+                "razorpay_order_id": razorpay_order["id"],
+                "payment_status": "pending",
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        return {
+            "razorpay_order_id": razorpay_order["id"],
+            "amount": razorpay_order["amount"],
+            "currency": razorpay_order["currency"],
+            "key_id": os.environ.get('RAZORPAY_KEY_ID')
+        }
+    except Exception as e:
+        logger.error(f"Payment order creation failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Payment order creation failed: {str(e)}")
+
+@api_router.post("/payment/verify")
+async def verify_payment(verification: PaymentVerification):
+    """Verify Razorpay payment signature"""
+    try:
+        # Verify signature
+        generated_signature = hmac.new(
+            os.environ.get('RAZORPAY_KEY_SECRET', '').encode(),
+            f"{verification.razorpay_order_id}|{verification.razorpay_payment_id}".encode(),
+            hashlib.sha256
+        ).hexdigest()
+        
+        if generated_signature != verification.razorpay_signature:
+            raise HTTPException(status_code=400, detail="Invalid payment signature")
+        
+        # Fetch payment details from Razorpay
+        payment = razorpay_client.payment.fetch(verification.razorpay_payment_id)
+        
+        # Update order with payment details
+        await db.orders.update_one(
+            {"id": verification.order_id},
+            {"$set": {
+                "razorpay_payment_id": verification.razorpay_payment_id,
+                "payment_status": "completed" if payment["status"] == "captured" else "failed",
+                "payment_method": payment.get("method"),
+                "payment_details": {
+                    "amount": payment["amount"],
+                    "currency": payment["currency"],
+                    "status": payment["status"],
+                    "method": payment.get("method"),
+                    "captured_at": payment.get("captured_at")
+                },
+                "status": "confirmed",  # Move order to confirmed status
+                "updated_at": datetime.now(timezone.utc).isoformat()
+            }}
+        )
+        
+        return {
+            "success": True,
+            "message": "Payment verified successfully",
+            "payment_id": verification.razorpay_payment_id,
+            "status": payment["status"]
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Payment verification failed: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Payment verification failed: {str(e)}")
+
+@api_router.post("/payment/webhook")
+async def payment_webhook(request: Request):
+    """Handle Razorpay webhooks"""
+    try:
+        payload = await request.body()
+        signature = request.headers.get('X-Razorpay-Signature', '')
+        webhook_secret = os.environ.get('RAZORPAY_WEBHOOK_SECRET', '')
+        
+        # Verify webhook signature
+        razorpay_client.utility.verify_webhook_signature(
+            payload.decode(),
+            signature,
+            webhook_secret
+        )
+        
+        # Process webhook event
+        import json
+        event = json.loads(payload.decode())
+        
+        if event["event"] == "payment.captured":
+            payment_id = event["payload"]["payment"]["entity"]["id"]
+            order_id = event["payload"]["payment"]["entity"]["notes"].get("order_id")
+            
+            if order_id:
+                await db.orders.update_one(
+                    {"id": order_id},
+                    {"$set": {
+                        "payment_status": "completed",
+                        "status": "confirmed",
+                        "updated_at": datetime.now(timezone.utc).isoformat()
+                    }}
+                )
+        
+        return {"status": "processed"}
+    except Exception as e:
+        logger.error(f"Webhook processing failed: {str(e)}")
+        raise HTTPException(status_code=400, detail="Webhook verification failed")
+
+# ============================================================================
 # USER MANAGEMENT ROUTES
 # ============================================================================
 
