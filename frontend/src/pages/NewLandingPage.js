@@ -145,9 +145,9 @@ const NewLandingPage = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Chicken Biryani", price: "₹260", desc: "Fragrant basmati rice with tender chicken" },
-              { name: "Butter Chicken", price: "₹280", desc: "Creamy tomato curry, rich and flavorful" },
-              { name: "Paneer Tikka", price: "₹160", desc: "Cottage cheese grilled to perfection" }
+              { name: "Chicken Biryani", price: "₹170 - ₹320", desc: "Fragrant basmati rice with tender chicken" },
+              { name: "Butter Chicken", price: "₹200 - ₹400", desc: "Creamy tomato curry, rich and flavorful" },
+              { name: "Tandoori Chicken", price: "₹210 - ₹410", desc: "Tandoor grilled to smoky perfection" }
             ].map((item, index) => (
               <div key={index} className="group cursor-pointer">
                 <div className="aspect-square bg-gradient-to-br from-gray-50 to-emerald-50 rounded-xl mb-4 overflow-hidden relative">
