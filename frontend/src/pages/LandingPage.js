@@ -134,7 +134,29 @@ const LandingPage = () => {
       toast({ title: 'Cart is empty', description: 'Please add items to cart first', variant: 'destructive' });
       return;
     }
-    navigate('/checkout', { state: { cart, selectedBranch, orderType } });
+    if (orderType === 'dine_in' && !selectedTable) {
+      toast({ title: 'Select a table', description: 'Please select a table for dine-in orders', variant: 'destructive' });
+      return;
+    }
+    if (orderType === 'delivery' && !deliveryAvailable) {
+      toast({ title: 'Delivery unavailable', description: 'All delivery partners are busy. Try takeaway instead.', variant: 'destructive' });
+      return;
+    }
+    navigate('/checkout', { state: { cart, selectedBranch, orderType, selectedTable } });
+  };
+
+  const handleOrderTypeChange = (type) => {
+    setOrderType(type);
+    if (type !== 'dine_in') {
+      setSelectedTable(null);
+    }
+  };
+
+  const getAvailableTables = () => {
+    return tables.filter(table => {
+      const status = table.status || (table.is_occupied ? 'occupied' : 'vacant');
+      return status === 'vacant';
+    });
   };
 
   const getItemsByCategory = (categoryId) => {
