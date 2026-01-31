@@ -274,6 +274,18 @@ class Offer(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Payment Models
+class PaymentOrderCreate(BaseModel):
+    amount: int  # Amount in paise (e.g., 50000 for ₹500)
+    currency: str = "INR"
+    order_id: str  # Our internal order ID
+
+class PaymentVerification(BaseModel):
+    razorpay_order_id: str
+    razorpay_payment_id: str
+    razorpay_signature: str
+    order_id: str  # Our internal order ID
+
 # ============================================================================
 # AUTHENTICATION ROUTES
 # ============================================================================
