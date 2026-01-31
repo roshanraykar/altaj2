@@ -97,34 +97,34 @@ async def seed_data():
     print("\n4️⃣ Creating menu items...")
     menu_items = [
         # Appetizers
-        {"name": "Chicken Tikka", "description": "Marinated chicken grilled to perfection", "category": "Appetizers", "price": 35.00, "vegetarian": False},
-        {"name": "Samosa (Veg)", "description": "Crispy pastry filled with spiced vegetables", "category": "Appetizers", "price": 15.00, "vegetarian": True},
-        {"name": "Paneer Tikka", "description": "Cottage cheese marinated in spices", "category": "Appetizers", "price": 32.00, "vegetarian": True},
+        {"name": "Chicken Tikka", "description": "Marinated chicken grilled to perfection", "category": "Appetizers", "price": 180.00, "vegetarian": False},
+        {"name": "Samosa (Veg)", "description": "Crispy pastry filled with spiced vegetables", "category": "Appetizers", "price": 40.00, "vegetarian": True},
+        {"name": "Paneer Tikka", "description": "Cottage cheese marinated in spices", "category": "Appetizers", "price": 160.00, "vegetarian": True},
         
         # Main Course
-        {"name": "Butter Chicken", "description": "Creamy tomato-based curry with tender chicken", "category": "Main Course", "price": 55.00, "vegetarian": False},
-        {"name": "Lamb Rogan Josh", "description": "Aromatic lamb curry with Kashmiri spices", "category": "Main Course", "price": 68.00, "vegetarian": False},
-        {"name": "Paneer Butter Masala", "description": "Cottage cheese in rich tomato gravy", "category": "Main Course", "price": 45.00, "vegetarian": True},
-        {"name": "Dal Makhani", "description": "Black lentils cooked overnight with butter", "category": "Main Course", "price": 38.00, "vegetarian": True},
+        {"name": "Butter Chicken", "description": "Creamy tomato-based curry with tender chicken", "category": "Main Course", "price": 280.00, "vegetarian": False},
+        {"name": "Lamb Rogan Josh", "description": "Aromatic lamb curry with Kashmiri spices", "category": "Main Course", "price": 340.00, "vegetarian": False},
+        {"name": "Paneer Butter Masala", "description": "Cottage cheese in rich tomato gravy", "category": "Main Course", "price": 230.00, "vegetarian": True},
+        {"name": "Dal Makhani", "description": "Black lentils cooked overnight with butter", "category": "Main Course", "price": 190.00, "vegetarian": True},
         
         # Biryani
-        {"name": "Chicken Biryani", "description": "Fragrant basmati rice with succulent chicken", "category": "Biryani", "price": 52.00, "vegetarian": False},
-        {"name": "Mutton Biryani", "description": "Tender mutton layered with aromatic rice", "category": "Biryani", "price": 65.00, "vegetarian": False},
-        {"name": "Vegetable Biryani", "description": "Mixed vegetables with saffron rice", "category": "Biryani", "price": 42.00, "vegetarian": True},
+        {"name": "Chicken Biryani", "description": "Fragrant basmati rice with succulent chicken", "category": "Biryani", "price": 260.00, "vegetarian": False},
+        {"name": "Mutton Biryani", "description": "Tender mutton layered with aromatic rice", "category": "Biryani", "price": 320.00, "vegetarian": False},
+        {"name": "Vegetable Biryani", "description": "Mixed vegetables with saffron rice", "category": "Biryani", "price": 210.00, "vegetarian": True},
         
         # Breads
-        {"name": "Naan", "description": "Soft leavened flatbread", "category": "Breads", "price": 8.00, "vegetarian": True},
-        {"name": "Garlic Naan", "description": "Naan topped with garlic and butter", "category": "Breads", "price": 10.00, "vegetarian": True},
-        {"name": "Tandoori Roti", "description": "Whole wheat flatbread from tandoor", "category": "Breads", "price": 7.00, "vegetarian": True},
+        {"name": "Naan", "description": "Soft leavened flatbread", "category": "Breads", "price": 40.00, "vegetarian": True},
+        {"name": "Garlic Naan", "description": "Naan topped with garlic and butter", "category": "Breads", "price": 50.00, "vegetarian": True},
+        {"name": "Tandoori Roti", "description": "Whole wheat flatbread from tandoor", "category": "Breads", "price": 35.00, "vegetarian": True},
         
         # Beverages
-        {"name": "Mango Lassi", "description": "Sweet yogurt drink with mango", "category": "Beverages", "price": 18.00, "vegetarian": True},
-        {"name": "Masala Chai", "description": "Spiced Indian tea", "category": "Beverages", "price": 12.00, "vegetarian": True},
-        {"name": "Fresh Lime Soda", "description": "Refreshing lime with soda", "category": "Beverages", "price": 15.00, "vegetarian": True},
+        {"name": "Mango Lassi", "description": "Sweet yogurt drink with mango", "category": "Beverages", "price": 80.00, "vegetarian": True},
+        {"name": "Masala Chai", "description": "Spiced Indian tea", "category": "Beverages", "price": 30.00, "vegetarian": True},
+        {"name": "Fresh Lime Soda", "description": "Refreshing lime with soda", "category": "Beverages", "price": 60.00, "vegetarian": True},
         
         # Desserts
-        {"name": "Gulab Jamun", "description": "Sweet milk balls in sugar syrup", "category": "Desserts", "price": 20.00, "vegetarian": True},
-        {"name": "Ras Malai", "description": "Cottage cheese dumplings in sweet milk", "category": "Desserts", "price": 25.00, "vegetarian": True}
+        {"name": "Gulab Jamun", "description": "Sweet milk balls in sugar syrup", "category": "Desserts", "price": 100.00, "vegetarian": True},
+        {"name": "Ras Malai", "description": "Cottage cheese dumplings in sweet milk", "category": "Desserts", "price": 120.00, "vegetarian": True}
     ]
     
     for item_data in menu_items:
