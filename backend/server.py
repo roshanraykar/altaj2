@@ -240,6 +240,8 @@ class Order(BaseModel):
     tax: float
     total: float
     status: str = "pending"  # pending, confirmed, preparing, ready, out_for_delivery, completed, cancelled
+    payment_method: str = "cod"  # cod or online
+    payment_status: str = "pending"  # pending, completed, failed
     delivery_address: Optional[str] = None
     table_id: Optional[str] = None
     delivery_partner_id: Optional[str] = None
