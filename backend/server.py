@@ -51,6 +51,10 @@ api_router = APIRouter(prefix="/api")
 # UTILITY FUNCTIONS
 # ============================================================================
 
+def generate_otp(length=6):
+    """Generate a random OTP"""
+    return ''.join(random.choices(string.digits, k=length))
+
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
 
