@@ -10,6 +10,7 @@ import OrderTrackingPage from '@/pages/OrderTrackingPage';
 import AdminDashboard from '@/pages/AdminDashboard';
 import WaiterDashboard from '@/pages/WaiterDashboard';
 import KitchenDashboard from '@/pages/KitchenDashboard';
+import DeliveryDashboard from '@/pages/DeliveryDashboard';
 import '@/App.css';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
