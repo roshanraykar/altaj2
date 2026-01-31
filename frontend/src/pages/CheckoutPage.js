@@ -125,6 +125,16 @@ const CheckoutPage = () => {
   };
 
   const handleRazorpayPayment = async (orderId, amount) => {
+    if (!razorpayLoaded || !window.Razorpay) {
+      toast({ 
+        title: 'Payment gateway not loaded', 
+        description: 'Please refresh and try again', 
+        variant: 'destructive' 
+      });
+      setLoading(false);
+      return;
+    }
+
     try {
       // Create Razorpay order
       const paymentOrderResponse = await axios.post(`${API}/payment/create-order`, {
@@ -152,7 +162,7 @@ const CheckoutPage = () => {
 
             toast({ 
               title: 'Payment successful!', 
-              description: `Order confirmed - #${orderId}` 
+              description: `Order confirmed` 
             });
             navigate('/order-tracking', { state: { orderId } });
           } catch (error) {
@@ -161,6 +171,7 @@ const CheckoutPage = () => {
               description: 'Please contact support', 
               variant: 'destructive' 
             });
+            setLoading(false);
           }
         },
         prefill: {
@@ -170,11 +181,22 @@ const CheckoutPage = () => {
         },
         theme: {
           color: '#059669'
+        },
+        modal: {
+          ondismiss: function() {
+            setLoading(false);
+            toast({ 
+              title: 'Payment cancelled', 
+              description: 'You can retry the payment anytime', 
+              variant: 'destructive' 
+            });
+          }
         }
       };
 
-      const razorpayInstance = new Razorpay(options);
+      const razorpayInstance = new window.Razorpay(options);
       razorpayInstance.on('payment.failed', function (response) {
+        setLoading(false);
         toast({ 
           title: 'Payment failed', 
           description: response.error.description, 
