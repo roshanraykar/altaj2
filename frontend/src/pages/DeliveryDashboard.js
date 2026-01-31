@@ -24,12 +24,21 @@ const DeliveryDashboard = () => {
 
   useEffect(() => {
     fetchDeliveryProfile();
-    fetchOrders();
-    const interval = setInterval(() => {
-      fetchOrders();
-    }, 5000);
-    return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (deliveryPartner) {
+      fetchOrders();
+      const interval = setInterval(() => {
+        fetchOrders();
+        // Refresh current order if exists
+        if (deliveryPartner?.current_order_id) {
+          fetchCurrentOrder(deliveryPartner.current_order_id);
+        }
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [deliveryPartner]);
 
   const fetchDeliveryProfile = async () => {
     try {
@@ -50,19 +59,33 @@ const DeliveryDashboard = () => {
       setCurrentOrder(response.data);
     } catch (error) {
       console.error('Failed to fetch current order:', error);
+      setCurrentOrder(null);
     }
   };
 
   const fetchOrders = async () => {
     try {
-      // Fetch delivery orders that are ready for pickup
+      // Fetch delivery orders that are ready for pickup OR assigned to this partner
       const response = await axios.get(`${API}/orders?branch_id=${user.branch_id}&order_type=delivery`, { headers });
-      // Filter orders that are ready or assigned to this partner
+      // Filter orders that are ready (available for pickup) or assigned to this partner (for status updates)
       const relevantOrders = response.data.filter(order => 
         order.status === 'ready' || 
         (order.delivery_partner_id === deliveryPartner?.id && ['picked_up', 'on_the_way'].includes(order.status))
       );
       setOrders(relevantOrders);
+      
+      // If this partner has an active delivery, update current order
+      const myActiveOrder = response.data.find(order => 
+        order.delivery_partner_id === deliveryPartner?.id && 
+        ['picked_up', 'on_the_way'].includes(order.status)
+      );
+      if (myActiveOrder) {
+        setCurrentOrder(myActiveOrder);
+      }
+    } catch (error) {
+      console.error('Failed to fetch orders:', error);
+    }
+  };
     } catch (error) {
       console.error('Failed to fetch orders:', error);
     }
