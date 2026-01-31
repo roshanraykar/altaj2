@@ -24,6 +24,12 @@ mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
 
+# Razorpay Client
+razorpay_client = razorpay.Client(auth=(
+    os.environ.get('RAZORPAY_KEY_ID', ''),
+    os.environ.get('RAZORPAY_KEY_SECRET', '')
+))
+
 # JWT Configuration
 SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'your-secret-key-change-in-production')
 ALGORITHM = "HS256"
