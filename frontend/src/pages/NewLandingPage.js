@@ -238,10 +238,7 @@ const NewLandingPage = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <ChefHat className="h-6 w-6 text-emerald-500" />
-                <span className="text-white font-light text-lg">Al Taj</span>
-              </div>
+              <img src="/altaj-logo.png" alt="Al Taj" className="h-10 w-auto mb-4" />
               <p className="text-sm font-light">Authentic flavors, served with pride across Hubballi</p>
             </div>
             <div>
