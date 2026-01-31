@@ -145,9 +145,7 @@ const LoginPage = () => {
       <Card className="w-full max-w-md shadow-2xl border-emerald-100" data-testid="login-card">
         <CardHeader className="text-center border-b border-emerald-50 pb-6">
           <div className="flex justify-center mb-4">
-            <div className="bg-gradient-to-br from-emerald-600 to-emerald-700 p-4 rounded-2xl shadow-lg">
-              <ChefHat className="h-10 w-10 text-white" />
-            </div>
+            <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-20 w-auto" />
           </div>
           <CardTitle className="text-3xl font-light">Welcome Back</CardTitle>
           <CardDescription className="text-base">Sign in to your Al Taj account</CardDescription>
