@@ -32,8 +32,8 @@ const CheckoutPage = () => {
   }
 
   const subtotal = cart.reduce((sum, item) => sum + item.total_price, 0);
-  const tax = subtotal * 0.05;
-  const total = subtotal + tax;
+  const gst = subtotal * 0.05; // 5% GST
+  const total = subtotal + gst;
 
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
