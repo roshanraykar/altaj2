@@ -206,9 +206,9 @@ async def seed_data():
     # 7. Create Sample Customers
     print("\n7️⃣ Creating sample customers...")
     customers = [
-        {"email": "john.doe@email.com", "password": "customer123", "name": "John Doe", "phone": "+971-50-999-0001"},
-        {"email": "sarah.ahmed@email.com", "password": "customer123", "name": "Sarah Ahmed", "phone": "+971-50-999-0002"},
-        {"email": "mike.smith@email.com", "password": "customer123", "name": "Mike Smith", "phone": "+971-50-999-0003"}
+        {"email": "rajesh.kumar@email.com", "password": "customer123", "name": "Rajesh Kumar", "phone": "+91-9876543210"},
+        {"email": "priya.sharma@email.com", "password": "customer123", "name": "Priya Sharma", "phone": "+91-9876543211"},
+        {"email": "amit.patil@email.com", "password": "customer123", "name": "Amit Patil", "phone": "+91-9876543212"}
     ]
     
     for customer in customers:
