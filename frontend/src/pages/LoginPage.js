@@ -126,6 +126,9 @@ const LoginPage = () => {
       case 'kitchen_staff':
         navigate('/kitchen');
         break;
+      case 'delivery_partner':
+        navigate('/delivery');
+        break;
       case 'customer':
         navigate('/');
         break;
