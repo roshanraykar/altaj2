@@ -502,8 +502,8 @@ async def create_order(order_data: OrderCreate):
     
     # Calculate totals
     subtotal = sum(item.total_price for item in order_data.items)
-    tax = subtotal * 0.05  # 5% tax
-    total = subtotal + tax
+    gst = subtotal * 0.05  # 5% GST (India)
+    total = subtotal + gst
     
     # Generate order number
     order_count = await db.orders.count_documents({}) + 1
