@@ -170,12 +170,15 @@ const AdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8">
+          <TabsList className="grid w-full grid-cols-5 mb-8">
             <TabsTrigger value="dashboard" data-testid="tab-dashboard">
               <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
             </TabsTrigger>
             <TabsTrigger value="branches" data-testid="tab-branches">
               <Store className="mr-2 h-4 w-4" /> Branches
+            </TabsTrigger>
+            <TabsTrigger value="staff" data-testid="tab-staff">
+              <Users className="mr-2 h-4 w-4" /> Staff
             </TabsTrigger>
             <TabsTrigger value="orders" data-testid="tab-orders">
               <ShoppingBag className="mr-2 h-4 w-4" /> Orders
