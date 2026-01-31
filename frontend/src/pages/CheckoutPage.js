@@ -43,17 +43,6 @@ const CheckoutPage = () => {
     };
   }, []);
 
-  const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    delivery_address: '',
-    special_instructions: ''
-  });
-  const [paymentMethod, setPaymentMethod] = useState('cod');
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
-
   if (!cart || cart.length === 0) {
     navigate('/order');
     return null;
