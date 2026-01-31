@@ -190,7 +190,7 @@ const CheckoutPage = () => {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>GST (5%):</span>
-                    <span>₹{tax.toFixed(2)}</span>
+                    <span>₹{gst.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold border-t pt-2">
                     <span>Total:</span>
