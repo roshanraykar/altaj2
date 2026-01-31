@@ -161,9 +161,9 @@ const WaiterDashboard = () => {
                     <div className="flex justify-between items-start">
                       <div>
                         <CardTitle className="text-lg">#{order.order_number}</CardTitle>
-                        <p className="text-sm text-gray-600">Table: {table?.table_number}</p>
+                        <p className="text-sm text-gray-600">Table: {table?.table_number || 'N/A'}</p>
                       </div>
-                      <Badge className={order.status === 'ready' ? 'bg-green-500' : 'bg-yellow-500'} data-testid={`order-status-${order.id}`}>
+                      <Badge className={order.status === 'ready' ? 'bg-green-500' : order.status === 'served' ? 'bg-blue-500' : 'bg-yellow-500'} data-testid={`order-status-${order.id}`}>
                         {order.status.replace('_', ' ')}
                       </Badge>
                     </div>
@@ -178,11 +178,32 @@ const WaiterDashboard = () => {
                         </p>
                       ))}
                     </div>
-                    <div className="border-t pt-3 flex justify-between items-center">
-                      <span className="font-bold text-lg">₹{order.total.toFixed(2)}</span>
-                      {order.status === 'ready' && (
-                        <Badge className="bg-green-600">Ready to Serve!</Badge>
-                      )}
+                    <div className="border-t pt-3 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-lg">₹{order.total?.toFixed(2)}</span>
+                      </div>
+                      <div className="flex gap-2 flex-wrap">
+                        {order.status === 'ready' && (
+                          <Button 
+                            size="sm" 
+                            className="bg-blue-500 hover:bg-blue-600"
+                            onClick={() => handleUpdateOrderStatus(order.id, 'served')}
+                            data-testid={`serve-order-${order.id}`}
+                          >
+                            Mark Served
+                          </Button>
+                        )}
+                        {order.status === 'served' && (
+                          <Button 
+                            size="sm" 
+                            className="bg-green-500 hover:bg-green-600"
+                            onClick={() => handleUpdateOrderStatus(order.id, 'completed')}
+                            data-testid={`complete-order-${order.id}`}
+                          >
+                            Complete Order
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
