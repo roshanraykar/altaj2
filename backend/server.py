@@ -201,12 +201,16 @@ class MenuItem(BaseModel):
     branch_ids: Optional[List[str]] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
-# Table Models
+# Table Models - States: vacant → occupied → cleaning → vacant
 class TableCreate(BaseModel):
     branch_id: str
     table_number: str
     capacity: int
     location: Optional[str] = None  # e.g., "Window side", "Garden"
+
+class TableStatusUpdate(BaseModel):
+    status: Literal["vacant", "occupied", "cleaning"]
+    order_id: Optional[str] = None
 
 class Table(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -215,7 +219,30 @@ class Table(BaseModel):
     table_number: str
     capacity: int
     location: Optional[str] = None
-    is_occupied: bool = False
+    status: Literal["vacant", "occupied", "cleaning"] = "vacant"
+    current_order_id: Optional[str] = None
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+# Delivery Partner Models - States: available → busy → available
+class DeliveryPartnerCreate(BaseModel):
+    user_id: str  # Links to user with role "delivery_partner"
+    branch_id: str
+    vehicle_type: Optional[str] = None  # e.g., "bike", "scooter"
+    vehicle_number: Optional[str] = None
+
+class DeliveryPartnerStatusUpdate(BaseModel):
+    status: Literal["available", "busy", "offline"]
+
+class DeliveryPartner(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    branch_id: str
+    name: str  # Copied from user for convenience
+    phone: str  # Copied from user for convenience
+    vehicle_type: Optional[str] = None
+    vehicle_number: Optional[str] = None
+    status: Literal["available", "busy", "offline"] = "available"
     current_order_id: Optional[str] = None
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
