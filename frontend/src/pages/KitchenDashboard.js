@@ -58,7 +58,7 @@ const KitchenDashboard = () => {
     pending: orders.filter(o => o.status === 'pending'),
     confirmed: orders.filter(o => o.status === 'confirmed'),
     preparing: orders.filter(o => o.status === 'preparing'),
-    ready: orders.filter(o => o.status === 'ready' || o.status === 'out_for_delivery')
+    ready: orders.filter(o => ['ready', 'picked_up', 'on_the_way', 'served'].includes(o.status))
   };
 
   const handleLogout = () => {
