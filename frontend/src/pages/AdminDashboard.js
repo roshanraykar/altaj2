@@ -276,6 +276,162 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
+          {/* Staff Management Tab */}
+          <TabsContent value="staff">
+            <Card data-testid="staff-management-card">
+              <CardHeader>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <CardTitle>Staff Management</CardTitle>
+                    <CardDescription>Manage users across all branches</CardDescription>
+                  </div>
+                  <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
+                    <DialogTrigger asChild>
+                      <Button className="bg-orange-600 hover:bg-orange-700" data-testid="add-staff-button">
+                        <UserPlus className="mr-2 h-4 w-4" /> Add Staff Member
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-md" data-testid="add-staff-dialog">
+                      <DialogHeader>
+                        <DialogTitle>Add New Staff Member</DialogTitle>
+                        <DialogDescription>Create a new user account for staff</DialogDescription>
+                      </DialogHeader>
+                      <div className="space-y-4 py-4">
+                        <div>
+                          <Label htmlFor="staff-name">Full Name *</Label>
+                          <Input
+                            id="staff-name"
+                            value={newUser.name}
+                            onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+                            placeholder="John Doe"
+                            data-testid="staff-name-input"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="staff-email">Email *</Label>
+                          <Input
+                            id="staff-email"
+                            type="email"
+                            value={newUser.email}
+                            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+                            placeholder="john@altaj.com"
+                            data-testid="staff-email-input"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="staff-phone">Phone *</Label>
+                          <Input
+                            id="staff-phone"
+                            value={newUser.phone}
+                            onChange={(e) => setNewUser({ ...newUser, phone: e.target.value })}
+                            placeholder="+971-50-XXX-XXXX"
+                            data-testid="staff-phone-input"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="staff-password">Password *</Label>
+                          <Input
+                            id="staff-password"
+                            type="password"
+                            value={newUser.password}
+                            onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
+                            placeholder="••••••••"
+                            data-testid="staff-password-input"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="staff-role">Role *</Label>
+                          <Select 
+                            value={newUser.role} 
+                            onValueChange={(value) => setNewUser({ ...newUser, role: value })}
+                            data-testid="staff-role-select"
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select role" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="branch_manager">Branch Manager</SelectItem>
+                              <SelectItem value="waiter">Waiter</SelectItem>
+                              <SelectItem value="kitchen_staff">Kitchen Staff</SelectItem>
+                              <SelectItem value="delivery_partner">Delivery Partner</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        {['waiter', 'kitchen_staff', 'branch_manager', 'delivery_partner'].includes(newUser.role) && (
+                          <div>
+                            <Label htmlFor="staff-branch">Branch *</Label>
+                            <Select 
+                              value={newUser.branch_id} 
+                              onValueChange={(value) => setNewUser({ ...newUser, branch_id: value })}
+                              data-testid="staff-branch-select"
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select branch" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {branches.map(branch => (
+                                  <SelectItem key={branch.id} value={branch.id}>
+                                    {branch.name}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+                        <Button 
+                          onClick={handleCreateUser} 
+                          className="w-full bg-orange-600 hover:bg-orange-700"
+                          data-testid="create-staff-button"
+                        >
+                          Create Staff Member
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {allUsers.map(staffUser => {
+                    const userBranch = branches.find(b => b.id === staffUser.branch_id);
+                    return (
+                      <div 
+                        key={staffUser.id} 
+                        className="p-4 border rounded-lg hover:bg-gray-50 flex items-center justify-between"
+                        data-testid={`staff-row-${staffUser.id}`}
+                      >
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-3 mb-2">
+                            <h3 className="font-semibold text-lg">{staffUser.name}</h3>
+                            <Badge 
+                              variant={staffUser.role === 'admin' ? 'destructive' : 'default'}
+                              data-testid={`staff-role-badge-${staffUser.id}`}
+                            >
+                              {staffUser.role.replace('_', ' ')}
+                            </Badge>
+                            <Badge variant={staffUser.is_active ? 'default' : 'secondary'}>
+                              {staffUser.is_active ? 'Active' : 'Inactive'}
+                            </Badge>
+                          </div>
+                          <div className="text-sm text-gray-600 space-y-1">
+                            <p><strong>Email:</strong> {staffUser.email}</p>
+                            {staffUser.phone && <p><strong>Phone:</strong> {staffUser.phone}</p>}
+                            {userBranch && (
+                              <p><strong>Branch:</strong> {userBranch.name}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  {allUsers.length === 0 && (
+                    <p className="text-center text-gray-500 py-8">No staff members found</p>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Orders Tab */}
           <TabsContent value="orders">
             <Card data-testid="all-orders-card">
