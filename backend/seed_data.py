@@ -36,30 +36,30 @@ async def seed_data():
     print("\n2️⃣ Creating branches...")
     branches = [
         {
-            "name": "Al Taj Downtown",
-            "address": "Sheikh Zayed Road, Downtown Dubai",
-            "phone": "+971-4-123-4567",
-            "email": "downtown@altaj.com",
-            "latitude": 25.2048,
-            "longitude": 55.2708,
+            "name": "Al Taj Dharwad Road",
+            "address": "Shop No. 45-46, Dharwad Road, Near HDFC Bank, Hubli - 580029",
+            "phone": "+91-836-2245678",
+            "email": "dharwadroad@altaj.com",
+            "latitude": 15.3647,
+            "longitude": 75.1240,
             "is_active": True
         },
         {
-            "name": "Al Taj Marina",
-            "address": "Dubai Marina Walk, Marina",
-            "phone": "+971-4-234-5678",
-            "email": "marina@altaj.com",
-            "latitude": 25.0772,
-            "longitude": 55.1370,
+            "name": "Al Taj Unkal",
+            "address": "Unkal Lake Road, Opp. Unkal Park, Hubli - 580031",
+            "phone": "+91-836-2356789",
+            "email": "unkal@altaj.com",
+            "latitude": 15.3486,
+            "longitude": 75.1348,
             "is_active": True
         },
         {
-            "name": "Al Taj JBR",
-            "address": "The Beach, JBR, Dubai",
-            "phone": "+971-4-345-6789",
-            "email": "jbr@altaj.com",
-            "latitude": 25.0782,
-            "longitude": 55.1318,
+            "name": "Al Taj Gokul Road",
+            "address": "Gokul Road, Near Old Bus Stand, Hubli - 580030",
+            "phone": "+91-836-2467890",
+            "email": "gokulroad@altaj.com",
+            "latitude": 15.3573,
+            "longitude": 75.1379,
             "is_active": True
         }
     ]
