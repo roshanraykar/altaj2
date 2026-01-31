@@ -9,11 +9,11 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 - **Waiter**: Table management and order taking
 - **Kitchen Staff**: Order queue management and preparation tracking
 - **Delivery Partner**: Pickup ready orders and manage delivery status
-- **Customer**: Browse menu, place orders (dine-in, takeaway, delivery), track orders
+- **Customer**: Browse menu, place orders (dine-in, takeaway, delivery), track orders, view order history
 
 ## Core Requirements
 - **Localization**: Indian Rupee (₹), Hubli Karnataka locations
-- **Branding**: Official Al Taj logo and authentic menu items
+- **Branding**: Official Al Taj logo and authentic menu items with images
 - **Authentication**: Email/password and Mobile OTP login
 - **Payments**: Razorpay integration (LIVE keys provided)
 - **UI/UX**: "Elegant Minimalist" design, professional and clean
@@ -30,96 +30,82 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 ### ✅ Completed (Jan 31, 2025)
 
 1. **Logo & Branding Update**
-   - Integrated official Al Taj Restaurant logo (`/frontend/public/altaj-logo.png`)
-   - Logo displayed on: Landing page, Order page, Login page
+   - Integrated official Al Taj Restaurant logo
+   - Logo displayed on: Landing page, Order page, Login page, Customer Dashboard
 
-2. **Menu Items Update**
-   - Updated `seed_data.py` with 163 actual menu items from Al Taj Menu Card
-   - 11 Categories: Chinese Thrillers, Tandoori Karishma, Starters, Indian Dishes (Chicken & Mutton), Biryani & Rice, Egg Items, Veg, Gravy, Dal, Extras
-   - All prices in INR (₹) matching the actual menu card
+2. **Menu Items with Images & Descriptions**
+   - 326 menu items with intelligent descriptions
+   - Food images from Unsplash categorized by dish type
+   - 11 Categories with proper image mapping
 
-3. **Delivery Fleet Management** (NEW)
+3. **Delivery Fleet Management**
    - Delivery partner model with availability status (Available/Busy/Offline)
-   - Admin can create delivery partners from users with delivery_partner role
    - 6 delivery partners seeded (3 per branch)
    - Vehicle type and number tracking
 
-4. **Delivery Dashboard** (NEW)
-   - `/delivery` route for delivery partners
-   - Shows orders marked "ready" by kitchen
-   - Availability toggle (Available/Offline)
-   - Order status updates: Picked Up → On the Way → Delivered
+4. **Delivery Dashboard** (`/delivery`)
+   - Orders ready for pickup display
+   - **Fixed**: Status flow now works: Picked Up → On the Way → Delivered
+   - Availability toggle with proper refresh
    - Partner profile with vehicle info
 
-5. **Table Management Enhancement** (NEW)
+5. **Table Management**
    - Table states: Vacant → Occupied → Cleaning → Vacant
-   - Waiter can mark table as "cleaning" after order completion
-   - Waiter can mark table as "vacant" after cleaning
-   - 20 tables seeded (10 per branch)
+   - Waiter can manage table status after orders
 
-6. **Customer Dine-in Table Selection** (NEW)
-   - Shows available tables when customer selects "Dine-in"
-   - Only vacant tables can be selected
+6. **Customer Dashboard** (`/my-orders`) - NEW
+   - Order history with Active/History tabs
+   - Stats: Total Orders, Active Orders, Completed, Total Spent
+   - Order tracking with status progress bar
+   - Real-time updates every 10 seconds
+
+7. **Customer Table Selection**
+   - Shows available tables for dine-in orders
    - Table linked to order
 
-7. **Delivery Availability Logic** (NEW)
-   - Checks if delivery personnel available before allowing delivery orders
-   - Disables delivery option if all personnel busy
-   - Shows warning message when delivery unavailable
-
-8. **Order Routing Display** (NEW)
-   - Kitchen sees: All orders (all types)
-   - Waiter sees: Dine-in orders with table info + serve/complete buttons
-   - Delivery sees: Delivery orders after "ready" status
-
-9. **Enhanced Order Status Flow** (NEW)
-   - Dine-in: pending → confirmed → preparing → ready → served → completed
-   - Takeaway: pending → confirmed → preparing → ready → completed
-   - Delivery: pending → confirmed → preparing → ready → picked_up → on_the_way → delivered
+8. **Delivery Availability Check**
+   - Disables delivery when no partners available
 
 ### 🔄 In Progress / Pending
-1. **OTP Login (BLOCKED)**
-   - Backend code exists but requires SMS provider credentials (Twilio)
-   - User needs to provide: Account SID, Auth Token, Phone Number
-
-2. **Razorpay Testing**
-   - Full end-to-end payment flow needs verification with LIVE keys
-
-3. **UI Redesign**
-   - Apply "Elegant Minimalist" design to Admin, Waiter, Kitchen dashboards
+1. **OTP Login (BLOCKED)** - Requires Twilio credentials
+2. **Razorpay End-to-End Testing** - Payment flow with LIVE keys
 
 ### 📋 Backlog
 1. **Native Mobile Apps** - React Native for Android & iOS
-2. **Backend Refactoring** - Split monolithic server.py into proper structure
-3. **Mobile Compatibility Preview** - Screenshots of responsive design
-
-## Database Schema
-- `users`: uuid, name, email, phone_number, hashed_password, role, branch_id
-- `branches`: uuid, name, location, address, phone, email, is_active
-- `menu_items`: uuid, name, price, category_id, is_vegetarian, is_available
-- `menu_categories`: uuid, name, description, display_order
-- `orders`: uuid, order_number, customer_id, branch_id, items, total, status, payment_method, table_id, delivery_partner_id
-- `tables`: uuid, branch_id, table_number, capacity, location, status (vacant/occupied/cleaning), current_order_id
-- `delivery_partners`: uuid, user_id, branch_id, name, phone, vehicle_type, vehicle_number, status (available/busy/offline), current_order_id
+2. **Backend Refactoring** - Split monolithic server.py
 
 ## Test Credentials
-- **Admin**: admin@altaj.com / admin123
-- **Branch Manager**: manager.familyrestaurant-oldhubli@altaj.com / manager123
-- **Waiter**: waiter1.familyrestaurant-oldhubli@altaj.com / waiter123
-- **Kitchen**: kitchen1.familyrestaurant-oldhubli@altaj.com / kitchen123
-- **Delivery Partner**: delivery1.familyrestaurant-oldhubli@altaj.com / delivery123
-- **Customer**: priya.sharma@email.com / customer123
+
+| Role | Email | Password | Dashboard |
+|------|-------|----------|-----------|
+| **Admin** | admin@altaj.com | admin123 | /admin |
+| **Customer** | priya.sharma@email.com | customer123 | /my-orders |
+| **Kitchen** | kitchen1.familyrestaurant-oldhubli@altaj.com | kitchen123 | /kitchen |
+| **Waiter** | waiter1.familyrestaurant-oldhubli@altaj.com | waiter123 | /waiter |
+| **Delivery** | delivery1.familyrestaurant-oldhubli@altaj.com | delivery123 | /delivery |
+
+## Test Flow (Multi-Browser Testing)
+
+### Delivery Order Flow:
+1. **Customer** → `/order` → Select "Delivery" → Add items → Checkout
+2. **Kitchen** → `/kitchen` → See order → Mark "Preparing" → Mark "Ready"
+3. **Delivery** → `/delivery` → See order in "Ready for Pickup" → "Pickup Order"
+4. **Delivery** → Click "Mark On The Way" → Click "Mark Delivered"
+5. **Customer** → `/my-orders` → See order status update in real-time
+
+### Dine-in Order Flow:
+1. **Customer** → `/order` → Select "Dine In" → Select Table → Add items → Checkout
+2. **Kitchen** → `/kitchen` → See order → Mark "Preparing" → Mark "Ready"
+3. **Waiter** → `/waiter` → See table "Occupied" → See order "Ready" → "Mark Served" → "Complete Order"
+4. **Waiter** → Table shows "Cleaning" → Click "Mark Vacant"
 
 ## Key Files
 - `backend/server.py` - All backend logic and API endpoints
-- `backend/seed_data.py` - Database seeding with actual menu and delivery partners
-- `frontend/src/pages/NewLandingPage.js` - Main landing page
-- `frontend/src/pages/LandingPage.js` - Order page with table selection
-- `frontend/src/pages/LoginPage.js` - Authentication page
+- `backend/seed_data.py` - Database seeding
+- `frontend/src/pages/CustomerDashboard.js` - Customer order history
 - `frontend/src/pages/DeliveryDashboard.js` - Delivery partner dashboard
-- `frontend/src/pages/WaiterDashboard.js` - Waiter table & order management
-- `frontend/src/pages/KitchenDashboard.js` - Kitchen order queue
+- `frontend/src/pages/LandingPage.js` - Order page with menu images
 
 ## Test Reports
-- `/app/test_reports/iteration_1.json` - Full test report (100% pass rate)
-- `/app/backend/tests/test_restaurant_features.py` - Pytest test cases
+- `/app/test_reports/iteration_1.json` - Initial features test
+- `/app/test_reports/iteration_2.json` - Customer Dashboard & Delivery flow test
