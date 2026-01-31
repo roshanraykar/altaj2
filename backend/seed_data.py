@@ -223,20 +223,20 @@ async def seed_data():
     offers = [
         {
             "title": "Weekend Special - 20% Off",
-            "description": "Get 20% off on all orders above AED 100 during weekends",
+            "description": "Get 20% off on all orders above ₹500 during weekends",
             "discount_type": "percentage",
             "discount_value": 20,
-            "min_order_value": 100,
+            "min_order_value": 500,
             "valid_from": now.isoformat(),
             "valid_until": (now + timedelta(days=30)).isoformat(),
             "branch_ids": None
         },
         {
             "title": "Lunch Combo Deal",
-            "description": "Flat AED 25 off on lunch orders between 12 PM - 3 PM",
+            "description": "Flat ₹100 off on lunch orders between 12 PM - 3 PM",
             "discount_type": "fixed",
-            "discount_value": 25,
-            "min_order_value": 75,
+            "discount_value": 100,
+            "min_order_value": 350,
             "valid_from": now.isoformat(),
             "valid_until": (now + timedelta(days=30)).isoformat(),
             "branch_ids": None
