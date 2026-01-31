@@ -100,10 +100,8 @@ const NewLandingPage = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-emerald-50 to-amber-50 overflow-hidden">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <ChefHat className="h-48 w-48 text-emerald-200/30" />
-                </div>
+              <div className="aspect-square rounded-2xl bg-gradient-to-br from-red-50 to-amber-50 overflow-hidden flex items-center justify-center p-8">
+                <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="w-full h-auto max-w-xs" />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-white p-6 rounded-xl shadow-xl border border-gray-100">
                 <div className="flex items-center space-x-3">
