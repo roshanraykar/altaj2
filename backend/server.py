@@ -292,7 +292,10 @@ class Order(BaseModel):
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 class OrderStatusUpdate(BaseModel):
-    status: Literal["pending", "confirmed", "preparing", "ready", "out_for_delivery", "completed", "cancelled"]
+    status: Literal["pending", "confirmed", "preparing", "ready", "picked_up", "on_the_way", "delivered", "served", "completed", "cancelled"]
+
+class DeliveryAssignment(BaseModel):
+    delivery_partner_id: str
 
 # Offer Models
 class OfferCreate(BaseModel):
