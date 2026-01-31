@@ -64,6 +64,14 @@ function AppRoutes() {
         }
       />
       <Route
+        path="/delivery"
+        element={
+          <ProtectedRoute allowedRoles={['delivery_partner']}>
+            <DeliveryDashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/branch-manager"
         element={
           <ProtectedRoute allowedRoles={['branch_manager', 'admin']}>
