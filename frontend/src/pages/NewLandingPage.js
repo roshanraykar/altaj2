@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, Clock, MapPin, Star, Phone, Mail, ChefHat, Utensils, Package, Truck } from 'lucide-react';
+import { ArrowRight, Clock, MapPin, Star, Phone, Utensils, Package, Truck } from 'lucide-react';
 
 const NewLandingPage = () => {
   const navigate = useNavigate();
