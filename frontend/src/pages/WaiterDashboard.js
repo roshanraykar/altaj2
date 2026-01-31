@@ -53,6 +53,27 @@ const WaiterDashboard = () => {
     return orders.find(order => order.table_id === tableId && !['completed', 'cancelled'].includes(order.status));
   };
 
+  const handleMarkTableVacant = async (tableId) => {
+    try {
+      await axios.put(`${API}/tables/${tableId}/status`, { status: 'vacant' }, { headers });
+      toast({ title: 'Table marked vacant', description: 'Table is now available for new customers' });
+      fetchTables();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to update table status', variant: 'destructive' });
+    }
+  };
+
+  const handleUpdateOrderStatus = async (orderId, newStatus) => {
+    try {
+      await axios.put(`${API}/orders/${orderId}/status`, { status: newStatus }, { headers });
+      toast({ title: 'Order updated', description: `Order status changed to ${newStatus}` });
+      fetchOrders();
+      fetchTables();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to update order status', variant: 'destructive' });
+    }
+  };
+
   const handleLogout = () => {
     logout();
     navigate('/login');
