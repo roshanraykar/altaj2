@@ -539,7 +539,9 @@ async def create_order(order_data: OrderCreate):
         "subtotal": subtotal,
         "tax": gst,  # Store as 'tax' field for backwards compatibility
         "total": total,
-        "status": "pending"
+        "status": "pending",
+        "payment_method": order_data.payment_method,
+        "payment_status": "pending" if order_data.payment_method == "online" else "cod"
     })
     
     order = Order(**order_dict)
