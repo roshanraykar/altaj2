@@ -223,6 +223,7 @@ class OrderCreate(BaseModel):
     delivery_address: Optional[str] = None
     table_id: Optional[str] = None  # For dine-in orders
     special_instructions: Optional[str] = None
+    payment_method: Literal["cod", "online"] = "cod"  # Default to COD
 
 class Order(BaseModel):
     model_config = ConfigDict(extra="ignore")
