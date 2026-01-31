@@ -130,7 +130,7 @@ const LoginPage = () => {
         navigate('/delivery');
         break;
       case 'customer':
-        navigate('/');
+        navigate('/my-orders');
         break;
       default:
         navigate('/');
