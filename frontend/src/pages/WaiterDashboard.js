@@ -83,22 +83,44 @@ const WaiterDashboard = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {tables.map(table => {
               const tableOrder = getTableOrder(table.id);
+              const tableStatus = table.status || (table.is_occupied ? 'occupied' : 'vacant');
+              const statusColors = {
+                'vacant': 'bg-green-50 border-green-300',
+                'occupied': 'bg-orange-50 border-orange-300',
+                'cleaning': 'bg-yellow-50 border-yellow-300'
+              };
+              const statusBadgeColors = {
+                'vacant': 'bg-green-500',
+                'occupied': 'bg-orange-500',
+                'cleaning': 'bg-yellow-500'
+              };
               return (
                 <Card
                   key={table.id}
-                  className={`cursor-pointer transition-all hover:shadow-lg ${
-                    table.is_occupied ? 'bg-orange-50 border-orange-300' : 'bg-green-50 border-green-300'
-                  }`}
+                  className={`cursor-pointer transition-all hover:shadow-lg ${statusColors[tableStatus]}`}
                   onClick={() => setSelectedTable(table)}
                   data-testid={`table-card-${table.id}`}
                 >
                   <CardContent className="pt-6 text-center">
                     <div className="text-3xl font-bold mb-2">{table.table_number}</div>
-                    <Badge variant={table.is_occupied ? 'destructive' : 'default'} data-testid={`table-status-${table.id}`}>
-                      {table.is_occupied ? 'Occupied' : 'Available'}
+                    <Badge className={statusBadgeColors[tableStatus]} data-testid={`table-status-${table.id}`}>
+                      {tableStatus.charAt(0).toUpperCase() + tableStatus.slice(1)}
                     </Badge>
                     <p className="text-sm text-gray-600 mt-2">Capacity: {table.capacity}</p>
                     <p className="text-xs text-gray-500">{table.location}</p>
+                    {tableStatus === 'cleaning' && (
+                      <Button 
+                        size="sm" 
+                        className="mt-2 bg-green-500 hover:bg-green-600"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleMarkTableVacant(table.id);
+                        }}
+                        data-testid={`mark-vacant-${table.id}`}
+                      >
+                        Mark Vacant
+                      </Button>
+                    )}
                   </CardContent>
                 </Card>
               );
