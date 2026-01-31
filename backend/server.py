@@ -132,6 +132,15 @@ class AuthResponse(BaseModel):
     token_type: str = "bearer"
     user: User
 
+# OTP Models
+class OTPRequest(BaseModel):
+    phone: str  # +91-XXXXXXXXXX format
+
+class OTPVerify(BaseModel):
+    phone: str
+    otp: str
+    name: Optional[str] = None  # For new user registration via OTP
+
 # Branch Models
 class BranchCreate(BaseModel):
     name: str
