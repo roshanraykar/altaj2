@@ -136,7 +136,7 @@ const WaiterDashboard = () => {
                       ))}
                     </div>
                     <div className="border-t pt-3 flex justify-between items-center">
-                      <span className="font-bold text-lg">AED {order.total.toFixed(2)}</span>
+                      <span className="font-bold text-lg">₹{order.total.toFixed(2)}</span>
                       {order.status === 'ready' && (
                         <Badge className="bg-green-600">Ready to Serve!</Badge>
                       )}

@@ -200,7 +200,7 @@ const AdminDashboard = () => {
               <Card data-testid="stat-card-today-revenue">
                 <CardHeader className="pb-3">
                   <CardDescription>Today's Revenue</CardDescription>
-                  <CardTitle className="text-3xl text-green-600">AED {stats?.today_revenue || 0}</CardTitle>
+                  <CardTitle className="text-3xl text-green-600">₹{stats?.today_revenue || 0}</CardTitle>
                 </CardHeader>
               </Card>
               <Card data-testid="stat-card-today-orders">
@@ -232,7 +232,7 @@ const AdminDashboard = () => {
                         <p className="text-xs text-gray-500 capitalize">{order.order_type.replace('_', ' ')}</p>
                       </div>
                       <div className="text-right mr-4">
-                        <p className="font-bold text-orange-600">AED {order.total.toFixed(2)}</p>
+                        <p className="font-bold text-orange-600">₹{order.total.toFixed(2)}</p>
                         <p className="text-sm text-gray-600">{order.items.length} items</p>
                       </div>
                       <Badge className={getStatusColor(order.status)} data-testid={`order-status-${order.id}`}>
@@ -457,7 +457,7 @@ const AdminDashboard = () => {
                         <div>
                           <p className="text-sm text-gray-600 capitalize">{order.order_type.replace('_', ' ')} - {order.items.length} items</p>
                         </div>
-                        <p className="font-bold text-orange-600 text-lg">AED {order.total.toFixed(2)}</p>
+                        <p className="font-bold text-orange-600 text-lg">₹{order.total.toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -481,7 +481,7 @@ const AdminDashboard = () => {
                       <div className="grid grid-cols-3 gap-4">
                         <div>
                           <p className="text-sm text-gray-600">Total Revenue</p>
-                          <p className="text-2xl font-bold text-green-600">AED {branch.total_revenue}</p>
+                          <p className="text-2xl font-bold text-green-600">₹{branch.total_revenue}</p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Total Orders</p>
@@ -489,7 +489,7 @@ const AdminDashboard = () => {
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Avg Order Value</p>
-                          <p className="text-2xl font-bold text-orange-600">AED {branch.avg_order_value}</p>
+                          <p className="text-2xl font-bold text-orange-600">₹{branch.avg_order_value}</p>
                         </div>
                       </div>
                     </div>

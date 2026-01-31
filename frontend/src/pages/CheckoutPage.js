@@ -177,24 +177,24 @@ const CheckoutPage = () => {
                     <div key={item.menu_item_id} className="flex justify-between text-sm" data-testid={`summary-item-${item.menu_item_id}`}>
                       <div>
                         <p className="font-medium">{item.menu_item_name}</p>
-                        <p className="text-gray-600">Qty: {item.quantity} × AED {item.unit_price.toFixed(2)}</p>
+                        <p className="text-gray-600">Qty: {item.quantity} × ₹{item.unit_price.toFixed(2)}</p>
                       </div>
-                      <span className="font-medium">AED {item.total_price.toFixed(2)}</span>
+                      <span className="font-medium">₹{item.total_price.toFixed(2)}</span>
                     </div>
                   ))}
                 </div>
                 <div className="border-t mt-4 pt-4 space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Subtotal:</span>
-                    <span>AED {subtotal.toFixed(2)}</span>
+                    <span>₹{subtotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span>Tax (5%):</span>
-                    <span>AED {tax.toFixed(2)}</span>
+                    <span>GST (5%):</span>
+                    <span>₹{tax.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-lg font-bold border-t pt-2">
                     <span>Total:</span>
-                    <span className="text-orange-600" data-testid="total-amount">AED {total.toFixed(2)}</span>
+                    <span className="text-orange-600" data-testid="total-amount">₹{total.toFixed(2)}</span>
                   </div>
                 </div>
               </CardContent>
