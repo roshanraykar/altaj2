@@ -776,6 +776,24 @@ async def create_order(order_data: OrderCreate):
     if not branch:
         raise HTTPException(status_code=400, detail="Invalid branch_id")
     
+    # For delivery orders, check if delivery is available
+    if order_data.order_type == "delivery":
+        available_partners = await db.delivery_partners.count_documents({
+            "branch_id": order_data.branch_id,
+            "status": "available"
+        })
+        if available_partners == 0:
+            raise HTTPException(status_code=400, detail="Delivery is currently unavailable. All delivery partners are busy.")
+    
+    # For dine-in orders, validate table is vacant
+    if order_data.order_type == "dine_in" and order_data.table_id:
+        table = await db.tables.find_one({"id": order_data.table_id}, {"_id": 0})
+        if not table:
+            raise HTTPException(status_code=400, detail="Table not found")
+        table_status = table.get("status", "occupied" if table.get("is_occupied") else "vacant")
+        if table_status != "vacant":
+            raise HTTPException(status_code=400, detail="Selected table is not available")
+    
     # Calculate totals
     subtotal = sum(item.total_price for item in order_data.items)
     gst = subtotal * 0.05  # 5% GST (India)
@@ -789,7 +807,7 @@ async def create_order(order_data: OrderCreate):
     order_dict.update({
         "order_number": order_number,
         "subtotal": subtotal,
-        "tax": gst,  # Store as 'tax' field for backwards compatibility
+        "tax": gst,
         "total": total,
         "status": "pending",
         "payment_method": order_data.payment_method,
@@ -807,7 +825,7 @@ async def create_order(order_data: OrderCreate):
     if order_data.order_type == "dine_in" and order_data.table_id:
         await db.tables.update_one(
             {"id": order_data.table_id},
-            {"$set": {"is_occupied": True, "current_order_id": order.id}}
+            {"$set": {"status": "occupied", "current_order_id": order.id}}
         )
     
     return order
