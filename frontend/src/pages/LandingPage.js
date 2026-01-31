@@ -130,9 +130,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
-              <div className="bg-white/10 backdrop-blur-sm p-3 rounded-xl">
-                <ChefHat className="h-8 w-8 text-white" />
-              </div>
+              <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-14 w-auto" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight" data-testid="restaurant-name">Al Taj Restaurant</h1>
                 <p className="text-orange-100 text-sm flex items-center gap-2">
