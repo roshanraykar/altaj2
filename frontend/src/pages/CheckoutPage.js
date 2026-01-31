@@ -226,7 +226,9 @@ const CheckoutPage = () => {
         order_type: orderType,
         items: cart,
         delivery_address: orderType === 'delivery' ? customerInfo.delivery_address.trim() : null,
-        special_instructions: customerInfo.special_instructions.trim() || null
+        table_id: orderType === 'dine_in' && selectedTable ? selectedTable.id : null,
+        special_instructions: customerInfo.special_instructions.trim() || null,
+        payment_method: paymentMethod
       };
 
       const response = await axios.post(`${API}/orders`, orderData);
