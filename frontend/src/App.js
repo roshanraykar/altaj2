@@ -11,6 +11,7 @@ import AdminDashboard from '@/pages/AdminDashboard';
 import WaiterDashboard from '@/pages/WaiterDashboard';
 import KitchenDashboard from '@/pages/KitchenDashboard';
 import DeliveryDashboard from '@/pages/DeliveryDashboard';
+import CustomerDashboard from '@/pages/CustomerDashboard';
 import '@/App.css';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -39,6 +40,15 @@ function AppRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order-tracking" element={<OrderTrackingPage />} />
+      <Route path="/track/:orderId" element={<OrderTrackingPage />} />
+      <Route
+        path="/my-orders"
+        element={
+          <ProtectedRoute allowedRoles={['customer']}>
+            <CustomerDashboard />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/admin"
         element={
