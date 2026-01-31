@@ -648,29 +648,122 @@ async def create_table(table_data: TableCreate, current_user: dict = Depends(req
     return table
 
 @api_router.get("/tables", response_model=List[Table])
-async def get_tables(branch_id: Optional[str] = None):
+async def get_tables(branch_id: Optional[str] = None, status: Optional[str] = None):
     query = {}
     if branch_id:
         query["branch_id"] = branch_id
+    if status:
+        query["status"] = status
     
     tables = await db.tables.find(query, {"_id": 0}).to_list(1000)
     for table in tables:
         if isinstance(table['created_at'], str):
             table['created_at'] = datetime.fromisoformat(table['created_at'])
+        # Handle legacy data with is_occupied field
+        if 'is_occupied' in table and 'status' not in table:
+            table['status'] = 'occupied' if table['is_occupied'] else 'vacant'
     return tables
 
 @api_router.put("/tables/{table_id}/status")
-async def update_table_status(table_id: str, is_occupied: bool, order_id: Optional[str] = None):
-    update_data = {"is_occupied": is_occupied}
-    if order_id:
-        update_data["current_order_id"] = order_id
-    elif not is_occupied:
+async def update_table_status(table_id: str, status_update: TableStatusUpdate):
+    """Update table status: vacant, occupied, or cleaning"""
+    update_data = {"status": status_update.status}
+    
+    if status_update.status == "occupied" and status_update.order_id:
+        update_data["current_order_id"] = status_update.order_id
+    elif status_update.status == "vacant":
         update_data["current_order_id"] = None
     
     result = await db.tables.update_one({"id": table_id}, {"$set": update_data})
     if result.matched_count == 0:
         raise HTTPException(status_code=404, detail="Table not found")
-    return {"message": "Table status updated"}
+    
+    updated_table = await db.tables.find_one({"id": table_id}, {"_id": 0})
+    return updated_table
+
+# ============================================================================
+# DELIVERY FLEET ROUTES
+# ============================================================================
+
+@api_router.post("/delivery-partners", response_model=DeliveryPartner)
+async def create_delivery_partner(partner_data: DeliveryPartnerCreate, current_user: dict = Depends(require_role(["admin", "branch_manager"]))):
+    """Create a delivery partner from an existing user with delivery_partner role"""
+    # Validate user exists and has delivery_partner role
+    user = await db.users.find_one({"id": partner_data.user_id}, {"_id": 0})
+    if not user:
+        raise HTTPException(status_code=400, detail="User not found")
+    if user.get("role") != "delivery_partner":
+        raise HTTPException(status_code=400, detail="User must have delivery_partner role")
+    
+    # Check if already a delivery partner
+    existing = await db.delivery_partners.find_one({"user_id": partner_data.user_id})
+    if existing:
+        raise HTTPException(status_code=400, detail="User is already a delivery partner")
+    
+    partner = DeliveryPartner(
+        user_id=partner_data.user_id,
+        branch_id=partner_data.branch_id,
+        name=user.get("name", ""),
+        phone=user.get("phone", ""),
+        vehicle_type=partner_data.vehicle_type,
+        vehicle_number=partner_data.vehicle_number
+    )
+    doc = partner.model_dump()
+    doc["created_at"] = doc["created_at"].isoformat()
+    await db.delivery_partners.insert_one(doc)
+    return partner
+
+@api_router.get("/delivery-partners", response_model=List[DeliveryPartner])
+async def get_delivery_partners(branch_id: Optional[str] = None, status: Optional[str] = None):
+    """Get delivery partners, optionally filtered by branch and status"""
+    query = {}
+    if branch_id:
+        query["branch_id"] = branch_id
+    if status:
+        query["status"] = status
+    
+    partners = await db.delivery_partners.find(query, {"_id": 0}).to_list(1000)
+    for partner in partners:
+        if isinstance(partner['created_at'], str):
+            partner['created_at'] = datetime.fromisoformat(partner['created_at'])
+    return partners
+
+@api_router.get("/delivery-partners/availability/{branch_id}")
+async def check_delivery_availability(branch_id: str):
+    """Check if delivery is available for a branch (at least one partner available)"""
+    available_count = await db.delivery_partners.count_documents({
+        "branch_id": branch_id,
+        "status": "available"
+    })
+    return {
+        "available": available_count > 0,
+        "available_count": available_count
+    }
+
+@api_router.put("/delivery-partners/{partner_id}/status")
+async def update_delivery_partner_status(partner_id: str, status_update: DeliveryPartnerStatusUpdate, current_user: dict = Depends(get_current_user)):
+    """Update delivery partner status"""
+    update_data = {"status": status_update.status}
+    
+    if status_update.status == "available":
+        update_data["current_order_id"] = None
+    
+    result = await db.delivery_partners.update_one({"id": partner_id}, {"$set": update_data})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Delivery partner not found")
+    
+    updated_partner = await db.delivery_partners.find_one({"id": partner_id}, {"_id": 0})
+    return updated_partner
+
+@api_router.get("/delivery-partners/me", response_model=DeliveryPartner)
+async def get_my_delivery_profile(current_user: dict = Depends(get_current_user)):
+    """Get current user's delivery partner profile"""
+    partner = await db.delivery_partners.find_one({"user_id": current_user["id"]}, {"_id": 0})
+    if not partner:
+        raise HTTPException(status_code=404, detail="Delivery partner profile not found")
+    if isinstance(partner['created_at'], str):
+        partner['created_at'] = datetime.fromisoformat(partner['created_at'])
+    return partner
 
 # ============================================================================
 # ORDER ROUTES
