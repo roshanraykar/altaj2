@@ -513,7 +513,7 @@ async def create_order(order_data: OrderCreate):
     order_dict.update({
         "order_number": order_number,
         "subtotal": subtotal,
-        "tax": tax,
+        "tax": gst,  # Store as 'tax' field for backwards compatibility
         "total": total,
         "status": "pending"
     })
