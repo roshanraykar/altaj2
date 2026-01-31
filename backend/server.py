@@ -977,47 +977,6 @@ async def assign_delivery_partner(order_id: str, assignment: DeliveryAssignment,
         updated_order['updated_at'] = datetime.fromisoformat(updated_order['updated_at'])
     return updated_order
 
-@api_router.get("/orders/my-orders", response_model=List[Order])
-async def get_my_orders(current_user: dict = Depends(get_current_user)):
-    """Get orders for the current logged-in customer"""
-    query = {}
-    
-    # Filter by customer email or phone
-    if current_user.get("email"):
-        query["$or"] = [
-            {"customer_email": current_user["email"]},
-            {"customer_phone": current_user.get("phone")}
-        ]
-    elif current_user.get("phone"):
-        query["customer_phone"] = current_user["phone"]
-    else:
-        # Fallback to customer_id if stored
-        query["customer_id"] = current_user.get("id")
-    
-    orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
-    
-    for order in orders:
-        if isinstance(order['created_at'], str):
-            order['created_at'] = datetime.fromisoformat(order['created_at'])
-        if isinstance(order['updated_at'], str):
-            order['updated_at'] = datetime.fromisoformat(order['updated_at'])
-    
-    return orders
-
-@api_router.get("/orders/{order_id}", response_model=Order)
-async def get_order_by_id(order_id: str):
-    """Get a specific order by ID"""
-    order = await db.orders.find_one({"id": order_id}, {"_id": 0})
-    if not order:
-        raise HTTPException(status_code=404, detail="Order not found")
-    
-    if isinstance(order['created_at'], str):
-        order['created_at'] = datetime.fromisoformat(order['created_at'])
-    if isinstance(order['updated_at'], str):
-        order['updated_at'] = datetime.fromisoformat(order['updated_at'])
-    
-    return order
-
 # ============================================================================
 # OFFER ROUTES
 # ============================================================================
