@@ -32,34 +32,25 @@ async def seed_data():
     
     headers = {"Authorization": f"Bearer {admin_token}"}
     
-    # 2. Create Branches
+    # 2. Create Branches (Real Al Taj Locations in Hubli)
     print("\n2️⃣ Creating branches...")
     branches = [
         {
-            "name": "Al Taj Dharwad Road",
-            "address": "Shop No. 45-46, Dharwad Road, Near HDFC Bank, Hubli - 580029",
+            "name": "Al Taj Family Restaurant - Old Hubli",
+            "address": "CTS No 5049, Vishal Nagar, Gudihal Road, Old Hubli, Hubballi - 580024",
             "phone": "+91-836-2245678",
-            "email": "dharwadroad@altaj.com",
+            "email": "oldhubli@altajrestaurant.com",
             "latitude": 15.3647,
             "longitude": 75.1240,
             "is_active": True
         },
         {
-            "name": "Al Taj Unkal",
-            "address": "Unkal Lake Road, Opp. Unkal Park, Hubli - 580031",
+            "name": "Al Taj Restaurant & Fast Food - Shirur Park",
+            "address": "Shirur Park, JC Nagar, Opposite Chetan College, Vidyanagar, Hubballi - 580021",
             "phone": "+91-836-2356789",
-            "email": "unkal@altaj.com",
+            "email": "shirurpark@altajrestaurant.com",
             "latitude": 15.3486,
             "longitude": 75.1348,
-            "is_active": True
-        },
-        {
-            "name": "Al Taj Gokul Road",
-            "address": "Gokul Road, Near Old Bus Stand, Hubli - 580030",
-            "phone": "+91-836-2467890",
-            "email": "gokulroad@altaj.com",
-            "latitude": 15.3573,
-            "longitude": 75.1379,
             "is_active": True
         }
     ]
