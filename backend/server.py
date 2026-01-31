@@ -742,6 +742,21 @@ async def get_dashboard_stats(
     }
 
 # ============================================================================
+# USER MANAGEMENT ROUTES
+# ============================================================================
+
+@api_router.get("/users", response_model=List[User])
+async def get_all_users(current_user: dict = Depends(require_role(["admin"]))):
+    """Get all users - Admin only"""
+    users = await db.users.find({}, {"_id": 0, "hashed_password": 0}).to_list(1000)
+    
+    for user_doc in users:
+        if isinstance(user_doc.get('created_at'), str):
+            user_doc['created_at'] = datetime.fromisoformat(user_doc['created_at'])
+    
+    return users
+
+# ============================================================================
 # ROOT ROUTE
 # ============================================================================
 
