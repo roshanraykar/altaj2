@@ -6,7 +6,11 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { LayoutDashboard, Store, UtensilsCrossed, ShoppingBag, BarChart3, LogOut, ChefHat } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { LayoutDashboard, Store, UtensilsCrossed, ShoppingBag, BarChart3, LogOut, ChefHat, Users, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -19,7 +23,17 @@ const AdminDashboard = () => {
   const [branches, setBranches] = useState([]);
   const [orders, setOrders] = useState([]);
   const [performanceData, setPerformanceData] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
   const [activeTab, setActiveTab] = useState('dashboard');
+  const [showAddUserDialog, setShowAddUserDialog] = useState(false);
+  const [newUser, setNewUser] = useState({
+    email: '',
+    password: '',
+    name: '',
+    phone: '',
+    role: 'waiter',
+    branch_id: ''
+  });
 
   const headers = { Authorization: `Bearer ${token}` };
 
