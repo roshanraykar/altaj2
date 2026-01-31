@@ -33,7 +33,8 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
 function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<NewLandingPage />} />
+      <Route path="/order" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/order-tracking" element={<OrderTrackingPage />} />
