@@ -375,9 +375,43 @@ const LandingPage = () => {
         {/* Menu - World-Class Design */}
         <div className="mb-8">
           <div className="mb-6">
-            <h2 className="text-4xl font-bold text-gray-800 mb-2">Our Menu</h2>
-            <p className="text-gray-600">Authentic Indian & Chinese cuisine prepared with love</p>
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div>
+                <h2 className="text-4xl font-bold text-gray-800 mb-2">Our Menu</h2>
+                <p className="text-gray-600">Authentic Indian & Chinese cuisine prepared with love</p>
+              </div>
+              {/* Search Bar */}
+              <div className="relative w-full md:w-96">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Input
+                  type="text"
+                  placeholder="Search dishes... (e.g., Biryani, Butter Chicken)"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 pr-10 py-3 text-lg border-2 border-gray-200 focus:border-orange-400 rounded-xl shadow-sm"
+                  data-testid="menu-search-input"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery('')}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
+
+          {/* Search Results Display */}
+          {searchQuery.trim() && (
+            <div className="mb-6 p-4 bg-orange-50 rounded-xl border border-orange-200">
+              <p className="text-orange-700 font-medium">
+                <Search className="h-4 w-4 inline mr-2" />
+                Found {getFilteredItems().length} items matching "{searchQuery}"
+              </p>
+            </div>
+          )}
           
           {categories.map(category => {
             const categoryItems = getItemsByCategory(category.id);
@@ -390,6 +424,11 @@ const LandingPage = () => {
                   <h3 className="text-3xl font-bold text-gray-800">
                     {category.name}
                   </h3>
+                  {searchQuery.trim() && (
+                    <Badge className="bg-orange-100 text-orange-700 ml-2">
+                      {categoryItems.length} match{categoryItems.length !== 1 ? 'es' : ''}
+                    </Badge>
+                  )}
                   <div className="h-1 flex-1 bg-gradient-to-r from-red-500 to-transparent rounded"></div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
