@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus, Search } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -21,6 +22,7 @@ const LandingPage = () => {
   const [tables, setTables] = useState([]);
   const [selectedTable, setSelectedTable] = useState(null);
   const [deliveryAvailable, setDeliveryAvailable] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const { toast } = useToast();
 
