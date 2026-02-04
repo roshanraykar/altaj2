@@ -7,6 +7,17 @@ BASE_URL = "http://localhost:8001/api"
 async def seed_data():
     print("🌱 Starting Al Taj Restaurant data seeding...")
     
+    # Check if data already exists
+    try:
+        existing_branches = requests.get(f"{BASE_URL}/branches").json()
+        if len(existing_branches) >= 2:
+            print("⚠️ Data already exists! Skipping seed to prevent duplicates.")
+            print(f"   Found {len(existing_branches)} branches")
+            print("   Run with --force to reseed (will clear existing data)")
+            return
+    except:
+        pass
+    
     # 1. Register Admin User
     print("\n1️⃣ Creating admin user...")
     admin_data = {
