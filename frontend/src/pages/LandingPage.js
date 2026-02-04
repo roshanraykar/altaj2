@@ -162,7 +162,29 @@ const LandingPage = () => {
   };
 
   const getItemsByCategory = (categoryId) => {
-    return menuItems.filter(item => item.category_id === categoryId);
+    let items = menuItems.filter(item => item.category_id === categoryId);
+    
+    // Apply search filter if query exists
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      items = items.filter(item => 
+        item.name.toLowerCase().includes(query) ||
+        (item.description && item.description.toLowerCase().includes(query))
+      );
+    }
+    
+    return items;
+  };
+
+  // Get all filtered items for search results display
+  const getFilteredItems = () => {
+    if (!searchQuery.trim()) return [];
+    
+    const query = searchQuery.toLowerCase().trim();
+    return menuItems.filter(item => 
+      item.name.toLowerCase().includes(query) ||
+      (item.description && item.description.toLowerCase().includes(query))
+    );
   };
 
   const orderTypeIcons = {
