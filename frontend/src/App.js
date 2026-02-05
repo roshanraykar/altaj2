@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
+import PWAInstallPrompt from '@/components/PWAInstallPrompt';
 import NewLandingPage from '@/pages/NewLandingPage';
 import LandingPage from '@/pages/LandingPage';
 import LoginPage from '@/pages/LoginPage';
@@ -13,6 +14,21 @@ import KitchenDashboard from '@/pages/KitchenDashboard';
 import DeliveryDashboard from '@/pages/DeliveryDashboard';
 import CustomerDashboard from '@/pages/CustomerDashboard';
 import '@/App.css';
+
+// Register Service Worker for PWA
+const registerServiceWorker = () => {
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then((registration) => {
+          console.log('PWA: Service Worker registered successfully', registration.scope);
+        })
+        .catch((error) => {
+          console.log('PWA: Service Worker registration failed', error);
+        });
+    });
+  }
+};
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user, loading } = useAuth();
