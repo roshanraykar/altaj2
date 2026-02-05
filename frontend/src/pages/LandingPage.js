@@ -204,6 +204,15 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
+              <Button 
+                variant="ghost" 
+                size="icon"
+                className="text-white hover:bg-white/20 rounded-full"
+                onClick={() => navigate('/')}
+                data-testid="back-to-home-button"
+              >
+                <ArrowLeft className="h-6 w-6" />
+              </Button>
               <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-14 w-auto" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight" data-testid="restaurant-name">Al Taj Restaurant</h1>
