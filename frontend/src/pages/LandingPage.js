@@ -566,6 +566,9 @@ const LandingPage = () => {
           </Card>
         </div>
       )}
+      
+      {/* Footer Install Section */}
+      <FooterInstallSection />
     </div>
   );
 };
