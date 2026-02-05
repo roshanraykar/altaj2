@@ -273,6 +273,9 @@ const NewLandingPage = () => {
           </div>
         </div>
       </footer>
+
+      {/* Footer Install Section */}
+      <FooterInstallSection />
     </div>
   );
 };
