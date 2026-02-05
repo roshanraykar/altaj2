@@ -45,8 +45,11 @@ const NewLandingPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-white">
-      {/* Minimal Header */}
+    <div className="min-h-screen bg-white" data-testid="landing-page">
+      {/* Install Banner - Shows at top */}
+      <InstallBanner />
+      
+      {/* Header */}
       <header className="fixed top-0 w-full bg-white/95 backdrop-blur-sm border-b border-gray-100 z-50">
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
@@ -58,7 +61,8 @@ const NewLandingPage = () => {
               <button onClick={() => document.getElementById('locations').scrollIntoView({behavior: 'smooth'})} className="text-gray-600 hover:text-gray-900 transition-colors">Locations</button>
               <button onClick={() => document.getElementById('about').scrollIntoView({behavior: 'smooth'})} className="text-gray-600 hover:text-gray-900 transition-colors">About</button>
             </nav>
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-3">
+              <HeaderInstallButton />
               <Button variant="ghost" onClick={() => navigate('/login')} className="text-sm font-light">Sign In</Button>
               <Button onClick={() => navigate('/order')} className="bg-emerald-700 hover:bg-emerald-800 text-white px-6 text-sm font-light">Order Now</Button>
             </div>
