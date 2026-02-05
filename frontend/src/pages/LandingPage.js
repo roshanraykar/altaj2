@@ -196,6 +196,9 @@ const LandingPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+      {/* Install Banner at Top */}
+      <InstallBanner />
+      
       {/* Premium Header */}
       <header className="bg-gradient-to-r from-orange-600 via-red-600 to-orange-700 text-white shadow-2xl sticky top-0 z-50" data-testid="landing-header">
         <div className="container mx-auto px-4 py-4">
@@ -211,6 +214,7 @@ const LandingPage = () => {
               </div>
             </div>
             <div className="flex items-center space-x-3">
+              <HeaderInstallButton />
               <Button 
                 variant="outline" 
                 className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hidden md:flex" 
