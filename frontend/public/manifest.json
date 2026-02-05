@@ -1,0 +1,45 @@
+{
+  "name": "Al Taj Restaurant",
+  "short_name": "Al Taj",
+  "description": "Order delicious food from Al Taj Restaurant - Authentic Indian & Chinese cuisine in Hubballi",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ea580c",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/altaj-logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/altaj-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["food", "restaurant", "delivery"],
+  "shortcuts": [
+    {
+      "name": "Order Food",
+      "short_name": "Order",
+      "description": "Browse menu and place order",
+      "url": "/order",
+      "icons": [{ "src": "/altaj-logo.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "My Orders",
+      "short_name": "Orders",
+      "description": "View your order history",
+      "url": "/my-orders",
+      "icons": [{ "src": "/altaj-logo.png", "sizes": "192x192" }]
+    }
+  ],
+  "screenshots": [],
+  "related_applications": [],
+  "prefer_related_applications": false
+}
