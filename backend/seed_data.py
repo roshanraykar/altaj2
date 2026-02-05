@@ -322,50 +322,79 @@ async def seed_data():
     
     # 6. Create Branch Staff
     print("\n6️⃣ Creating branch staff...")
+    
+    # Create short-named staff for testing (Old Hubli branch - first branch)
+    test_staff = [
+        {"email": "kitchen@altaj.com", "password": "kit123", "name": "Test Kitchen", "role": "kitchen_staff", "branch_id": branch_ids[0]},
+        {"email": "waiter@altaj.com", "password": "wait123", "name": "Test Waiter", "role": "waiter", "branch_id": branch_ids[0]},
+        {"email": "del@altaj.com", "password": "del123", "name": "Test Delivery", "role": "delivery_partner", "branch_id": branch_ids[0]},
+    ]
+    
+    delivery_user_id = None
+    for staff in test_staff:
+        staff["phone"] = "+91-836-0000001"
+        response = requests.post(f"{BASE_URL}/auth/register", json=staff)
+        if response.status_code == 200:
+            print(f"✅ Created test {staff['role']}: {staff['email']}")
+            if staff["role"] == "delivery_partner":
+                delivery_user_id = response.json().get("user", {}).get("id")
+    
+    # Create delivery partner profile for test delivery user
+    if delivery_user_id:
+        partner_data = {
+            "user_id": delivery_user_id,
+            "branch_id": branch_ids[0],
+            "vehicle_type": "bike",
+            "vehicle_number": "KA-25-TEST1"
+        }
+        requests.post(f"{BASE_URL}/delivery-partners", json=partner_data, headers=headers)
+    
+    # Create additional staff for all branches
     for idx, branch_id in enumerate(branch_ids):
         branch_name = branches[idx]["name"].replace("Al Taj ", "").lower().replace(" ", "")
         
         manager_data = {
-            "email": f"manager.{branch_name}@altaj.com",
-            "password": "manager123",
-            "name": f"{branches[idx]['name']} Manager",
+            "email": f"mgr{idx+1}@altaj.com",
+            "password": "mgr123",
+            "name": f"Manager - {branches[idx]['name']}",
             "role": "branch_manager",
             "phone": f"+91-836-{idx}00-0001",
             "branch_id": branch_id
         }
         response = requests.post(f"{BASE_URL}/auth/register", json=manager_data)
         if response.status_code == 200:
-            print(f"✅ Created manager for {branches[idx]['name']}")
+            print(f"✅ Created manager: mgr{idx+1}@altaj.com")
         
-        for waiter_num in range(1, 4):
+        # Additional staff with shorter emails
+        for waiter_num in range(1, 3):
             waiter_data = {
-                "email": f"waiter{waiter_num}.{branch_name}@altaj.com",
-                "password": "waiter123",
-                "name": f"Waiter {waiter_num} - {branches[idx]['name']}",
+                "email": f"w{waiter_num}b{idx+1}@altaj.com",
+                "password": "wait123",
+                "name": f"Waiter {waiter_num} - Branch {idx+1}",
                 "role": "waiter",
                 "phone": f"+91-836-{idx}0{waiter_num}-0001",
                 "branch_id": branch_id
             }
-            response = requests.post(f"{BASE_URL}/auth/register", json=waiter_data)
+            requests.post(f"{BASE_URL}/auth/register", json=waiter_data)
         
-        for kitchen_num in range(1, 3):
+        for kitchen_num in range(1, 2):
             kitchen_data = {
-                "email": f"kitchen{kitchen_num}.{branch_name}@altaj.com",
-                "password": "kitchen123",
-                "name": f"Chef {kitchen_num} - {branches[idx]['name']}",
+                "email": f"k{kitchen_num}b{idx+1}@altaj.com",
+                "password": "kit123",
+                "name": f"Chef {kitchen_num} - Branch {idx+1}",
                 "role": "kitchen_staff",
                 "phone": f"+91-836-{idx}1{kitchen_num}-0001",
                 "branch_id": branch_id
             }
-            response = requests.post(f"{BASE_URL}/auth/register", json=kitchen_data)
+            requests.post(f"{BASE_URL}/auth/register", json=kitchen_data)
         
         # Create delivery partners for each branch
         delivery_user_ids = []
-        for delivery_num in range(1, 4):
+        for delivery_num in range(1, 3):
             delivery_data = {
-                "email": f"delivery{delivery_num}.{branch_name}@altaj.com",
-                "password": "delivery123",
-                "name": f"Delivery {delivery_num} - {branches[idx]['name']}",
+                "email": f"d{delivery_num}b{idx+1}@altaj.com",
+                "password": "del123",
+                "name": f"Delivery {delivery_num} - Branch {idx+1}",
                 "role": "delivery_partner",
                 "phone": f"+91-836-{idx}2{delivery_num}-0001",
                 "branch_id": branch_id
