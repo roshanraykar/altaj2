@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus, Search } from 'lucide-react';
+import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus, Search, Download } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { InstallBanner, HeaderInstallButton, FooterInstallSection } from '@/components/PWAInstallPrompt';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
