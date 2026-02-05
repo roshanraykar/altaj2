@@ -110,11 +110,17 @@ function AppRoutes() {
 }
 
 function App() {
+  // Register service worker on mount
+  useEffect(() => {
+    registerServiceWorker();
+  }, []);
+
   return (
     <AuthProvider>
       <BrowserRouter>
         <div className="App">
           <AppRoutes />
+          <PWAInstallPrompt />
           <Toaster />
         </div>
       </BrowserRouter>
