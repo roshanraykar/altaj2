@@ -226,18 +226,17 @@ export const FloatingInstallButton = () => {
     <>
       <div className="fixed bottom-6 right-6 z-50" data-testid="floating-install-btn">
         {showTooltip && (
-          <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white text-sm py-2 px-3 rounded-lg shadow-lg whitespace-nowrap">
+          <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white text-xs py-2 px-3 rounded-lg shadow-lg whitespace-nowrap">
             <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900"></div>
-            📲 Install our app!
+            Get our app
           </div>
         )}
         
         <button
           onClick={() => setShowModal(true)}
-          className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white p-4 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 active:scale-95"
-          style={{ boxShadow: '0 4px 20px rgba(234, 88, 12, 0.4)' }}
+          className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
         >
-          <Download className="h-6 w-6" />
+          <Download className="h-5 w-5" />
         </button>
       </div>
       <InstallModal isOpen={showModal} onClose={() => setShowModal(false)} />
@@ -254,24 +253,22 @@ export const FooterInstallSection = () => {
 
   return (
     <>
-      <div className="bg-orange-50 border-t-2 border-orange-200 py-6 px-4" data-testid="footer-install-section">
+      <div className="bg-red-50 border-t border-red-100 py-6 px-4" data-testid="footer-install-section">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <Smartphone className="h-8 w-8 text-orange-600" />
-            <h3 className="text-xl font-bold text-gray-800">Download Al Taj App</h3>
+            <Smartphone className="h-6 w-6 text-red-600" />
+            <h3 className="text-lg font-semibold text-gray-800">Download Al Taj App</h3>
           </div>
-          <p className="text-gray-600 mb-4 max-w-md mx-auto">
-            Get exclusive offers, faster ordering, and real-time order tracking!
+          <p className="text-gray-500 text-sm mb-4 max-w-md mx-auto">
+            Order faster with our mobile app
           </p>
           <Button 
             onClick={() => setShowModal(true)}
-            size="lg"
-            className="bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold px-8"
+            className="bg-red-600 hover:bg-red-700 text-white font-medium px-6"
           >
-            <Download className="h-5 w-5 mr-2" />
-            Install Free App
+            <Download className="h-4 w-4 mr-2" />
+            Download App
           </Button>
-          <p className="text-xs text-gray-500 mt-3">Download from Play Store or App Store</p>
         </div>
       </div>
       <InstallModal isOpen={showModal} onClose={() => setShowModal(false)} />
