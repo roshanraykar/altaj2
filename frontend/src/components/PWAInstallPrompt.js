@@ -40,87 +40,89 @@ export const InstallModal = ({ isOpen, onClose }) => {
 
   const androidAvailable = !!APP_STORE_URLS.android;
   const iosAvailable = !!APP_STORE_URLS.ios;
-  const appsComingSoon = !androidAvailable && !iosAvailable;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="flex justify-between items-start mb-6">
-          <div className="flex items-center gap-3">
-            <img src="/altaj-logo.png" alt="Al Taj" className="h-12 w-auto object-contain flex-shrink-0" />
-            <div>
-              <h3 className="font-bold text-xl text-gray-800">Download Al Taj App</h3>
-              <p className="text-sm text-gray-500">Order food faster on your phone</p>
-            </div>
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-6" onClick={onClose}>
+      <div 
+        className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden" 
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header with red accent */}
+        <div className="bg-gradient-to-r from-red-600 to-red-500 px-5 py-4">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-lg text-white">Download Our App</h3>
+            <button onClick={onClose} className="text-white/80 hover:text-white">
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 p-1">
-            <X className="h-6 w-6" />
-          </button>
         </div>
+        
+        {/* Content */}
+        <div className="p-5">
+          {/* Logo and subtitle */}
+          <div className="flex items-center gap-3 mb-5">
+            <img src="/altaj-logo.png" alt="Al Taj" className="h-14 w-auto object-contain" />
+            <p className="text-sm text-gray-500">Order food faster on your phone</p>
+          </div>
 
-        <div className="space-y-3">
-          {/* Android Download Button */}
-          <button
-            onClick={handleAndroidDownload}
-            disabled={!androidAvailable}
-            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${
-              androidAvailable 
-                ? 'border-green-200 bg-green-50 hover:bg-green-100 hover:border-green-300 cursor-pointer' 
-                : 'border-gray-200 bg-gray-50 cursor-not-allowed'
-            }`}
+          <div className="space-y-3">
+            {/* Android Download Button */}
+            <button
+              onClick={handleAndroidDownload}
+              disabled={!androidAvailable}
+              className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                androidAvailable 
+                  ? 'border-red-200 bg-red-50 hover:bg-red-100 cursor-pointer' 
+                  : 'border-gray-200 bg-gray-50/50'
+              }`}
+            >
+              <div className={`p-2 rounded-lg ${androidAvailable ? 'bg-red-600' : 'bg-gray-300'}`}>
+                <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M17.6 11.4c-.1-.1-.2-.2-.3-.2l-2.4-1.4 1.6-2.6c.1-.2.1-.4-.1-.5-.2-.1-.4-.1-.5.1l-1.6 2.7-2.3-1.3V5.5c0-.2-.2-.4-.4-.4s-.4.2-.4.4v2.7l-2.3 1.3-1.6-2.7c-.1-.2-.3-.2-.5-.1-.2.1-.2.4-.1.5l1.6 2.6-2.4 1.4c-.1.1-.2.2-.3.2-.1.1-.1.3 0 .4.1.2.3.3.5.2l2.3-1.4v2.8c0 .2.2.4.4.4s.4-.2.4-.4v-2.8l2.3 1.4c.2.1.4 0 .5-.2.1-.1.1-.3 0-.4zM12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"/>
+                </svg>
+              </div>
+              <div className="flex-1 text-left">
+                <p className={`font-medium ${androidAvailable ? 'text-gray-800' : 'text-gray-400'}`}>
+                  Android
+                </p>
+                <p className={`text-xs ${androidAvailable ? 'text-red-600' : 'text-gray-400'}`}>
+                  {androidAvailable ? 'Get it on Play Store' : 'Coming Soon'}
+                </p>
+              </div>
+            </button>
+
+            {/* iOS Download Button */}
+            <button
+              onClick={handleIOSDownload}
+              disabled={!iosAvailable}
+              className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
+                iosAvailable 
+                  ? 'border-red-200 bg-red-50 hover:bg-red-100 cursor-pointer' 
+                  : 'border-gray-200 bg-gray-50/50'
+              }`}
+            >
+              <div className={`p-2 rounded-lg ${iosAvailable ? 'bg-gray-900' : 'bg-gray-300'}`}>
+                <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+                </svg>
+              </div>
+              <div className="flex-1 text-left">
+                <p className={`font-medium ${iosAvailable ? 'text-gray-800' : 'text-gray-400'}`}>
+                  iOS
+                </p>
+                <p className={`text-xs ${iosAvailable ? 'text-gray-600' : 'text-gray-400'}`}>
+                  {iosAvailable ? 'Download on App Store' : 'Coming Soon'}
+                </p>
+              </div>
+            </button>
+          </div>
+
+          {/* Close button */}
+          <Button 
+            onClick={onClose} 
+            variant="outline" 
+            className="w-full mt-4 border-red-200 text-red-600 hover:bg-red-50"
           >
-            <div className={`p-3 rounded-xl ${androidAvailable ? 'bg-green-500' : 'bg-gray-400'}`}>
-              <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M17.523 15.341a.5.5 0 0 0 0-.682l-1.006-1.006a.5.5 0 0 0-.707 0l-1.362 1.362-1.362-1.362a.5.5 0 0 0-.707 0l-1.006 1.006a.5.5 0 0 0 0 .682l1.362 1.362-1.362 1.362a.5.5 0 0 0 0 .707l1.006 1.006a.5.5 0 0 0 .707 0l1.362-1.362 1.362 1.362a.5.5 0 0 0 .707 0l1.006-1.006a.5.5 0 0 0 0-.707l-1.362-1.362 1.362-1.362zM6 18c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V8H6v10zM7.5 8.5v9h9v-9h-9zm7-5.5L16 4.5V6h-2V4.5L12.5 3h-1L10 4.5V6H8V4.5L9.5 3h-1L7 4.5V6H5v2h14V6h-2V4.5L15.5 3h-1z"/>
-                <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm0 12h2v-2H3v2zM21 9h-2v2h2V9zm0 4h-2v2h2v-2zm0 4h-2v2h2v-2zm0-12h-2v2h2V5z"/>
-              </svg>
-            </div>
-            <div className="flex-1 text-left">
-              <p className={`font-bold text-lg ${androidAvailable ? 'text-gray-800' : 'text-gray-500'}`}>
-                Android App
-              </p>
-              <p className={`text-sm ${androidAvailable ? 'text-green-600' : 'text-gray-400'}`}>
-                {androidAvailable ? 'Download from Play Store' : 'Coming Soon'}
-              </p>
-            </div>
-            {androidAvailable && (
-              <ExternalLink className="h-5 w-5 text-green-600" />
-            )}
-          </button>
-
-          {/* iOS Download Button */}
-          <button
-            onClick={handleIOSDownload}
-            disabled={!iosAvailable}
-            className={`w-full flex items-center gap-4 p-4 rounded-xl border-2 transition-all ${
-              iosAvailable 
-                ? 'border-blue-200 bg-blue-50 hover:bg-blue-100 hover:border-blue-300 cursor-pointer' 
-                : 'border-gray-200 bg-gray-50 cursor-not-allowed'
-            }`}
-          >
-            <div className={`p-3 rounded-xl ${iosAvailable ? 'bg-black' : 'bg-gray-400'}`}>
-              <svg className="h-8 w-8 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-              </svg>
-            </div>
-            <div className="flex-1 text-left">
-              <p className={`font-bold text-lg ${iosAvailable ? 'text-gray-800' : 'text-gray-500'}`}>
-                iOS App
-              </p>
-              <p className={`text-sm ${iosAvailable ? 'text-blue-600' : 'text-gray-400'}`}>
-                {iosAvailable ? 'Download from App Store' : 'Coming Soon'}
-              </p>
-            </div>
-            {iosAvailable && (
-              <ExternalLink className="h-5 w-5 text-blue-600" />
-            )}
-          </button>
-        </div>
-
-        {/* Spacer */}
-
-        <div className="mt-6 pt-4 border-t">
-          <Button onClick={onClose} variant="outline" className="w-full">
             Close
           </Button>
         </div>
