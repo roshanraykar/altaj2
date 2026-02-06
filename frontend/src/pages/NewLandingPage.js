@@ -54,7 +54,7 @@ const NewLandingPage = () => {
         <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
-              <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-12 w-auto" />
+              <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-10 sm:h-12 w-auto object-contain" />
             </div>
             <nav className="hidden md:flex items-center space-x-8 text-sm">
               <button onClick={() => document.getElementById('menu').scrollIntoView({behavior: 'smooth'})} className="text-gray-600 hover:text-gray-900 transition-colors">Menu</button>
