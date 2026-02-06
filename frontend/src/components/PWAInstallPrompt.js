@@ -47,7 +47,7 @@ export const InstallModal = ({ isOpen, onClose }) => {
       <div className="bg-white rounded-2xl p-6 w-full max-w-md shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex justify-between items-start mb-6">
           <div className="flex items-center gap-3">
-            <img src="/altaj-logo.png" alt="Al Taj" className="h-14 w-14 rounded-xl shadow-md object-contain" />
+            <img src="/altaj-logo.png" alt="Al Taj" className="h-12 w-auto object-contain flex-shrink-0" />
             <div>
               <h3 className="font-bold text-xl text-gray-800">Download Al Taj App</h3>
               <p className="text-sm text-gray-500">Order food faster on your phone</p>
