@@ -107,12 +107,12 @@ const WaiterDashboard = () => {
               const tableStatus = table.status || (table.is_occupied ? 'occupied' : 'vacant');
               const statusColors = {
                 'vacant': 'bg-green-50 border-green-300',
-                'occupied': 'bg-orange-50 border-orange-300',
+                'occupied': 'bg-red-50 border-red-300',
                 'cleaning': 'bg-yellow-50 border-yellow-300'
               };
               const statusBadgeColors = {
                 'vacant': 'bg-green-500',
-                'occupied': 'bg-orange-500',
+                'occupied': 'bg-red-500',
                 'cleaning': 'bg-yellow-500'
               };
               return (

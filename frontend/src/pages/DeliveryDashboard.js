@@ -155,7 +155,7 @@ const DeliveryDashboard = () => {
     const statusConfig = {
       'ready': { variant: 'default', label: 'Ready for Pickup', color: 'bg-blue-500' },
       'picked_up': { variant: 'secondary', label: 'Picked Up', color: 'bg-yellow-500' },
-      'on_the_way': { variant: 'secondary', label: 'On the Way', color: 'bg-orange-500' },
+      'on_the_way': { variant: 'secondary', label: 'On the Way', color: 'bg-red-500' },
       'delivered': { variant: 'default', label: 'Delivered', color: 'bg-green-500' }
     };
     const config = statusConfig[status] || { variant: 'outline', label: status, color: 'bg-gray-500' };
@@ -235,7 +235,7 @@ const DeliveryDashboard = () => {
                 {currentOrder.status === 'picked_up' && (
                   <Button 
                     onClick={() => handleUpdateStatus(currentOrder.id, 'on_the_way')}
-                    className="bg-orange-500 hover:bg-orange-600"
+                    className="bg-red-500 hover:bg-red-600"
                     data-testid="on-the-way-button"
                   >
                     <Navigation className="mr-2 h-4 w-4" /> Mark On The Way
