@@ -158,26 +158,23 @@ export const InstallBanner = () => {
 
   return (
     <>
-      <div className="bg-gradient-to-r from-orange-600 to-red-600 text-white py-3 px-4" data-testid="install-banner">
+      <div className="bg-red-600 text-white py-2.5 px-4" data-testid="install-banner">
         <div className="container mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <Smartphone className="h-6 w-6 flex-shrink-0" />
-            <div>
-              <p className="font-bold text-sm md:text-base">Get Al Taj App on your phone!</p>
-              <p className="text-xs text-orange-100 hidden sm:block">Order food faster • Works offline</p>
-            </div>
+            <Smartphone className="h-5 w-5 flex-shrink-0" />
+            <p className="font-medium text-sm">Download our app for a better experience</p>
           </div>
           
           <div className="flex items-center gap-2">
             <Button 
               size="sm" 
-              className="bg-white text-orange-600 hover:bg-orange-50 font-bold"
+              className="bg-white text-red-600 hover:bg-red-50 font-medium text-xs px-3 h-8"
               onClick={() => setShowModal(true)}
             >
-              <Download className="h-4 w-4 mr-1" /> Install
+              <Download className="h-3.5 w-3.5 mr-1" /> Get App
             </Button>
             <button onClick={handleDismiss} className="text-white/80 hover:text-white p-1">
-              <X className="h-5 w-5" />
+              <X className="h-4 w-4" />
             </button>
           </div>
         </div>
@@ -199,10 +196,11 @@ export const HeaderInstallButton = () => {
       <Button 
         onClick={() => setShowModal(true)}
         size="sm"
-        className="bg-white text-orange-600 hover:bg-orange-50 font-bold shadow-md"
+        variant="outline"
+        className="border-red-200 text-red-600 hover:bg-red-50 font-medium text-xs"
         data-testid="header-install-btn"
       >
-        <Download className="h-4 w-4 mr-1" />
+        <Download className="h-3.5 w-3.5 mr-1" />
         <span>Get App</span>
       </Button>
       <InstallModal isOpen={showModal} onClose={() => setShowModal(false)} />
