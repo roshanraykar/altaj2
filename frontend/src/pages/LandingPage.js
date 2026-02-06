@@ -195,12 +195,12 @@ const LandingPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-yellow-50">
       {/* Install Banner at Top */}
       <InstallBanner />
       
       {/* Premium Header */}
-      <header className="bg-gradient-to-r from-orange-600 via-red-600 to-orange-700 text-white shadow-2xl sticky top-0 z-50" data-testid="landing-header">
+      <header className="bg-gradient-to-r from-red-600 via-red-500 to-red-700 text-white shadow-2xl sticky top-0 z-50" data-testid="landing-header">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
@@ -216,7 +216,7 @@ const LandingPage = () => {
               <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-14 w-auto" />
               <div>
                 <h1 className="text-2xl md:text-3xl font-bold tracking-tight" data-testid="restaurant-name">Al Taj Restaurant</h1>
-                <p className="text-orange-100 text-sm flex items-center gap-2">
+                <p className="text-red-100 text-sm flex items-center gap-2">
                   <MapPin className="h-3 w-3" />
                   Authentic Flavors • Hubballi, Karnataka
                 </p>
@@ -233,7 +233,7 @@ const LandingPage = () => {
                 Sign In
               </Button>
               <Button 
-                className="bg-white text-orange-600 hover:bg-orange-50 font-semibold relative" 
+                className="bg-white text-red-600 hover:bg-red-50 font-semibold relative" 
                 onClick={() => setShowCart(!showCart)} 
                 data-testid="cart-button"
               >
@@ -252,11 +252,11 @@ const LandingPage = () => {
 
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         {/* Branch Selection - Premium Design */}
-        <Card className="mb-8 border-2 border-orange-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="branch-selection-card">
-          <CardHeader className="border-b border-orange-100">
+        <Card className="mb-8 border-2 border-red-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="branch-selection-card">
+          <CardHeader className="border-b border-red-100">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Store className="h-6 w-6 text-orange-600" />
+              <div className="p-2 bg-red-100 rounded-lg">
+                <Store className="h-6 w-6 text-red-600" />
               </div>
               <div>
                 <CardTitle className="text-2xl">Choose Your Branch</CardTitle>
@@ -271,8 +271,8 @@ const LandingPage = () => {
                   key={branch.id}
                   className={`cursor-pointer transition-all duration-300 hover:shadow-2xl border-2 ${
                     selectedBranch?.id === branch.id 
-                      ? 'ring-4 ring-orange-500 bg-gradient-to-br from-orange-50 to-red-50 border-orange-500 shadow-xl' 
-                      : 'border-gray-200 hover:border-orange-300'
+                      ? 'ring-4 ring-red-500 bg-gradient-to-br from-red-50 to-red-50 border-red-500 shadow-xl' 
+                      : 'border-gray-200 hover:border-red-300'
                   }`}
                   onClick={() => setSelectedBranch(branch)}
                   data-testid={`branch-card-${branch.id}`}
@@ -286,15 +286,15 @@ const LandingPage = () => {
                     </div>
                     <div className="space-y-3 text-sm text-gray-600">
                       <p className="flex items-start gap-2">
-                        <MapPin className="h-4 w-4 mt-1 flex-shrink-0 text-orange-600" />
+                        <MapPin className="h-4 w-4 mt-1 flex-shrink-0 text-red-600" />
                         <span>{branch.address}</span>
                       </p>
                       <p className="flex items-center gap-2">
-                        <Phone className="h-4 w-4 text-orange-600" />
+                        <Phone className="h-4 w-4 text-red-600" />
                         <span className="font-medium">{branch.phone}</span>
                       </p>
                       <p className="flex items-center gap-2">
-                        <Clock className="h-4 w-4 text-orange-600" />
+                        <Clock className="h-4 w-4 text-red-600" />
                         <span className="text-green-600 font-semibold">Open Now • 24 Hours</span>
                       </p>
                     </div>
@@ -306,13 +306,13 @@ const LandingPage = () => {
         </Card>
 
         {/* Order Type Selection - Enhanced */}
-        <Card className="mb-8 border-2 border-orange-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="order-type-card">
+        <Card className="mb-8 border-2 border-red-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="order-type-card">
           <CardContent className="pt-6">
             <Tabs value={orderType} onValueChange={handleOrderTypeChange} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 h-14 bg-gradient-to-r from-orange-100 to-red-100">
+              <TabsList className="grid w-full grid-cols-3 h-14 bg-gradient-to-r from-red-100 to-red-100">
                 <TabsTrigger 
                   value="dine_in" 
-                  className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
+                  className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
                   data-testid="order-type-dine-in"
                 >
                   {orderTypeIcons.dine_in}
@@ -320,7 +320,7 @@ const LandingPage = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="takeaway" 
-                  className="data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
+                  className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
                   data-testid="order-type-takeaway"
                 >
                   {orderTypeIcons.takeaway}
@@ -328,7 +328,7 @@ const LandingPage = () => {
                 </TabsTrigger>
                 <TabsTrigger 
                   value="delivery" 
-                  className={`data-[state=active]:bg-white data-[state=active]:text-orange-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2 ${!deliveryAvailable ? 'opacity-50' : ''}`}
+                  className={`data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2 ${!deliveryAvailable ? 'opacity-50' : ''}`}
                   data-testid="order-type-delivery"
                   disabled={!deliveryAvailable}
                 >
@@ -343,7 +343,7 @@ const LandingPage = () => {
             {orderType === 'dine_in' && (
               <div className="mt-6" data-testid="table-selection">
                 <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Store className="h-5 w-5 text-orange-600" />
+                  <Store className="h-5 w-5 text-red-600" />
                   Select Your Table
                 </h4>
                 {getAvailableTables().length === 0 ? (
@@ -356,8 +356,8 @@ const LandingPage = () => {
                         onClick={() => setSelectedTable(table)}
                         className={`p-3 rounded-lg border-2 text-center transition-all ${
                           selectedTable?.id === table.id
-                            ? 'bg-orange-500 text-white border-orange-500 shadow-lg'
-                            : 'bg-white border-gray-200 hover:border-orange-300'
+                            ? 'bg-red-500 text-white border-red-500 shadow-lg'
+                            : 'bg-white border-gray-200 hover:border-red-300'
                         }`}
                         data-testid={`table-${table.id}`}
                       >
@@ -402,7 +402,7 @@ const LandingPage = () => {
                   placeholder="Search dishes... (e.g., Biryani, Butter Chicken)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-10 py-3 text-lg border-2 border-gray-200 focus:border-orange-400 rounded-xl shadow-sm"
+                  className="pl-10 pr-10 py-3 text-lg border-2 border-gray-200 focus:border-red-400 rounded-xl shadow-sm"
                   data-testid="menu-search-input"
                 />
                 {searchQuery && (
@@ -419,8 +419,8 @@ const LandingPage = () => {
 
           {/* Search Results Display */}
           {searchQuery.trim() && (
-            <div className="mb-6 p-4 bg-orange-50 rounded-xl border border-orange-200">
-              <p className="text-orange-700 font-medium">
+            <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200">
+              <p className="text-red-700 font-medium">
                 <Search className="h-4 w-4 inline mr-2" />
                 Found {getFilteredItems().length} items matching "{searchQuery}"
               </p>
@@ -434,12 +434,12 @@ const LandingPage = () => {
             return (
               <div key={category.id} className="mb-12" data-testid={`menu-category-${category.id}`}>
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="h-1 w-12 bg-gradient-to-r from-orange-500 to-red-500 rounded"></div>
+                  <div className="h-1 w-12 bg-gradient-to-r from-red-500 to-red-500 rounded"></div>
                   <h3 className="text-3xl font-bold text-gray-800">
                     {category.name}
                   </h3>
                   {searchQuery.trim() && (
-                    <Badge className="bg-orange-100 text-orange-700 ml-2">
+                    <Badge className="bg-red-100 text-red-700 ml-2">
                       {categoryItems.length} match{categoryItems.length !== 1 ? 'es' : ''}
                     </Badge>
                   )}
@@ -449,7 +449,7 @@ const LandingPage = () => {
                   {categoryItems.map(item => (
                     <Card 
                       key={item.id} 
-                      className="group hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-orange-300 bg-white overflow-hidden" 
+                      className="group hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-red-300 bg-white overflow-hidden" 
                       data-testid={`menu-item-${item.id}`}
                     >
                       {/* Food Image */}
@@ -465,7 +465,7 @@ const LandingPage = () => {
                       )}
                       <CardContent className="pt-4">
                         <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-bold text-lg text-gray-800 group-hover:text-orange-600 transition-colors">{item.name}</h4>
+                          <h4 className="font-bold text-lg text-gray-800 group-hover:text-red-600 transition-colors">{item.name}</h4>
                           {item.is_vegetarian && (
                             <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 font-semibold">
                               <Leaf className="h-3 w-3 mr-1" />Veg
@@ -474,12 +474,12 @@ const LandingPage = () => {
                         </div>
                         <p className="text-sm text-gray-600 mb-4 line-clamp-2">{item.description}</p>
                         <div className="flex justify-between items-center pt-3 border-t border-gray-100">
-                          <span className="text-xl font-bold text-orange-600 flex items-center">
+                          <span className="text-xl font-bold text-red-600 flex items-center">
                             ₹{item.base_price.toFixed(0)}
                           </span>
                           <Button
                             onClick={() => addToCart(item)}
-                            className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold shadow-lg"
+                            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-700 text-white font-semibold shadow-lg"
                             data-testid={`add-to-cart-${item.id}`}
                           >
                             <Plus className="mr-1 h-4 w-4" />
@@ -504,14 +504,14 @@ const LandingPage = () => {
             onClick={(e) => e.stopPropagation()}
             data-testid="cart-summary"
           >
-            <CardHeader className="border-b bg-gradient-to-r from-orange-600 to-red-600 text-white">
+            <CardHeader className="border-b bg-gradient-to-r from-red-600 to-red-500 text-white">
               <div className="flex justify-between items-center">
                 <CardTitle className="text-2xl">Your Order</CardTitle>
                 <Button variant="ghost" size="icon" className="text-white hover:bg-white/20" onClick={() => setShowCart(false)}>
                   <X className="h-5 w-5" />
                 </Button>
               </div>
-              <CardDescription className="text-orange-100">Review items before checkout</CardDescription>
+              <CardDescription className="text-red-100">Review items before checkout</CardDescription>
             </CardHeader>
             <CardContent className="overflow-y-auto max-h-96 pt-6">
               <div className="space-y-4">
@@ -526,7 +526,7 @@ const LandingPage = () => {
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          className="h-8 w-8 hover:bg-orange-100" 
+                          className="h-8 w-8 hover:bg-red-100" 
                           onClick={() => updateQuantity(item.menu_item_id, -1)}
                         >
                           <Minus className="h-4 w-4" />
@@ -535,14 +535,14 @@ const LandingPage = () => {
                         <Button 
                           size="icon" 
                           variant="ghost" 
-                          className="h-8 w-8 hover:bg-orange-100" 
+                          className="h-8 w-8 hover:bg-red-100" 
                           onClick={() => updateQuantity(item.menu_item_id, 1)}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
                       </div>
                       <div className="text-right min-w-[80px]">
-                        <p className="font-bold text-orange-600">₹{item.total_price.toFixed(0)}</p>
+                        <p className="font-bold text-red-600">₹{item.total_price.toFixed(0)}</p>
                       </div>
                     </div>
                   </div>
@@ -561,12 +561,12 @@ const LandingPage = () => {
                 </div>
                 <div className="flex justify-between text-xl font-bold pt-3 border-t">
                   <span>Total</span>
-                  <span className="text-orange-600">₹{(parseFloat(getCartTotal()) * 1.05).toFixed(0)}</span>
+                  <span className="text-red-600">₹{(parseFloat(getCartTotal()) * 1.05).toFixed(0)}</span>
                 </div>
               </div>
               <Button 
                 onClick={handleCheckout} 
-                className="w-full h-14 text-lg bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 font-bold shadow-xl" 
+                className="w-full h-14 text-lg bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-700 font-bold shadow-xl" 
                 data-testid="checkout-button"
               >
                 Proceed to Checkout

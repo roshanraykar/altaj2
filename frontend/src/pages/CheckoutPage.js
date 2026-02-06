@@ -459,13 +459,13 @@ const CheckoutPage = () => {
                   </div>
                   <div className="flex justify-between text-lg font-bold border-t pt-2">
                     <span>Total:</span>
-                    <span className="text-emerald-700" data-testid="total-amount">₹{total.toFixed(0)}</span>
+                    <span className="text-red-600" data-testid="total-amount">₹{total.toFixed(0)}</span>
                   </div>
                 </div>
 
                 <Button
                   onClick={handlePlaceOrder}
-                  className="w-full mt-6 h-12 bg-emerald-700 hover:bg-emerald-800 text-white"
+                  className="w-full mt-6 h-12 bg-red-600 hover:bg-red-700 text-white"
                   disabled={loading}
                   data-testid="place-order-button"
                 >

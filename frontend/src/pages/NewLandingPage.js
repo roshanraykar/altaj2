@@ -64,7 +64,7 @@ const NewLandingPage = () => {
             <div className="flex items-center space-x-3">
               <HeaderInstallButton />
               <Button variant="ghost" onClick={() => navigate('/login')} className="text-sm font-light">Sign In</Button>
-              <Button onClick={() => navigate('/order')} className="bg-emerald-700 hover:bg-emerald-800 text-white px-6 text-sm font-light">Order Now</Button>
+              <Button onClick={() => navigate('/order')} className="bg-red-600 hover:bg-red-700 text-white px-6 text-sm font-light">Order Now</Button>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ const NewLandingPage = () => {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
               <div className="space-y-4">
-                <p className="text-emerald-700 text-sm font-light tracking-widest uppercase">Authentic Indian Cuisine</p>
+                <p className="text-red-600 text-sm font-light tracking-widest uppercase">Authentic Indian Cuisine</p>
                 <h1 className="text-5xl md:text-6xl font-light text-gray-900 leading-tight">
                   Taste the
                   <span className="block font-normal">Tradition</span>
@@ -86,7 +86,7 @@ const NewLandingPage = () => {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
-                <Button onClick={() => navigate('/order')} size="lg" className="bg-emerald-700 hover:bg-emerald-800 text-white px-8 h-12 text-base font-light">
+                <Button onClick={() => navigate('/order')} size="lg" className="bg-red-600 hover:bg-red-700 text-white px-8 h-12 text-base font-light">
                   Order Online <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
                 <Button onClick={() => document.getElementById('locations').scrollIntoView({behavior: 'smooth'})} variant="outline" size="lg" className="h-12 px-8 text-base font-light border-gray-300">
@@ -96,7 +96,7 @@ const NewLandingPage = () => {
               <div className="flex items-center space-x-6 pt-4">
                 <div className="flex items-center space-x-2">
                   <div className="flex -space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-white"></div>
+                    <div className="w-8 h-8 rounded-full bg-red-100 border-2 border-white"></div>
                     <div className="w-8 h-8 rounded-full bg-amber-100 border-2 border-white"></div>
                     <div className="w-8 h-8 rounded-full bg-rose-100 border-2 border-white"></div>
                   </div>
@@ -125,13 +125,13 @@ const NewLandingPage = () => {
       <section className="py-20 bg-gray-50">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-16">
-            <p className="text-emerald-700 text-sm font-light tracking-widest uppercase mb-3">Our Services</p>
+            <p className="text-red-600 text-sm font-light tracking-widest uppercase mb-3">Our Services</p>
             <h2 className="text-4xl font-light text-gray-900">How We <span className="font-normal">Serve</span></h2>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="p-6 bg-white border border-gray-100 hover:shadow-lg transition-shadow duration-300">
-                <div className="text-emerald-700 mb-4">{feature.icon}</div>
+                <div className="text-red-600 mb-4">{feature.icon}</div>
                 <h3 className="text-lg font-normal text-gray-900 mb-2">{feature.title}</h3>
                 <p className="text-sm text-gray-600 font-light leading-relaxed">{feature.description}</p>
               </Card>
@@ -144,7 +144,7 @@ const NewLandingPage = () => {
       <section id="menu" className="py-20 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <p className="text-emerald-700 text-sm font-light tracking-widest uppercase mb-3">Our Specialties</p>
+            <p className="text-red-600 text-sm font-light tracking-widest uppercase mb-3">Our Specialties</p>
             <h2 className="text-4xl font-light text-gray-900 mb-4">Signature <span className="font-normal">Dishes</span></h2>
             <p className="text-gray-600 font-light max-w-2xl mx-auto">From aromatic biryanis to rich curries, each dish is a celebration of authentic flavors</p>
           </div>
@@ -155,19 +155,19 @@ const NewLandingPage = () => {
               { name: "Tandoori Chicken", price: "₹210 - ₹410", desc: "Tandoor grilled to smoky perfection" }
             ].map((item, index) => (
               <div key={index} className="group cursor-pointer">
-                <div className="aspect-square bg-gradient-to-br from-gray-50 to-emerald-50 rounded-xl mb-4 overflow-hidden relative">
+                <div className="aspect-square bg-gradient-to-br from-gray-50 to-red-50 rounded-xl mb-4 overflow-hidden relative">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <Utensils className="h-24 w-24 text-gray-200 group-hover:text-emerald-200 transition-colors" />
+                    <Utensils className="h-24 w-24 text-gray-200 group-hover:text-red-200 transition-colors" />
                   </div>
                 </div>
                 <h3 className="text-lg font-normal text-gray-900 mb-1">{item.name}</h3>
                 <p className="text-sm text-gray-600 font-light mb-2">{item.desc}</p>
-                <p className="text-emerald-700 font-normal">{item.price}</p>
+                <p className="text-red-600 font-normal">{item.price}</p>
               </div>
             ))}
           </div>
           <div className="text-center mt-12">
-            <Button onClick={() => navigate('/order')} size="lg" variant="outline" className="border-emerald-700 text-emerald-700 hover:bg-emerald-700 hover:text-white px-8 h-12 text-base font-light">
+            <Button onClick={() => navigate('/order')} size="lg" variant="outline" className="border-red-600 text-red-600 hover:bg-red-600 hover:text-white px-8 h-12 text-base font-light">
               View Full Menu <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -178,15 +178,15 @@ const NewLandingPage = () => {
       <section id="locations" className="py-20 bg-gray-50 px-6">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-16">
-            <p className="text-emerald-700 text-sm font-light tracking-widest uppercase mb-3">Visit Us</p>
+            <p className="text-red-600 text-sm font-light tracking-widest uppercase mb-3">Visit Us</p>
             <h2 className="text-4xl font-light text-gray-900">Our <span className="font-normal">Locations</span></h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8">
             {locations.map((location, index) => (
               <Card key={index} className="p-8 bg-white border border-gray-100 hover:shadow-lg transition-shadow duration-300">
                 <div className="flex items-start space-x-4 mb-6">
-                  <div className="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center flex-shrink-0">
-                    <MapPin className="h-6 w-6 text-emerald-700" />
+                  <div className="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center flex-shrink-0">
+                    <MapPin className="h-6 w-6 text-red-600" />
                   </div>
                   <div>
                     <h3 className="text-xl font-normal text-gray-900 mb-2">{location.name}</h3>
@@ -201,7 +201,7 @@ const NewLandingPage = () => {
                   </div>
                   <div className="flex items-center space-x-3 text-sm">
                     <Clock className="h-4 w-4 text-gray-400" />
-                    <span className="text-emerald-700 font-light">Open 24/7</span>
+                    <span className="text-red-600 font-light">Open 24/7</span>
                   </div>
                 </div>
               </Card>
@@ -213,7 +213,7 @@ const NewLandingPage = () => {
       {/* About Section */}
       <section id="about" className="py-20 px-6">
         <div className="container mx-auto max-w-4xl text-center">
-          <p className="text-emerald-700 text-sm font-light tracking-widest uppercase mb-3">Our Story</p>
+          <p className="text-red-600 text-sm font-light tracking-widest uppercase mb-3">Our Story</p>
           <h2 className="text-4xl font-light text-gray-900 mb-6">Crafting Memories <span className="font-normal">Since Day One</span></h2>
           <p className="text-lg text-gray-600 font-light leading-relaxed mb-8">
             At Al Taj Restaurant, we believe food is more than sustenance—it's an experience, a memory, a celebration. 
@@ -228,11 +228,11 @@ const NewLandingPage = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-emerald-700 px-6">
+      <section className="py-20 bg-red-600 px-6">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-4xl font-light text-white mb-4">Ready to <span className="font-normal">Order?</span></h2>
-          <p className="text-emerald-100 font-light text-lg mb-8">Experience the taste of tradition, delivered fresh to your door</p>
-          <Button onClick={() => navigate('/order')} size="lg" className="bg-white text-emerald-700 hover:bg-gray-50 px-10 h-14 text-base font-light">
+          <p className="text-red-100 font-light text-lg mb-8">Experience the taste of tradition, delivered fresh to your door</p>
+          <Button onClick={() => navigate('/order')} size="lg" className="bg-white text-red-600 hover:bg-gray-50 px-10 h-14 text-base font-light">
             Start Your Order <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
@@ -264,7 +264,7 @@ const NewLandingPage = () => {
             </div>
             <div>
               <h4 className="text-white font-normal mb-4">Hours</h4>
-              <p className="text-emerald-400 text-sm font-light">Open 24/7</p>
+              <p className="text-red-400 text-sm font-light">Open 24/7</p>
               <p className="text-sm font-light mt-2">Serving you round the clock</p>
             </div>
           </div>
