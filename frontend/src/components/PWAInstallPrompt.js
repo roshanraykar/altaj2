@@ -117,17 +117,7 @@ export const InstallModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Coming Soon Message */}
-        {appsComingSoon && (
-          <div className="mt-4 p-4 bg-orange-50 rounded-xl border border-orange-200">
-            <p className="text-center text-orange-700 font-medium">
-              🚀 Native apps coming soon!
-            </p>
-            <p className="text-center text-sm text-orange-600 mt-1">
-              Meanwhile, bookmark this website for easy access
-            </p>
-          </div>
-        )}
+        {/* Spacer */}
 
         <div className="mt-6 pt-4 border-t">
           <Button onClick={onClose} variant="outline" className="w-full">
