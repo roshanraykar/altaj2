@@ -151,17 +151,17 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-gray-50" data-testid="admin-dashboard">
       {/* Header */}
-      <header className="bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg">
+      <header className="bg-gradient-to-r from-red-600 to-red-600 text-white shadow-lg">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-3">
               <ChefHat className="h-8 w-8" />
               <div>
                 <h1 className="text-2xl font-bold" data-testid="admin-title">Al Taj Admin</h1>
-                <p className="text-sm text-orange-100">{user?.name} ({user?.role})</p>
+                <p className="text-sm text-red-100">{user?.name} ({user?.role})</p>
               </div>
             </div>
-            <Button variant="outline" className="bg-white text-orange-600 hover:bg-orange-50" onClick={handleLogout} data-testid="logout-button">
+            <Button variant="outline" className="bg-white text-red-600 hover:bg-red-50" onClick={handleLogout} data-testid="logout-button">
               <LogOut className="mr-2 h-4 w-4" /> Logout
             </Button>
           </div>
@@ -212,7 +212,7 @@ const AdminDashboard = () => {
               <Card data-testid="stat-card-pending-orders">
                 <CardHeader className="pb-3">
                   <CardDescription>Pending Orders</CardDescription>
-                  <CardTitle className="text-3xl text-orange-600">{stats?.orders_by_status?.pending || 0}</CardTitle>
+                  <CardTitle className="text-3xl text-red-600">{stats?.orders_by_status?.pending || 0}</CardTitle>
                 </CardHeader>
               </Card>
             </div>
@@ -232,7 +232,7 @@ const AdminDashboard = () => {
                         <p className="text-xs text-gray-500 capitalize">{order.order_type.replace('_', ' ')}</p>
                       </div>
                       <div className="text-right mr-4">
-                        <p className="font-bold text-orange-600">₹{order.total.toFixed(2)}</p>
+                        <p className="font-bold text-red-600">₹{order.total.toFixed(2)}</p>
                         <p className="text-sm text-gray-600">{order.items.length} items</p>
                       </div>
                       <Badge className={getStatusColor(order.status)} data-testid={`order-status-${order.id}`}>
@@ -287,7 +287,7 @@ const AdminDashboard = () => {
                   </div>
                   <Dialog open={showAddUserDialog} onOpenChange={setShowAddUserDialog}>
                     <DialogTrigger asChild>
-                      <Button className="bg-orange-600 hover:bg-orange-700" data-testid="add-staff-button">
+                      <Button className="bg-red-600 hover:bg-red-700" data-testid="add-staff-button">
                         <UserPlus className="mr-2 h-4 w-4" /> Add Staff Member
                       </Button>
                     </DialogTrigger>
@@ -380,7 +380,7 @@ const AdminDashboard = () => {
                         )}
                         <Button 
                           onClick={handleCreateUser} 
-                          className="w-full bg-orange-600 hover:bg-orange-700"
+                          className="w-full bg-red-600 hover:bg-red-700"
                           data-testid="create-staff-button"
                         >
                           Create Staff Member
@@ -457,7 +457,7 @@ const AdminDashboard = () => {
                         <div>
                           <p className="text-sm text-gray-600 capitalize">{order.order_type.replace('_', ' ')} - {order.items.length} items</p>
                         </div>
-                        <p className="font-bold text-orange-600 text-lg">₹{order.total.toFixed(2)}</p>
+                        <p className="font-bold text-red-600 text-lg">₹{order.total.toFixed(2)}</p>
                       </div>
                     </div>
                   ))}
@@ -489,7 +489,7 @@ const AdminDashboard = () => {
                         </div>
                         <div>
                           <p className="text-sm text-gray-600">Avg Order Value</p>
-                          <p className="text-2xl font-bold text-orange-600">₹{branch.avg_order_value}</p>
+                          <p className="text-2xl font-bold text-red-600">₹{branch.avg_order_value}</p>
                         </div>
                       </div>
                     </div>

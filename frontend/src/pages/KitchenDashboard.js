@@ -116,7 +116,7 @@ const KitchenDashboard = () => {
                       ))}
                     </div>
                     {order.special_instructions && (
-                      <p className="text-sm text-orange-600 mb-3 p-2 bg-orange-50 rounded">
+                      <p className="text-sm text-red-600 mb-3 p-2 bg-red-50 rounded">
                         Note: {order.special_instructions}
                       </p>
                     )}
