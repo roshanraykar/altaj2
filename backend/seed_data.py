@@ -290,6 +290,32 @@ async def seed_data():
         {"name": "Masala Papad", "category": "Extras", "price": 50.00, "vegetarian": True},
         {"name": "Veg Manchow Soup", "category": "Extras", "price": 120.00, "vegetarian": True},
         {"name": "Chicken Manchow Soup", "category": "Extras", "price": 210.00, "vegetarian": False},
+        
+        # Combos (with discounted prices)
+        {"name": "Combo 1: Chicken Biryani + Chicken Kabab", "category": "Combos", "price": 299.00, "vegetarian": False, "description": "Full Chicken Biryani + 6 Pcs Chicken Kabab (Save ₹51)"},
+        {"name": "Combo 2: Egg Biryani + Chicken Kabab", "category": "Combos", "price": 249.00, "vegetarian": False, "description": "Full Egg Biryani + 6 Pcs Chicken Kabab (Save ₹41)"},
+        {"name": "Combo 3: Jeera Rice + Chicken Masala", "category": "Combos", "price": 279.00, "vegetarian": False, "description": "Jeera Rice + Chicken Masala Half (Save ₹31)"},
+        {"name": "Combo 4: Veg Biryani + Paneer Butter Masala", "category": "Combos", "price": 269.00, "vegetarian": True, "description": "Veg Biryani + Paneer Butter Masala Half (Save ₹41)"},
+        {"name": "Combo 5: Family Pack - 2 Biryani + 2 Kabab", "category": "Combos", "price": 549.00, "vegetarian": False, "description": "2 Chicken Biryani + 12 Pcs Kabab (Save ₹111)"},
+        
+        # Raw Meat
+        {"name": "Chicken Leg Piece (1 Kg)", "category": "Raw Meat", "price": 220.00, "vegetarian": False, "description": "Fresh chicken leg pieces - cleaned and ready"},
+        {"name": "Chicken Boneless (1 Kg)", "category": "Raw Meat", "price": 350.00, "vegetarian": False, "description": "Premium boneless chicken cubes"},
+        {"name": "Chicken Wings (1 Kg)", "category": "Raw Meat", "price": 280.00, "vegetarian": False, "description": "Fresh chicken wings - party pack"},
+        {"name": "Chicken Breast (1 Kg)", "category": "Raw Meat", "price": 320.00, "vegetarian": False, "description": "Lean chicken breast fillets"},
+        {"name": "Whole Chicken (1 Pc)", "category": "Raw Meat", "price": 300.00, "vegetarian": False, "description": "Whole dressed chicken approx 1-1.2 Kg"},
+        {"name": "Chicken Liver (500g)", "category": "Raw Meat", "price": 120.00, "vegetarian": False, "description": "Fresh chicken liver"},
+        {"name": "Mutton (1 Kg)", "category": "Raw Meat", "price": 750.00, "vegetarian": False, "description": "Fresh goat meat with bone"},
+        {"name": "Mutton Boneless (1 Kg)", "category": "Raw Meat", "price": 950.00, "vegetarian": False, "description": "Premium boneless mutton cubes"},
+        
+        # Ready to Cook
+        {"name": "Chicken Gravy Pack (Serves 4)", "category": "Ready to Cook", "price": 280.00, "vegetarian": False, "description": "Marinated chicken with gravy mix - just heat and serve"},
+        {"name": "Chicken Masala Pack (Serves 4)", "category": "Ready to Cook", "price": 290.00, "vegetarian": False, "description": "Pre-marinated chicken masala - cook in 15 mins"},
+        {"name": "Chicken Kabab Pack (12 Pcs)", "category": "Ready to Cook", "price": 320.00, "vegetarian": False, "description": "Marinated kababs - grill or pan fry"},
+        {"name": "Tandoori Chicken Pack (Full)", "category": "Ready to Cook", "price": 350.00, "vegetarian": False, "description": "Tandoori marinated chicken - oven ready"},
+        {"name": "Chicken 65 Pack (500g)", "category": "Ready to Cook", "price": 280.00, "vegetarian": False, "description": "Ready to fry chicken 65 - crispy in minutes"},
+        {"name": "Biryani Mix Pack (Serves 4)", "category": "Ready to Cook", "price": 350.00, "vegetarian": False, "description": "Marinated chicken + spices + rice - complete biryani kit"},
+        {"name": "Butter Chicken Pack (Serves 4)", "category": "Ready to Cook", "price": 320.00, "vegetarian": False, "description": "Creamy butter chicken - microwave ready"},
     ]
     
     for item_data in menu_items:
