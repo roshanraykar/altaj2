@@ -6,11 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus, Search, Download, ArrowLeft } from 'lucide-react';
+import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus, Search, Download, ArrowLeft, Navigation, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { InstallBanner, HeaderInstallButton, FooterInstallSection } from '@/components/PWAInstallPrompt';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const GOOGLE_MAPS_API_KEY = 'AIzaSyAHZ50WSteOfJNHAE6eCn5Bf8Py1vGQAmE';
 
 const LandingPage = () => {
   const [branches, setBranches] = useState([]);
@@ -24,6 +25,9 @@ const LandingPage = () => {
   const [selectedTable, setSelectedTable] = useState(null);
   const [deliveryAvailable, setDeliveryAvailable] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [userLocation, setUserLocation] = useState(null);
+  const [locationLoading, setLocationLoading] = useState(false);
+  const [branchDistances, setBranchDistances] = useState({});
   const navigate = useNavigate();
   const { toast } = useToast();
 
