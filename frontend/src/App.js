@@ -73,6 +73,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      {/* Waiter module temporarily disabled
       <Route
         path="/waiter"
         element={
@@ -81,6 +82,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      */}
       <Route
         path="/kitchen"
         element={
