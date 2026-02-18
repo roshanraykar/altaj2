@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ShoppingCart, MapPin, Phone, Leaf, Store, Package, Truck, X, Plus, Minus, Search, ArrowLeft, Navigation, Loader2, ArrowUp, MessageCircle } from 'lucide-react';
+import { ShoppingCart, MapPin, Phone, Leaf, Store, Package, Truck, X, Plus, Minus, Search, ArrowLeft, Navigation, Loader2, ArrowUp, MessageCircle, Clock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { InstallBanner, HeaderInstallButton, FooterInstallSection, FloatingInstallButton } from '@/components/PWAInstallPrompt';
 
