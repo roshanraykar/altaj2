@@ -31,10 +31,85 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // Calculate distance between two points using Haversine formula
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c; // Distance in km
+  };
+
+  // Get user's current location
+  const detectLocation = () => {
+    setLocationLoading(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setUserLocation({ lat: latitude, lng: longitude });
+          
+          // Calculate distances to all branches
+          if (branches.length > 0) {
+            const distances = {};
+            let nearestBranch = null;
+            let minDistance = Infinity;
+            
+            branches.forEach(branch => {
+              const dist = calculateDistance(latitude, longitude, branch.latitude, branch.longitude);
+              distances[branch.id] = dist.toFixed(1);
+              if (dist < minDistance) {
+                minDistance = dist;
+                nearestBranch = branch;
+              }
+            });
+            
+            setBranchDistances(distances);
+            if (nearestBranch) {
+              setSelectedBranch(nearestBranch);
+              toast({
+                title: '📍 Location detected!',
+                description: `Nearest branch: ${nearestBranch.name} (${distances[nearestBranch.id]} km away)`
+              });
+            }
+          }
+          setLocationLoading(false);
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          toast({
+            title: 'Location access denied',
+            description: 'Please select a branch manually',
+            variant: 'destructive'
+          });
+          setLocationLoading(false);
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    } else {
+      toast({
+        title: 'Location not supported',
+        description: 'Your browser does not support geolocation',
+        variant: 'destructive'
+      });
+      setLocationLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchBranches();
     fetchCategories();
   }, []);
+
+  // Auto-detect location when branches are loaded
+  useEffect(() => {
+    if (branches.length > 0 && !userLocation) {
+      detectLocation();
+    }
+  }, [branches]);
 
   useEffect(() => {
     if (selectedBranch) {
