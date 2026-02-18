@@ -321,7 +321,7 @@ async def seed_data():
     for item_data in menu_items:
         menu_item_payload = {
             "name": item_data["name"],
-            "description": f"Authentic {item_data['name']} - a house specialty",
+            "description": item_data.get("description", f"Authentic {item_data['name']} - a house specialty"),
             "category_id": category_ids[item_data["category"]],
             "base_price": item_data["price"],
             "is_vegetarian": item_data["vegetarian"],
