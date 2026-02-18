@@ -476,7 +476,7 @@ const LandingPage = () => {
           <div className="mb-6">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div>
-                <h2 className="text-4xl font-bold text-gray-800 mb-2">Our Menu</h2>
+                <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">Our Menu</h2>
                 <p className="text-gray-600">Authentic Indian & Chinese cuisine prepared with love</p>
               </div>
               {/* Search Bar */}
@@ -484,10 +484,10 @@ const LandingPage = () => {
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <Input
                   type="text"
-                  placeholder="Search dishes... (e.g., Biryani, Butter Chicken)"
+                  placeholder="Search dishes..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 pr-10 py-3 text-lg border-2 border-gray-200 focus:border-red-400 rounded-xl shadow-sm"
+                  className="pl-10 pr-10 py-3 text-lg border-2 border-gray-200 focus:border-[#b2101f] rounded-xl shadow-sm"
                   data-testid="menu-search-input"
                 />
                 {searchQuery && (
@@ -502,10 +502,30 @@ const LandingPage = () => {
             </div>
           </div>
 
+          {/* Sticky Category Navigation */}
+          <div className="sticky top-[70px] z-40 bg-white/95 backdrop-blur-md py-3 mb-6 border-b border-[#c59433]/20 shadow-sm -mx-4 px-4">
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+              {categories.map(category => (
+                <button
+                  key={category.id}
+                  onClick={() => scrollToCategory(category.id)}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
+                    activeCategory === category.id
+                      ? 'bg-gradient-to-r from-[#b2101f] to-[#e70825] text-white shadow-lg'
+                      : 'bg-gray-100 text-gray-700 hover:bg-[#c59433]/20 hover:text-[#b2101f]'
+                  }`}
+                  data-testid={`category-nav-${category.id}`}
+                >
+                  {category.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Search Results Display */}
           {searchQuery.trim() && (
-            <div className="mb-6 p-4 bg-red-50 rounded-xl border border-red-200">
-              <p className="text-red-700 font-medium">
+            <div className="mb-6 p-4 bg-[#b2101f]/10 rounded-xl border border-[#b2101f]/20">
+              <p className="text-[#b2101f] font-medium">
                 <Search className="h-4 w-4 inline mr-2" />
                 Found {getFilteredItems().length} items matching "{searchQuery}"
               </p>
@@ -517,7 +537,7 @@ const LandingPage = () => {
             if (categoryItems.length === 0) return null;
 
             return (
-              <div key={category.id} className="mb-12" data-testid={`menu-category-${category.id}`}>
+              <div key={category.id} id={`category-${category.id}`} className="mb-12 scroll-mt-48" data-testid={`menu-category-${category.id}`}>
                 <div className="flex items-center gap-3 mb-6">
                   <div className="h-1 w-12 bg-gradient-to-r from-red-500 to-red-500 rounded"></div>
                   <h3 className="text-3xl font-bold text-gray-800">
