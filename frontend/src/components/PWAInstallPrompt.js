@@ -228,21 +228,6 @@ export const FloatingInstallButton = () => {
     </>
   );
 };
-            Get our app
-          </div>
-        )}
-        
-        <button
-          onClick={() => setShowModal(true)}
-          className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-full shadow-lg flex items-center justify-center transition-all hover:scale-105 active:scale-95"
-        >
-          <Download className="h-5 w-5" />
-        </button>
-      </div>
-      <InstallModal isOpen={showModal} onClose={() => setShowModal(false)} />
-    </>
-  );
-};
 
 // Footer Install Section
 export const FooterInstallSection = () => {
@@ -253,10 +238,10 @@ export const FooterInstallSection = () => {
 
   return (
     <>
-      <div className="bg-red-50 border-t border-red-100 py-6 px-4" data-testid="footer-install-section">
+      <div className="bg-gradient-to-r from-[#b2101f]/10 to-[#e70825]/10 border-t border-[#c59433]/20 py-6 px-4" data-testid="footer-install-section">
         <div className="container mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <Smartphone className="h-6 w-6 text-red-600" />
+            <Smartphone className="h-6 w-6 text-[#b2101f]" />
             <h3 className="text-lg font-semibold text-gray-800">Download Al Taj App</h3>
           </div>
           <p className="text-gray-500 text-sm mb-4 max-w-md mx-auto">
@@ -264,7 +249,7 @@ export const FooterInstallSection = () => {
           </p>
           <Button 
             onClick={() => setShowModal(true)}
-            className="bg-red-600 hover:bg-red-700 text-white font-medium px-6"
+            className="bg-gradient-to-r from-[#b2101f] to-[#e70825] hover:from-[#8a0c18] hover:to-[#b2101f] text-white font-medium px-6 shadow-lg"
           >
             <Download className="h-4 w-4 mr-2" />
             Download App
