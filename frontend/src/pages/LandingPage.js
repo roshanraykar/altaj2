@@ -424,7 +424,7 @@ const LandingPage = () => {
                       </p>
                       <p className="flex items-center gap-2">
                         <Clock className="h-4 w-4 text-red-600" />
-                        <span className="text-green-600 font-semibold">Open Now • 24 Hours</span>
+                        <span className="text-green-600 font-semibold">Open Now</span>
                       </p>
                     </div>
                   </CardContent>
