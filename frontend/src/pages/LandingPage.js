@@ -333,14 +333,31 @@ const LandingPage = () => {
         {/* Branch Selection - Premium Design */}
         <Card className="mb-8 border-2 border-red-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="branch-selection-card">
           <CardHeader className="border-b border-red-100">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-red-100 rounded-lg">
-                <Store className="h-6 w-6 text-red-600" />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-red-100 rounded-lg">
+                  <Store className="h-6 w-6 text-red-600" />
+                </div>
+                <div>
+                  <CardTitle className="text-2xl">Choose Your Branch</CardTitle>
+                  <CardDescription>Select the nearest Al Taj location</CardDescription>
+                </div>
               </div>
-              <div>
-                <CardTitle className="text-2xl">Choose Your Branch</CardTitle>
-                <CardDescription>Select the nearest Al Taj location</CardDescription>
-              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                className="border-red-300 text-red-600 hover:bg-red-50"
+                onClick={detectLocation}
+                disabled={locationLoading}
+                data-testid="detect-location-btn"
+              >
+                {locationLoading ? (
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                ) : (
+                  <Navigation className="h-4 w-4 mr-2" />
+                )}
+                {locationLoading ? 'Detecting...' : 'Detect Location'}
+              </Button>
             </div>
           </CardHeader>
           <CardContent className="pt-6">
@@ -359,9 +376,16 @@ const LandingPage = () => {
                   <CardContent className="pt-6">
                     <div className="flex justify-between items-start mb-4">
                       <h3 className="font-bold text-lg text-gray-800">{branch.name}</h3>
-                      {selectedBranch?.id === branch.id && (
-                        <Badge className="bg-green-500">Selected</Badge>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {branchDistances[branch.id] && (
+                          <Badge variant="outline" className="bg-blue-50 text-blue-600 border-blue-200">
+                            {branchDistances[branch.id]} km
+                          </Badge>
+                        )}
+                        {selectedBranch?.id === branch.id && (
+                          <Badge className="bg-green-500">Selected</Badge>
+                        )}
+                      </div>
                     </div>
                     <div className="space-y-3 text-sm text-gray-600">
                       <p className="flex items-start gap-2">
