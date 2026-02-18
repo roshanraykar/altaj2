@@ -4,11 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ShoppingCart, MapPin, Phone, Clock, Leaf, Store, Utensils, Package, Truck, X, Plus, Minus, Search, Download, ArrowLeft, Navigation, Loader2 } from 'lucide-react';
+import { ShoppingCart, MapPin, Phone, Leaf, Store, Package, Truck, X, Plus, Minus, Search, ArrowLeft, Navigation, Loader2, ArrowUp, MessageCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { InstallBanner, HeaderInstallButton, FooterInstallSection } from '@/components/PWAInstallPrompt';
+import { InstallBanner, HeaderInstallButton, FooterInstallSection, FloatingInstallButton } from '@/components/PWAInstallPrompt';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAHZ50WSteOfJNHAE6eCn5Bf8Py1vGQAmE';
@@ -28,8 +28,35 @@ const LandingPage = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [locationLoading, setLocationLoading] = useState(false);
   const [branchDistances, setBranchDistances] = useState({});
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [activeCategory, setActiveCategory] = useState(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const whatsappLink = "https://wa.me/918123884771?text=Hi%2C%20I%20want%20to%20order%20food%20at%20Al%20Taj%20Restaurant%20and%20I%20need%20help";
+
+  // Handle scroll for back to top button
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowBackToTop(window.scrollY > 500);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToCategory = (categoryId) => {
+    const element = document.getElementById(`category-${categoryId}`);
+    if (element) {
+      const offset = 200; // Account for sticky header
+      const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
+      setActiveCategory(categoryId);
+    }
+  };
 
   // Calculate distance between two points using Haversine formula
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
