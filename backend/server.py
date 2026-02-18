@@ -322,6 +322,44 @@ class Offer(BaseModel):
     is_active: bool = True
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+# Coupon Models
+class CouponCreate(BaseModel):
+    code: str
+    description: str
+    discount_type: Literal["percentage", "fixed"]
+    discount_value: float
+    min_order_value: Optional[float] = None
+    max_discount: Optional[float] = None  # Max discount for percentage coupons
+    valid_from: datetime
+    valid_until: datetime
+    usage_limit: Optional[int] = None  # Total times coupon can be used
+    per_user_limit: int = 1  # Times per user
+    branch_ids: Optional[List[str]] = None
+    is_active: bool = True
+
+class Coupon(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    code: str
+    description: str
+    discount_type: str
+    discount_value: float
+    min_order_value: Optional[float] = None
+    max_discount: Optional[float] = None
+    valid_from: datetime
+    valid_until: datetime
+    usage_limit: Optional[int] = None
+    per_user_limit: int = 1
+    branch_ids: Optional[List[str]] = None
+    is_active: bool = True
+    usage_count: int = 0
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+class CouponApply(BaseModel):
+    code: str
+    order_total: float
+    branch_id: Optional[str] = None
+
 # Payment Models
 class PaymentOrderCreate(BaseModel):
     amount: int  # Amount in paise (e.g., 50000 for ₹500)
