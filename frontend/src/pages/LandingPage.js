@@ -309,15 +309,7 @@ const LandingPage = () => {
         <Card className="mb-8 border-2 border-red-200 shadow-xl bg-white/80 backdrop-blur-sm" data-testid="order-type-card">
           <CardContent className="pt-6">
             <Tabs value={orderType} onValueChange={handleOrderTypeChange} className="w-full">
-              <TabsList className="grid w-full grid-cols-3 h-14 bg-gradient-to-r from-red-100 to-red-100">
-                <TabsTrigger 
-                  value="dine_in" 
-                  className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
-                  data-testid="order-type-dine-in"
-                >
-                  {orderTypeIcons.dine_in}
-                  Dine In
-                </TabsTrigger>
+              <TabsList className="grid w-full grid-cols-2 h-14 bg-gradient-to-r from-red-100 to-red-100">
                 <TabsTrigger 
                   value="takeaway" 
                   className="data-[state=active]:bg-white data-[state=active]:text-red-600 data-[state=active]:shadow-lg font-semibold flex items-center gap-2" 
@@ -338,26 +330,6 @@ const LandingPage = () => {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-            
-            {/* Table Selection for Dine-in */}
-            {orderType === 'dine_in' && (
-              <div className="mt-6" data-testid="table-selection">
-                <h4 className="font-semibold mb-3 flex items-center gap-2">
-                  <Store className="h-5 w-5 text-red-600" />
-                  Select Your Table
-                </h4>
-                {getAvailableTables().length === 0 ? (
-                  <p className="text-gray-500 text-sm">No tables available at the moment. Please try takeaway or delivery.</p>
-                ) : (
-                  <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
-                    {getAvailableTables().map(table => (
-                      <button
-                        key={table.id}
-                        onClick={() => setSelectedTable(table)}
-                        className={`p-3 rounded-lg border-2 text-center transition-all ${
-                          selectedTable?.id === table.id
-                            ? 'bg-red-500 text-white border-red-500 shadow-lg'
-                            : 'bg-white border-gray-200 hover:border-red-300'
                         }`}
                         data-testid={`table-${table.id}`}
                       >
