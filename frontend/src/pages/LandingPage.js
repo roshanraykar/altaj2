@@ -295,19 +295,18 @@ const LandingPage = () => {
   };
 
   const orderTypeIcons = {
-    dine_in: <Utensils className="h-5 w-5" />,
     takeaway: <Package className="h-5 w-5" />,
     delivery: <Truck className="h-5 w-5" />
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 via-amber-50 to-yellow-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#fef7e7] via-white to-[#fff5f5]">
       {/* Install Banner at Top */}
       <InstallBanner />
       
-      {/* Premium Header */}
-      <header className="bg-gradient-to-r from-red-600 via-red-500 to-red-700 text-white shadow-2xl sticky top-0 z-50" data-testid="landing-header">
-        <div className="container mx-auto px-4 py-4">
+      {/* Premium Header with Brand Colors */}
+      <header className="bg-gradient-to-r from-[#b2101f] via-[#e70825] to-[#b2101f] text-white shadow-2xl sticky top-0 z-50 border-b-4 border-[#c59433]" data-testid="landing-header">
+        <div className="container mx-auto px-4 py-3">
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <Button 
@@ -319,34 +318,34 @@ const LandingPage = () => {
               >
                 <ArrowLeft className="h-6 w-6" />
               </Button>
-              <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-14 w-auto" />
-              <div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight" data-testid="restaurant-name">Al Taj Restaurant</h1>
-                <p className="text-red-100 text-sm flex items-center gap-2">
+              <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-12 w-auto" />
+              <div className="hidden sm:block">
+                <h1 className="text-xl md:text-2xl font-bold tracking-tight" data-testid="restaurant-name">Al Taj Restaurant</h1>
+                <p className="text-white/80 text-xs flex items-center gap-2">
                   <MapPin className="h-3 w-3" />
-                  Authentic Flavors • Hubballi, Karnataka
+                  Authentic Flavors • Hubballi
                 </p>
               </div>
             </div>
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 md:space-x-3">
               <HeaderInstallButton />
               <Button 
                 variant="outline" 
-                className="bg-white/10 backdrop-blur-sm border-white/20 text-white hover:bg-white/20 hidden md:flex" 
+                className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20 hidden md:flex text-sm" 
                 onClick={() => navigate('/login')} 
                 data-testid="login-button"
               >
                 Sign In
               </Button>
               <Button 
-                className="bg-white text-red-600 hover:bg-red-50 font-semibold relative" 
+                className="bg-white text-[#b2101f] hover:bg-[#c59433] hover:text-white font-semibold relative shadow-lg" 
                 onClick={() => setShowCart(!showCart)} 
                 data-testid="cart-button"
               >
-                <ShoppingCart className="mr-2 h-5 w-5" />
+                <ShoppingCart className="mr-1 md:mr-2 h-5 w-5" />
                 <span className="hidden md:inline">Cart</span>
                 {getCartCount() > 0 && (
-                  <Badge className="absolute -top-2 -right-2 bg-red-500 text-white border-2 border-white">
+                  <Badge className="absolute -top-2 -right-2 bg-[#c59433] text-white border-2 border-white">
                     {getCartCount()}
                   </Badge>
                 )}
