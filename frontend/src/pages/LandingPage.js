@@ -330,22 +330,6 @@ const LandingPage = () => {
                 </TabsTrigger>
               </TabsList>
             </Tabs>
-                        }`}
-                        data-testid={`table-${table.id}`}
-                      >
-                        <span className="font-bold text-sm">{table.table_number}</span>
-                        <span className="block text-xs opacity-75">{table.capacity}P</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-                {selectedTable && (
-                  <p className="mt-3 text-sm text-green-600 font-medium">
-                    ✓ Table {selectedTable.table_number} selected (Capacity: {selectedTable.capacity})
-                  </p>
-                )}
-              </div>
-            )}
 
             {/* Delivery unavailable notice */}
             {orderType === 'delivery' && !deliveryAvailable && (
