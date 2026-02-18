@@ -79,6 +79,7 @@ async def seed_data():
     # 3. Create Menu Categories (Based on actual Al Taj Menu Card)
     print("\n3️⃣ Creating menu categories...")
     categories = [
+        {"name": "Combos", "description": "Value combo meals - Save more!", "display_order": 0},
         {"name": "Chinese Thrillers", "description": "Indo-Chinese specialties", "display_order": 1},
         {"name": "Tandoori Karishma", "description": "Tandoor grilled delicacies", "display_order": 2},
         {"name": "Starters", "description": "Appetizers to begin your meal", "display_order": 3},
@@ -89,7 +90,9 @@ async def seed_data():
         {"name": "Veg", "description": "Vegetarian delights", "display_order": 8},
         {"name": "Gravy", "description": "Rich gravies and curries", "display_order": 9},
         {"name": "Dal", "description": "Lentil preparations", "display_order": 10},
-        {"name": "Extras", "description": "Sides and accompaniments", "display_order": 11}
+        {"name": "Extras", "description": "Sides and accompaniments", "display_order": 11},
+        {"name": "Raw Meat", "description": "Fresh raw meat cuts - Chicken, Mutton", "display_order": 12},
+        {"name": "Ready to Cook", "description": "Marinated & ready to cook at home", "display_order": 13}
     ]
     
     category_ids = {}
