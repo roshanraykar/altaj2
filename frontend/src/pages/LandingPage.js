@@ -683,6 +683,35 @@ const LandingPage = () => {
       
       {/* Footer Install Section */}
       <FooterInstallSection />
+
+      {/* Floating Buttons Container */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-3">
+        {/* Back to Top Button */}
+        {showBackToTop && (
+          <button
+            onClick={scrollToTop}
+            className="bg-[#b2101f] hover:bg-[#8a0c18] text-white p-3 rounded-full shadow-xl transition-all hover:scale-110"
+            data-testid="back-to-top-btn"
+          >
+            <ArrowUp className="h-5 w-5" />
+          </button>
+        )}
+        
+        {/* Get App Button */}
+        <FloatingInstallButton />
+      </div>
+
+      {/* WhatsApp Floating Button */}
+      <a 
+        href={whatsappLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 bg-green-500 hover:bg-green-600 text-white p-4 rounded-full shadow-2xl transition-all hover:scale-110 flex items-center gap-2 group"
+        data-testid="whatsapp-btn"
+      >
+        <MessageCircle className="h-6 w-6" />
+        <span className="hidden group-hover:inline-block text-sm font-medium whitespace-nowrap pr-2">Need help? Chat now</span>
+      </a>
     </div>
   );
 };
