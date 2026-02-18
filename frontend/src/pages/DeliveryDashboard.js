@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
-import { LogOut, Truck, Package, MapPin, Phone, Clock, CheckCircle2, Navigation } from 'lucide-react';
+import { LogOut, Truck, Package, MapPin, Phone, Clock, CheckCircle2, Navigation, Volume2, VolumeX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -19,8 +19,25 @@ const DeliveryDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [currentOrder, setCurrentOrder] = useState(null);
   const [isAvailable, setIsAvailable] = useState(true);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [previousOrderCount, setPreviousOrderCount] = useState(0);
+  const audioRef = useRef(null);
 
   const headers = { Authorization: `Bearer ${token}` };
+
+  // Initialize audio
+  useEffect(() => {
+    audioRef.current = new Audio('/notification.mp3');
+    audioRef.current.volume = 1.0;
+  }, []);
+
+  // Play buzzer sound for new delivery assignments
+  const playNotificationSound = () => {
+    if (soundEnabled && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(err => console.log('Audio play failed:', err));
+    }
+  };
 
   useEffect(() => {
     fetchDeliveryProfile();
