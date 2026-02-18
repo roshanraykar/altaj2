@@ -44,11 +44,11 @@ export const InstallModal = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-6" onClick={onClose}>
       <div 
-        className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden" 
+        className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden border-t-4 border-[#c59433]" 
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with red accent */}
-        <div className="bg-gradient-to-r from-red-600 to-red-500 px-5 py-4">
+        {/* Header with brand colors */}
+        <div className="bg-gradient-to-r from-[#b2101f] to-[#e70825] px-5 py-4">
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-lg text-white">Download Our App</h3>
             <button onClick={onClose} className="text-white/80 hover:text-white">
@@ -72,11 +72,11 @@ export const InstallModal = ({ isOpen, onClose }) => {
               disabled={!androidAvailable}
               className={`w-full flex items-center gap-3 p-3 rounded-xl border transition-all ${
                 androidAvailable 
-                  ? 'border-red-200 bg-red-50 hover:bg-red-100 cursor-pointer' 
+                  ? 'border-[#b2101f]/30 bg-[#b2101f]/5 hover:bg-[#b2101f]/10 cursor-pointer' 
                   : 'border-gray-200 bg-gray-50/50'
               }`}
             >
-              <div className={`p-2 rounded-lg ${androidAvailable ? 'bg-red-600' : 'bg-gray-300'}`}>
+              <div className={`p-2 rounded-lg ${androidAvailable ? 'bg-[#b2101f]' : 'bg-gray-300'}`}>
                 <svg className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M17.6 11.4c-.1-.1-.2-.2-.3-.2l-2.4-1.4 1.6-2.6c.1-.2.1-.4-.1-.5-.2-.1-.4-.1-.5.1l-1.6 2.7-2.3-1.3V5.5c0-.2-.2-.4-.4-.4s-.4.2-.4.4v2.7l-2.3 1.3-1.6-2.7c-.1-.2-.3-.2-.5-.1-.2.1-.2.4-.1.5l1.6 2.6-2.4 1.4c-.1.1-.2.2-.3.2-.1.1-.1.3 0 .4.1.2.3.3.5.2l2.3-1.4v2.8c0 .2.2.4.4.4s.4-.2.4-.4v-2.8l2.3 1.4c.2.1.4 0 .5-.2.1-.1.1-.3 0-.4zM12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-5 0-9-4-9-9s4-9 9-9 9 4 9 9-4 9-9 9z"/>
                 </svg>
@@ -85,7 +85,7 @@ export const InstallModal = ({ isOpen, onClose }) => {
                 <p className={`font-medium ${androidAvailable ? 'text-gray-800' : 'text-gray-400'}`}>
                   Android
                 </p>
-                <p className={`text-xs ${androidAvailable ? 'text-red-600' : 'text-gray-400'}`}>
+                <p className={`text-xs ${androidAvailable ? 'text-[#b2101f]' : 'text-gray-400'}`}>
                   {androidAvailable ? 'Get it on Play Store' : 'Coming Soon'}
                 </p>
               </div>
