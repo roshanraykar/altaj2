@@ -197,37 +197,37 @@ export const HeaderInstallButton = () => {
         onClick={() => setShowModal(true)}
         size="sm"
         variant="outline"
-        className="border-red-200 text-red-600 hover:bg-red-50 font-medium text-xs"
+        className="border-white/30 bg-white/10 text-white hover:bg-white/20 font-medium text-xs backdrop-blur-sm"
         data-testid="header-install-btn"
       >
         <Download className="h-3.5 w-3.5 mr-1" />
-        <span>Get App</span>
+        <span className="hidden sm:inline">Get App</span>
       </Button>
       <InstallModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 };
 
-// Floating Install Button - Always visible
+// Floating Install Button - Not a fixed element anymore, will be placed by parent
 export const FloatingInstallButton = () => {
   const [showModal, setShowModal] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const { isStandalone } = getDeviceInfo();
-
-  useEffect(() => {
-    const timer = setTimeout(() => setShowTooltip(true), 3000);
-    const hideTimer = setTimeout(() => setShowTooltip(false), 8000);
-    return () => { clearTimeout(timer); clearTimeout(hideTimer); };
-  }, []);
 
   if (isStandalone) return null;
 
   return (
     <>
-      <div className="fixed bottom-6 right-6 z-50" data-testid="floating-install-btn">
-        {showTooltip && (
-          <div className="absolute bottom-full right-0 mb-2 bg-gray-900 text-white text-xs py-2 px-3 rounded-lg shadow-lg whitespace-nowrap">
-            <div className="absolute bottom-0 right-4 transform translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900"></div>
+      <button
+        onClick={() => setShowModal(true)}
+        className="bg-[#b2101f] hover:bg-[#8a0c18] text-white p-3 rounded-full shadow-xl transition-all hover:scale-110"
+        data-testid="floating-install-btn"
+      >
+        <Download className="h-5 w-5" />
+      </button>
+      <InstallModal isOpen={showModal} onClose={() => setShowModal(false)} />
+    </>
+  );
+};
             Get our app
           </div>
         )}
