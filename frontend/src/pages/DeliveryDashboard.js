@@ -89,6 +89,17 @@ const DeliveryDashboard = () => {
         order.status === 'ready' || 
         (order.delivery_partner_id === deliveryPartner?.id && ['picked_up', 'on_the_way'].includes(order.status))
       );
+      
+      // Check for new ready orders and play sound
+      const readyOrders = relevantOrders.filter(o => o.status === 'ready');
+      if (readyOrders.length > previousOrderCount && previousOrderCount >= 0) {
+        playNotificationSound();
+        toast({ 
+          title: '🔔 New Delivery!', 
+          description: 'A new order is ready for pickup!',
+        });
+      }
+      setPreviousOrderCount(readyOrders.length);
       setOrders(relevantOrders);
       
       // If this partner has an active delivery, update current order
