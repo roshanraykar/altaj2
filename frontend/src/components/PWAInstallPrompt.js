@@ -158,7 +158,7 @@ export const InstallBanner = () => {
 
   return (
     <>
-      <div className="bg-red-600 text-white py-2.5 px-4" data-testid="install-banner">
+      <div className="bg-gradient-to-r from-[#b2101f] to-[#e70825] text-white py-2.5 px-4" data-testid="install-banner">
         <div className="container mx-auto flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Smartphone className="h-5 w-5 flex-shrink-0" />
@@ -168,7 +168,7 @@ export const InstallBanner = () => {
           <div className="flex items-center gap-2">
             <Button 
               size="sm" 
-              className="bg-white text-red-600 hover:bg-red-50 font-medium text-xs px-3 h-8"
+              className="bg-white text-[#b2101f] hover:bg-[#c59433] hover:text-white font-medium text-xs px-3 h-8 shadow-md"
               onClick={() => setShowModal(true)}
             >
               <Download className="h-3.5 w-3.5 mr-1" /> Get App
