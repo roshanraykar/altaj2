@@ -144,9 +144,9 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-amber-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-2xl border-emerald-100" data-testid="login-card">
-        <CardHeader className="text-center border-b border-emerald-50 pb-6">
+    <div className="min-h-screen bg-gradient-to-br from-red-50 via-white to-red-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-2xl border-red-100" data-testid="login-card">
+        <CardHeader className="text-center border-b border-red-50 pb-6">
           <div className="flex justify-center mb-4">
             <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="h-20 w-auto" />
           </div>
@@ -188,7 +188,7 @@ const LoginPage = () => {
                         type="button" 
                         onClick={handleSendOTP} 
                         disabled={loading}
-                        className="bg-emerald-700 hover:bg-emerald-800"
+                        className="bg-red-600 hover:bg-red-700"
                         data-testid="send-otp-button"
                       >
                         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Send OTP'}
@@ -215,7 +215,7 @@ const LoginPage = () => {
                       <div className="flex justify-between items-center mt-2">
                         <p className="text-xs text-gray-500">OTP sent to +91-{mobileData.phone}</p>
                         {otpTimer > 0 ? (
-                          <p className="text-xs text-emerald-600 font-medium">{formatTime(otpTimer)}</p>
+                          <p className="text-xs text-red-500 font-medium">{formatTime(otpTimer)}</p>
                         ) : (
                           <Button 
                             type="button" 
@@ -244,7 +244,7 @@ const LoginPage = () => {
 
                     <Button 
                       type="submit" 
-                      className="w-full h-12 bg-emerald-700 hover:bg-emerald-800" 
+                      className="w-full h-12 bg-red-600 hover:bg-red-700" 
                       disabled={loading || !mobileData.otp || mobileData.otp.length !== 6}
                       data-testid="verify-otp-button"
                     >
@@ -297,7 +297,7 @@ const LoginPage = () => {
                 </div>
                 <Button 
                   type="submit" 
-                  className="w-full h-12 bg-emerald-700 hover:bg-emerald-800" 
+                  className="w-full h-12 bg-red-600 hover:bg-red-700" 
                   disabled={loading} 
                   data-testid="login-submit-button"
                 >
@@ -308,7 +308,7 @@ const LoginPage = () => {
           </Tabs>
 
           <div className="mt-6 text-center">
-            <Button variant="link" onClick={() => navigate('/')} data-testid="back-to-home-button" className="text-emerald-700">
+            <Button variant="link" onClick={() => navigate('/')} data-testid="back-to-home-button" className="text-red-600">
               Back to Home
             </Button>
           </div>
