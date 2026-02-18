@@ -6,106 +6,158 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 ## User Personas
 - **Admin**: Central control for branches, menu, pricing, staff management, and system-wide reporting
 - **Branch Manager**: Branch-specific operations and staff oversight
-- **Waiter**: Table management and order taking
 - **Kitchen Staff**: Order queue management and preparation tracking
 - **Delivery Partner**: Pickup ready orders and manage delivery status
-- **Customer**: Browse menu, place orders (dine-in, takeaway, delivery), track orders, view order history
+- **Customer**: Browse menu, place orders (takeaway, delivery), track orders, view order history
+- **Waiter**: (Temporarily disabled)
 
-## Core Requirements
-- **Localization**: Indian Rupee (₹), Hubli Karnataka locations
-- **Branding**: Official Al Taj logo and authentic menu items with images
-- **Authentication**: Email/password and Mobile OTP login
-- **Payments**: Razorpay integration (LIVE keys provided)
-- **UI/UX**: "Elegant Minimalist" design, professional and clean
+## Brand Colors
+- **Primary Red**: #b2101f, #e70825
+- **Gold Accent**: #c59433
+- **White Background**
 
 ## Tech Stack
 - **Frontend**: React, Tailwind CSS, Shadcn UI, React Router
 - **Backend**: FastAPI, Pydantic
 - **Database**: MongoDB (motor async driver)
 - **Authentication**: JWT, passlib for password hashing
-- **Payments**: Razorpay
+- **Payments**: Razorpay (LIVE keys)
+- **Maps**: Google Maps API for location detection
 
 ## Current Implementation Status
 
-### ✅ Completed (Jan 31, 2025)
+### ✅ Completed Features (Feb 18, 2025)
 
-1. **Logo & Branding Update**
-   - Integrated official Al Taj Restaurant logo
-   - Logo displayed on: Landing page, Order page, Login page, Customer Dashboard
+1. **Brand Theme Update**
+   - Updated to white-red color theme (#b2101f, #e70825, #c59433 gold)
+   - Arabic-themed decorative elements (golden lines, diamond patterns)
+   - Premium shadows and borders throughout
 
-2. **Menu Items with Images & Descriptions**
-   - 326 menu items with intelligent descriptions
-   - Food images from Unsplash categorized by dish type
-   - 11 Categories with proper image mapping
+2. **Google Maps Integration**
+   - Auto-detect user's current location
+   - Calculate distance to each branch
+   - Auto-select nearest branch
+   - "Detect Location" button
 
-3. **Delivery Fleet Management**
-   - Delivery partner model with availability status (Available/Busy/Offline)
-   - 6 delivery partners seeded (3 per branch)
-   - Vehicle type and number tracking
+3. **New Menu Categories**
+   - **Combos**: 5 value meal combos with discounts
+   - **Raw Meat**: Chicken leg piece, boneless, wings, breast, liver, mutton
+   - **Ready to Cook**: Pre-marinated meals for home cooking
 
-4. **Delivery Dashboard** (`/delivery`)
-   - Orders ready for pickup display
-   - **Fixed**: Status flow now works: Picked Up → On the Way → Delivered
-   - Availability toggle with proper refresh
-   - Partner profile with vehicle info
+4. **Category Navigation**
+   - Sticky category sub-menu on order page
+   - Click to scroll to category section
+   - Back to top button (arrow up)
 
-5. **Table Management**
-   - Table states: Vacant → Occupied → Cleaning → Vacant
-   - Waiter can manage table status after orders
+5. **Buzzer Sound for New Orders**
+   - Kitchen Dashboard: Continuous alert until acknowledged
+   - "Stop Alert" button for each new order
+   - Sound On/Off toggle in header
 
-6. **Customer Dashboard** (`/my-orders`) - NEW
-   - Order history with Active/History tabs
-   - Stats: Total Orders, Active Orders, Completed, Total Spent
-   - Order tracking with status progress bar
-   - Real-time updates every 10 seconds
+6. **Discount Coupons System**
+   - Admin can create coupons (percentage or fixed discount)
+   - Min order value, max discount, usage limits
+   - Apply coupon API endpoint
 
-7. **Customer Table Selection**
-   - Shows available tables for dine-in orders
-   - Table linked to order
+7. **WhatsApp Chat Integration**
+   - Floating WhatsApp button on all pages
+   - Links to: wa.me/918123884771
+   - "Need help? Chat now" hover text
 
-8. **Delivery Availability Check**
-   - Disables delivery when no partners available
+8. **UI Improvements**
+   - Removed 24/7 service info
+   - Removed info@altajrestaurant.com
+   - Get App button visible in header
+   - Premium home page with Arabic styling
 
-### 🔄 In Progress / Pending
-1. **OTP Login (BLOCKED)** - Requires Twilio credentials
-2. **Razorpay End-to-End Testing** - Payment flow with LIVE keys
+9. **Waiter & Dine-in Disabled**
+   - Waiter module route disabled
+   - Dine-in tab removed from order page
+   - Only Takeaway and Delivery available
 
-### 📋 Backlog
-1. **Native Mobile Apps** - React Native for Android & iOS
-2. **Backend Refactoring** - Split monolithic server.py
+### ⏳ Pending Features
 
-## Test Credentials
+1. **Push Notifications (Firebase)**
+   - Requires Firebase project setup
+   - User needs to provide:
+     - Firebase config (apiKey, projectId, etc.)
+     - Server key
+     - VAPID key
 
-| Role | Email | Password | Dashboard |
-|------|-------|----------|-----------|
-| **Admin** | admin@altaj.com | admin123 | /admin |
-| **Customer** | priya.sharma@email.com | customer123 | /my-orders |
-| **Kitchen** | kitchen1.familyrestaurant-oldhubli@altaj.com | kitchen123 | /kitchen |
-| **Waiter** | waiter1.familyrestaurant-oldhubli@altaj.com | waiter123 | /waiter |
-| **Delivery** | delivery1.familyrestaurant-oldhubli@altaj.com | delivery123 | /delivery |
+2. **Hero Video on Home Page**
+   - User needs to upload video file
 
-## Test Flow (Multi-Browser Testing)
+3. **Petpooja CRM Integration**
+   - Awaiting API credentials from Petpooja
+   - Cost: ₹4,500 + GST per outlet per year
 
-### Delivery Order Flow:
-1. **Customer** → `/order` → Select "Delivery" → Add items → Checkout
-2. **Kitchen** → `/kitchen` → See order → Mark "Preparing" → Mark "Ready"
-3. **Delivery** → `/delivery` → See order in "Ready for Pickup" → "Pickup Order"
-4. **Delivery** → Click "Mark On The Way" → Click "Mark Delivered"
-5. **Customer** → `/my-orders` → See order status update in real-time
+4. **Native Mobile Apps**
+   - To be built using Mobile Agent (Expo/React Native)
+   - Prompt prepared for user
 
-### Dine-in Order Flow:
-1. **Customer** → `/order` → Select "Dine In" → Select Table → Add items → Checkout
-2. **Kitchen** → `/kitchen` → See order → Mark "Preparing" → Mark "Ready"
-3. **Waiter** → `/waiter` → See table "Occupied" → See order "Ready" → "Mark Served" → "Complete Order"
-4. **Waiter** → Table shows "Cleaning" → Click "Mark Vacant"
+### 📋 Test Credentials
 
-## Key Files
-- `backend/server.py` - All backend logic and API endpoints
-- `backend/seed_data.py` - Database seeding
-- `frontend/src/pages/CustomerDashboard.js` - Customer order history
-- `frontend/src/pages/DeliveryDashboard.js` - Delivery partner dashboard
-- `frontend/src/pages/LandingPage.js` - Order page with menu images
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@altaj.com | admin123 |
+| Customer | cust@altaj.com | cust123 |
+| Kitchen | kitchen@altaj.com | kit123 |
+| Delivery | del@altaj.com | del123 |
+| Manager | mgr1@altaj.com | mgr123 |
 
-## Test Reports
-- `/app/test_reports/iteration_1.json` - Initial features test
-- `/app/test_reports/iteration_2.json` - Customer Dashboard & Delivery flow test
+### 📍 URLs
+
+| Page | Path |
+|------|------|
+| Home | / |
+| Order Menu | /order |
+| Login | /login |
+| Customer Orders | /my-orders |
+| Kitchen Dashboard | /kitchen |
+| Delivery Dashboard | /delivery |
+| Admin Dashboard | /admin |
+
+### 💰 Cost Summary
+
+| Item | Cost |
+|------|------|
+| Emergent Deployment | 50 credits/month |
+| Google Play Account | $25 one-time |
+| Apple Developer | $99/year |
+| Petpooja (2 outlets) | ₹10,620/year |
+| Razorpay | 2% per transaction |
+| SMS (OTP) | ~₹800/month |
+| Google Maps | Free tier ($200 credit) |
+
+### 🔗 Key API Endpoints
+
+- `POST /api/coupons` - Create coupon (Admin)
+- `GET /api/coupons` - List coupons (Admin)
+- `POST /api/coupons/apply` - Validate and apply coupon
+- `PUT /api/coupons/{id}` - Enable/disable coupon
+- `DELETE /api/coupons/{id}` - Delete coupon
+
+### Architecture
+
+```
+/app/
+├── backend/
+│   ├── server.py (All routes & models)
+│   ├── seed_data.py (Database seeding)
+│   └── .env (MONGO_URL, RAZORPAY keys)
+├── frontend/
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── NewLandingPage.js (Home)
+│   │   │   ├── LandingPage.js (Order page)
+│   │   │   ├── KitchenDashboard.js (with buzzer)
+│   │   │   ├── DeliveryDashboard.js
+│   │   │   └── ...
+│   │   └── components/
+│   │       └── PWAInstallPrompt.js (Get App popup)
+│   └── public/
+│       ├── altaj-logo.png
+│       └── notification.mp3 (buzzer sound)
+└── memory/
+    └── PRD.md
+```
