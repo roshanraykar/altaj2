@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { LogOut, ChefHat, Clock, CheckCircle2 } from 'lucide-react';
+import { LogOut, ChefHat, Clock, CheckCircle2, Volume2, VolumeX } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -16,8 +16,25 @@ const KitchenDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [orders, setOrders] = useState([]);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [previousOrderCount, setPreviousOrderCount] = useState(0);
+  const audioRef = useRef(null);
 
   const headers = { Authorization: `Bearer ${token}` };
+
+  // Initialize audio
+  useEffect(() => {
+    audioRef.current = new Audio('/notification.mp3');
+    audioRef.current.volume = 1.0;
+  }, []);
+
+  // Play buzzer sound for new orders
+  const playNotificationSound = () => {
+    if (soundEnabled && audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play().catch(err => console.log('Audio play failed:', err));
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
@@ -31,6 +48,17 @@ const KitchenDashboard = () => {
       const activeOrders = response.data.filter(order => 
         !['completed', 'cancelled'].includes(order.status)
       );
+      
+      // Check for new pending orders and play sound
+      const newPendingCount = activeOrders.filter(o => o.status === 'pending').length;
+      if (newPendingCount > previousOrderCount && previousOrderCount > 0) {
+        playNotificationSound();
+        toast({ 
+          title: '🔔 New Order!', 
+          description: 'A new order has arrived!',
+        });
+      }
+      setPreviousOrderCount(newPendingCount);
       setOrders(activeOrders);
     } catch (error) {
       console.error('Failed to fetch orders:', error);
