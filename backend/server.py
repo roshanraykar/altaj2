@@ -1058,6 +1058,102 @@ async def get_offers(branch_id: Optional[str] = None):
     return offers
 
 # ============================================================================
+# COUPON ROUTES
+# ============================================================================
+
+@api_router.post("/coupons", response_model=Coupon)
+async def create_coupon(coupon: CouponCreate, current_user: dict = Depends(require_role(["admin"]))):
+    """Create a new discount coupon (Admin only)"""
+    # Check if coupon code already exists
+    existing = await db.coupons.find_one({"code": coupon.code.upper()})
+    if existing:
+        raise HTTPException(status_code=400, detail="Coupon code already exists")
+    
+    coupon_dict = coupon.model_dump()
+    coupon_dict['code'] = coupon.code.upper()
+    coupon_dict['id'] = str(uuid.uuid4())
+    coupon_dict['usage_count'] = 0
+    coupon_dict['created_at'] = datetime.now(timezone.utc)
+    await db.coupons.insert_one(coupon_dict)
+    return Coupon(**coupon_dict)
+
+@api_router.get("/coupons", response_model=List[Coupon])
+async def get_coupons(current_user: dict = Depends(require_role(["admin"]))):
+    """Get all coupons (Admin only)"""
+    coupons = await db.coupons.find().to_list(1000)
+    return [Coupon(**{k: v for k, v in c.items() if k != '_id'}) for c in coupons]
+
+@api_router.post("/coupons/apply")
+async def apply_coupon(data: CouponApply):
+    """Validate and apply a coupon code"""
+    coupon = await db.coupons.find_one({"code": data.code.upper(), "is_active": True})
+    
+    if not coupon:
+        raise HTTPException(status_code=404, detail="Invalid coupon code")
+    
+    now = datetime.now(timezone.utc)
+    valid_from = coupon['valid_from']
+    valid_until = coupon['valid_until']
+    
+    if isinstance(valid_from, str):
+        valid_from = datetime.fromisoformat(valid_from.replace('Z', '+00:00'))
+    if isinstance(valid_until, str):
+        valid_until = datetime.fromisoformat(valid_until.replace('Z', '+00:00'))
+    
+    if now < valid_from:
+        raise HTTPException(status_code=400, detail="Coupon is not yet active")
+    if now > valid_until:
+        raise HTTPException(status_code=400, detail="Coupon has expired")
+    
+    if coupon.get('usage_limit') and coupon.get('usage_count', 0) >= coupon['usage_limit']:
+        raise HTTPException(status_code=400, detail="Coupon usage limit reached")
+    
+    if coupon.get('min_order_value') and data.order_total < coupon['min_order_value']:
+        raise HTTPException(status_code=400, detail=f"Minimum order value of ₹{coupon['min_order_value']} required")
+    
+    if coupon.get('branch_ids') and data.branch_id and data.branch_id not in coupon['branch_ids']:
+        raise HTTPException(status_code=400, detail="Coupon not valid for this branch")
+    
+    # Calculate discount
+    if coupon['discount_type'] == 'percentage':
+        discount = data.order_total * (coupon['discount_value'] / 100)
+        if coupon.get('max_discount'):
+            discount = min(discount, coupon['max_discount'])
+    else:
+        discount = coupon['discount_value']
+    
+    discount = min(discount, data.order_total)  # Discount can't exceed order total
+    
+    return {
+        "valid": True,
+        "code": coupon['code'],
+        "description": coupon['description'],
+        "discount_type": coupon['discount_type'],
+        "discount_value": coupon['discount_value'],
+        "calculated_discount": round(discount, 2),
+        "final_total": round(data.order_total - discount, 2)
+    }
+
+@api_router.put("/coupons/{coupon_id}")
+async def update_coupon(coupon_id: str, is_active: bool, current_user: dict = Depends(require_role(["admin"]))):
+    """Enable/disable a coupon"""
+    result = await db.coupons.update_one(
+        {"id": coupon_id},
+        {"$set": {"is_active": is_active}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Coupon not found")
+    return {"message": "Coupon updated successfully"}
+
+@api_router.delete("/coupons/{coupon_id}")
+async def delete_coupon(coupon_id: str, current_user: dict = Depends(require_role(["admin"]))):
+    """Delete a coupon"""
+    result = await db.coupons.delete_one({"id": coupon_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Coupon not found")
+    return {"message": "Coupon deleted successfully"}
+
+# ============================================================================
 # REPORTS & ANALYTICS ROUTES
 # ============================================================================
 
