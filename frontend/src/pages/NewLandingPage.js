@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, MapPin, Star, Phone, Utensils, Package, Truck, MessageCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, MapPin, Star, Phone, Utensils, Package, Truck, MessageCircle, Sparkles, Quote } from 'lucide-react';
 import { InstallBanner, HeaderInstallButton, FooterInstallSection } from '@/components/PWAInstallPrompt';
+import axios from 'axios';
+
+const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
 const NewLandingPage = () => {
   const navigate = useNavigate();
+  const [publicReviews, setPublicReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState({ average: 0, count: 0 });
+
+  useEffect(() => {
+    fetchPublicReviews();
+  }, []);
+
+  const fetchPublicReviews = async () => {
+    try {
+      const response = await axios.get(`${API}/reviews/public`);
+      setPublicReviews(response.data);
+      
+      // Calculate average from published reviews
+      if (response.data.length > 0) {
+        const avg = response.data.reduce((sum, r) => sum + r.star_rating, 0) / response.data.length;
+        setReviewStats({ average: avg.toFixed(1), count: response.data.length });
+      }
+    } catch (error) {
+      console.error('Failed to fetch reviews:', error);
+    }
+  };
 
   const features = [
     {
