@@ -68,7 +68,9 @@ const AdminDashboard = () => {
         fetchOrders(),
         fetchPerformance(),
         fetchUsers(),
-        fetchCoupons()
+        fetchCoupons(),
+        fetchReviews(),
+        fetchReviewStats()
       ]);
     } catch (error) {
       console.error('Failed to fetch dashboard data:', error);
