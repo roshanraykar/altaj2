@@ -58,7 +58,51 @@ const LandingPage = () => {
       const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
       setActiveCategory(categoryId);
+      // Open the accordion for this category
+      setOpenCategories(prev => ({ ...prev, [categoryId]: true }));
     }
+  };
+
+  const toggleCategory = (categoryId) => {
+    setOpenCategories(prev => ({ ...prev, [categoryId]: !prev[categoryId] }));
+  };
+
+  // Helper to check if category is special (Raw Meat, Ready to Cook, or Combos)
+  const isSpecialCategory = (categoryName) => {
+    const special = ['raw meat', 'ready to cook', 'combos', 'combo'];
+    return special.some(s => categoryName.toLowerCase().includes(s));
+  };
+
+  const getCategoryStyle = (categoryName) => {
+    const name = categoryName.toLowerCase();
+    if (name.includes('raw meat')) {
+      return {
+        bg: 'bg-gradient-to-r from-red-50 to-orange-50',
+        border: 'border-red-200 hover:border-red-400',
+        icon: <Beef className="h-5 w-5 text-red-600" />,
+        badge: 'bg-red-600',
+        accent: 'text-red-600'
+      };
+    }
+    if (name.includes('ready to cook')) {
+      return {
+        bg: 'bg-gradient-to-r from-amber-50 to-yellow-50',
+        border: 'border-amber-200 hover:border-amber-400',
+        icon: <FlameKindling className="h-5 w-5 text-amber-600" />,
+        badge: 'bg-amber-600',
+        accent: 'text-amber-600'
+      };
+    }
+    if (name.includes('combo')) {
+      return {
+        bg: 'bg-gradient-to-r from-purple-50 to-pink-50',
+        border: 'border-purple-200 hover:border-purple-400',
+        icon: <Sparkles className="h-5 w-5 text-purple-600" />,
+        badge: 'bg-purple-600',
+        accent: 'text-purple-600'
+      };
+    }
+    return null;
   };
 
   // Calculate distance between two points using Haversine formula
