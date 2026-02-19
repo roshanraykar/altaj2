@@ -831,6 +831,237 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
+          {/* Reviews Tab */}
+          <TabsContent value="reviews">
+            {/* Review Stats Cards */}
+            {reviewStats && (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <Card>
+                  <CardContent className="pt-6 text-center">
+                    <Star className="h-8 w-8 mx-auto mb-2 text-yellow-500 fill-yellow-500" />
+                    <p className="text-3xl font-bold">{reviewStats.average_rating}</p>
+                    <p className="text-sm text-gray-500">Average Rating</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6 text-center">
+                    <MessageSquare className="h-8 w-8 mx-auto mb-2 text-blue-500" />
+                    <p className="text-3xl font-bold">{reviewStats.total_reviews}</p>
+                    <p className="text-sm text-gray-500">Total Reviews</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6 text-center">
+                    <Eye className="h-8 w-8 mx-auto mb-2 text-green-500" />
+                    <p className="text-3xl font-bold">{reviewStats.published_count}</p>
+                    <p className="text-sm text-gray-500">Published</p>
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardContent className="pt-6 text-center">
+                    <EyeOff className="h-8 w-8 mx-auto mb-2 text-gray-500" />
+                    <p className="text-3xl font-bold">{reviewStats.private_count}</p>
+                    <p className="text-sm text-gray-500">Private</p>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* Rating Distribution */}
+            {reviewStats && reviewStats.total_reviews > 0 && (
+              <Card className="mb-6">
+                <CardHeader>
+                  <CardTitle className="text-lg">Rating Distribution</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {[5, 4, 3, 2, 1].map(rating => {
+                      const count = reviewStats.rating_distribution[rating] || 0;
+                      const percentage = reviewStats.total_reviews > 0 
+                        ? Math.round((count / reviewStats.total_reviews) * 100) 
+                        : 0;
+                      return (
+                        <div key={rating} className="flex items-center gap-3">
+                          <div className="flex items-center gap-1 w-16">
+                            <span className="font-medium">{rating}</span>
+                            <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                          </div>
+                          <div className="flex-1 bg-gray-200 rounded-full h-3">
+                            <div 
+                              className="bg-yellow-400 h-3 rounded-full transition-all"
+                              style={{ width: `${percentage}%` }}
+                            />
+                          </div>
+                          <span className="text-sm text-gray-600 w-16">{count} ({percentage}%)</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Filters */}
+            <Card className="mb-6">
+              <CardContent className="pt-4">
+                <div className="flex gap-4 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <Label>Status:</Label>
+                    <Select value={reviewFilter.status} onValueChange={(v) => setReviewFilter({...reviewFilter, status: v})}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All</SelectItem>
+                        <SelectItem value="private">Private</SelectItem>
+                        <SelectItem value="published">Published</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label>Rating:</Label>
+                    <Select value={reviewFilter.rating} onValueChange={(v) => setReviewFilter({...reviewFilter, rating: v})}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Stars</SelectItem>
+                        <SelectItem value="5">5 Stars</SelectItem>
+                        <SelectItem value="4">4 Stars</SelectItem>
+                        <SelectItem value="3">3 Stars</SelectItem>
+                        <SelectItem value="2">2 Stars</SelectItem>
+                        <SelectItem value="1">1 Star</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Reviews List */}
+            <Card data-testid="reviews-list-card">
+              <CardHeader>
+                <CardTitle>Customer Reviews</CardTitle>
+                <CardDescription>Manage and respond to customer feedback</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {reviews.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                      <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>No reviews yet</p>
+                      <p className="text-sm">Customer reviews will appear here</p>
+                    </div>
+                  ) : (
+                    reviews.map(review => (
+                      <div 
+                        key={review.id} 
+                        className={`p-4 border-2 rounded-lg ${
+                          review.status === 'published' ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-white'
+                        }`}
+                        data-testid={`review-${review.id}`}
+                      >
+                        <div className="flex justify-between items-start mb-3">
+                          <div>
+                            <div className="flex items-center gap-2 mb-1">
+                              <span className="font-semibold">{review.customer_name}</span>
+                              <Badge className={review.status === 'published' ? 'bg-green-600' : 'bg-gray-500'}>
+                                {review.status === 'published' ? 'Published' : 'Private'}
+                              </Badge>
+                            </div>
+                            <div className="flex items-center gap-1">
+                              {[1, 2, 3, 4, 5].map(star => (
+                                <Star 
+                                  key={star} 
+                                  className={`h-4 w-4 ${star <= review.star_rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                                />
+                              ))}
+                              <span className="text-sm text-gray-500 ml-2">
+                                {new Date(review.created_at).toLocaleDateString('en-IN', { 
+                                  day: 'numeric', month: 'short', year: 'numeric' 
+                                })}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            {review.status === 'private' ? (
+                              <Button 
+                                size="sm" 
+                                onClick={() => handlePublishReview(review.id)}
+                                className="bg-green-600 hover:bg-green-700"
+                              >
+                                <Eye className="h-4 w-4 mr-1" /> Publish
+                              </Button>
+                            ) : (
+                              <Button 
+                                size="sm" 
+                                variant="outline"
+                                onClick={() => handleUnpublishReview(review.id)}
+                              >
+                                <EyeOff className="h-4 w-4 mr-1" /> Unpublish
+                              </Button>
+                            )}
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                              className="text-red-600 border-red-300"
+                              onClick={() => handleDeleteReview(review.id)}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+
+                        {/* Review Text */}
+                        {review.review_text && (
+                          <p className="text-gray-700 mb-3 bg-white/50 p-3 rounded-lg">"{review.review_text}"</p>
+                        )}
+
+                        {/* Order Details (Expandable) */}
+                        {review.order_details && (
+                          <div className="text-sm text-gray-600 mb-3">
+                            <span className="font-medium">Order:</span> #{review.order_details.order_number} • 
+                            ₹{review.order_details.total} • {review.order_details.items?.length || 0} items
+                          </div>
+                        )}
+
+                        {/* Admin Response */}
+                        {review.admin_response && (
+                          <div className="bg-blue-50 p-3 rounded-lg mb-3 border-l-4 border-blue-500">
+                            <p className="text-sm font-medium text-blue-800 mb-1">Restaurant replied:</p>
+                            <p className="text-gray-700">{review.admin_response}</p>
+                          </div>
+                        )}
+
+                        {/* Reply Form */}
+                        {!review.admin_response && (
+                          <div className="flex gap-2 mt-3">
+                            <Input
+                              placeholder="Write a reply... (max 300 chars)"
+                              value={replyText[review.id] || ''}
+                              onChange={(e) => setReplyText(prev => ({ 
+                                ...prev, 
+                                [review.id]: e.target.value.slice(0, 300) 
+                              }))}
+                              className="flex-1"
+                            />
+                            <Button 
+                              size="sm"
+                              onClick={() => handleReplyToReview(review.id)}
+                              disabled={!replyText[review.id]?.trim()}
+                            >
+                              <Reply className="h-4 w-4 mr-1" /> Reply
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Reports Tab */}
           <TabsContent value="reports">
             <Card data-testid="performance-report-card">
