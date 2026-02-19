@@ -261,9 +261,11 @@ export const FooterInstallSection = () => {
   );
 };
 
-// Main export
+// Main export - No longer renders floating button (removed per user request)
+// The floating install button was removed from bottom-right of order page
+// Use HeaderInstallButton or FooterInstallSection instead
 const PWAInstallPrompt = () => {
-  return <FloatingInstallButton />;
+  return null;
 };
 
 export default PWAInstallPrompt;
