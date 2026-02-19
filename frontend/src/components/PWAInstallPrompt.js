@@ -184,7 +184,7 @@ export const InstallBanner = () => {
   );
 };
 
-// Header Install Button - Always visible
+// Header Install Button - Always visible with proper contrast
 export const HeaderInstallButton = () => {
   const [showModal, setShowModal] = useState(false);
   const { isStandalone } = getDeviceInfo();
@@ -196,8 +196,7 @@ export const HeaderInstallButton = () => {
       <Button 
         onClick={() => setShowModal(true)}
         size="sm"
-        variant="outline"
-        className="border-white/30 bg-white/10 text-white hover:bg-white/20 font-medium text-xs backdrop-blur-sm"
+        className="bg-[#c59433] hover:bg-[#a87e2a] text-white font-medium text-xs shadow-md border-none"
         data-testid="header-install-btn"
       >
         <Download className="h-3.5 w-3.5 mr-1" />

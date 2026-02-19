@@ -429,7 +429,7 @@ const LandingPage = () => {
                 ) : (
                   <Navigation className="h-4 w-4 mr-2" />
                 )}
-                {locationLoading ? 'Detecting...' : 'Detect Location'}
+                {locationLoading ? 'Detecting...' : 'Detect Nearest Location'}
               </Button>
             </div>
           </CardHeader>
