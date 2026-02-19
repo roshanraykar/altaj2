@@ -258,6 +258,17 @@ const CustomerDashboard = () => {
               </Button>
             )}
           </div>
+
+          {/* Review Section for Delivered Orders */}
+          {!isActive && ['delivered', 'completed'].includes(order.status) && (
+            <div className="mt-3 pt-3 border-t">
+              <OrderReviewCard 
+                order={order} 
+                token={token} 
+                onReviewSubmitted={handleReviewSubmitted}
+              />
+            </div>
+          )}
         </CardContent>
       </Card>
     );
