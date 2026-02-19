@@ -680,6 +680,16 @@ const AdminDashboard = () => {
                           data-testid="coupon-code-input"
                         />
                       </div>
+                      <div>
+                        <Label htmlFor="coupon-desc">Description *</Label>
+                        <Input
+                          id="coupon-desc"
+                          placeholder="e.g., 20% off on orders above ₹500"
+                          value={newCoupon.description}
+                          onChange={(e) => setNewCoupon({ ...newCoupon, description: e.target.value })}
+                          data-testid="coupon-desc-input"
+                        />
+                      </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
                           <Label htmlFor="discount-type">Discount Type</Label>
