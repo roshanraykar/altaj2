@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
-import { ShoppingCart, MapPin, Phone, Leaf, Store, Package, Truck, X, Plus, Minus, Search, ArrowLeft, Navigation, Loader2, ArrowUp, MessageCircle, Clock } from 'lucide-react';
+import { ShoppingCart, MapPin, Phone, Leaf, Store, Package, Truck, X, Plus, Minus, Search, ArrowLeft, Navigation, Loader2, ArrowUp, MessageCircle, Clock, Beef, FlameKindling } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { InstallBanner, HeaderInstallButton, FooterInstallSection, FloatingInstallButton } from '@/components/PWAInstallPrompt';
+import { InstallBanner, HeaderInstallButton, FooterInstallSection } from '@/components/PWAInstallPrompt';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 const GOOGLE_MAPS_API_KEY = 'AIzaSyAHZ50WSteOfJNHAE6eCn5Bf8Py1vGQAmE';
