@@ -175,6 +175,8 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 
 ### 🔗 Key API Endpoints
 
+- `POST /api/auth/google/session` - Exchange Emergent Auth session for JWT
+- `POST /api/auth/facebook` - Facebook OAuth login
 - `POST /api/coupons` - Create coupon (Admin)
 - `GET /api/coupons` - List coupons (Admin)
 - `POST /api/coupons/apply` - Validate and apply coupon
