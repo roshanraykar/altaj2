@@ -1299,8 +1299,8 @@ async def create_coupon(coupon: CouponCreate, current_user: dict = Depends(requi
 @api_router.get("/coupons", response_model=List[Coupon])
 async def get_coupons(current_user: dict = Depends(require_role(["admin"]))):
     """Get all coupons (Admin only)"""
-    coupons = await db.coupons.find().to_list(1000)
-    return [Coupon(**{k: v for k, v in c.items() if k != '_id'}) for c in coupons]
+    coupons = await db.coupons.find({}, {"_id": 0}).to_list(100)
+    return [Coupon(**c) for c in coupons]
 
 @api_router.post("/coupons/apply")
 async def apply_coupon(data: CouponApply):
