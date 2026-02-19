@@ -587,66 +587,116 @@ const LandingPage = () => {
           {categories.map(category => {
             const categoryItems = getItemsByCategory(category.id);
             if (categoryItems.length === 0) return null;
+            
+            const style = getCategoryStyle(category.name);
+            const isOpen = openCategories[category.id];
+            const isSpecial = isSpecialCategory(category.name);
 
             return (
-              <div key={category.id} id={`category-${category.id}`} className="mb-12 scroll-mt-48" data-testid={`menu-category-${category.id}`}>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="h-1 w-12 bg-gradient-to-r from-red-500 to-red-500 rounded"></div>
-                  <h3 className="text-3xl font-bold text-gray-800">
-                    {category.name}
-                  </h3>
-                  {searchQuery.trim() && (
-                    <Badge className="bg-red-100 text-red-700 ml-2">
-                      {categoryItems.length} match{categoryItems.length !== 1 ? 'es' : ''}
-                    </Badge>
-                  )}
-                  <div className="h-1 flex-1 bg-gradient-to-r from-red-500 to-transparent rounded"></div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {categoryItems.map(item => (
-                    <Card 
-                      key={item.id} 
-                      className="group hover:shadow-2xl transition-all duration-300 border-2 border-gray-200 hover:border-red-300 bg-white overflow-hidden" 
-                      data-testid={`menu-item-${item.id}`}
-                    >
-                      {/* Food Image */}
-                      {item.image_url && (
-                        <div className="h-40 overflow-hidden">
-                          <img 
-                            src={item.image_url} 
-                            alt={item.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                            onError={(e) => { e.target.style.display = 'none'; }}
-                          />
-                        </div>
-                      )}
-                      <CardContent className="pt-4">
-                        <div className="flex justify-between items-start mb-2">
-                          <h4 className="font-bold text-lg text-gray-800 group-hover:text-red-600 transition-colors">{item.name}</h4>
-                          {item.is_vegetarian && (
-                            <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 font-semibold">
-                              <Leaf className="h-3 w-3 mr-1" />Veg
-                            </Badge>
+              <div key={category.id} id={`category-${category.id}`} className="mb-4 scroll-mt-48" data-testid={`menu-category-${category.id}`}>
+                {/* Accordion Header */}
+                <button
+                  onClick={() => toggleCategory(category.id)}
+                  className={`w-full flex items-center justify-between p-4 rounded-xl transition-all ${
+                    isSpecial && style
+                      ? `${style.bg} ${style.border} border-2 shadow-md hover:shadow-lg`
+                      : 'bg-gray-50 border-2 border-gray-200 hover:border-red-300 hover:bg-red-50'
+                  }`}
+                  data-testid={`category-accordion-${category.id}`}
+                >
+                  <div className="flex items-center gap-3">
+                    {isSpecial && style && (
+                      <div className={`p-2 rounded-lg ${style.badge}`}>
+                        {style.icon && React.cloneElement(style.icon, { className: 'h-5 w-5 text-white' })}
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <h3 className={`text-xl font-bold ${isSpecial && style ? style.accent : 'text-gray-800'}`}>
+                        {category.name}
+                      </h3>
+                      <p className="text-sm text-gray-500">
+                        {categoryItems.length} item{categoryItems.length !== 1 ? 's' : ''} 
+                        {isSpecial && style && category.name.toLowerCase().includes('raw') && ' • Fresh Daily'}
+                        {isSpecial && style && category.name.toLowerCase().includes('ready') && ' • Marinated & Ready'}
+                        {isSpecial && style && category.name.toLowerCase().includes('combo') && ' • Great Value'}
+                      </p>
+                    </div>
+                    {searchQuery.trim() && (
+                      <Badge className="bg-red-100 text-red-700 ml-2">
+                        {categoryItems.length} match{categoryItems.length !== 1 ? 'es' : ''}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className={`p-2 rounded-full transition-colors ${isOpen ? 'bg-white/80' : 'bg-white/50'}`}>
+                    {isOpen ? (
+                      <ChevronUp className={`h-5 w-5 ${isSpecial && style ? style.accent : 'text-gray-600'}`} />
+                    ) : (
+                      <ChevronDown className={`h-5 w-5 ${isSpecial && style ? style.accent : 'text-gray-600'}`} />
+                    )}
+                  </div>
+                </button>
+
+                {/* Accordion Content */}
+                {isOpen && (
+                  <div className={`mt-4 p-4 rounded-xl border ${
+                    isSpecial && style 
+                      ? `${style.bg} ${style.border}`
+                      : 'bg-white border-gray-100'
+                  }`}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {categoryItems.map(item => (
+                        <Card 
+                          key={item.id} 
+                          className={`group hover:shadow-xl transition-all duration-300 border-2 bg-white overflow-hidden ${
+                            isSpecial && style ? style.border : 'border-gray-200 hover:border-red-300'
+                          }`}
+                          data-testid={`menu-item-${item.id}`}
+                        >
+                          {/* Food Image */}
+                          {item.image_url && (
+                            <div className="h-32 overflow-hidden">
+                              <img 
+                                src={item.image_url} 
+                                alt={item.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                onError={(e) => { e.target.style.display = 'none'; }}
+                              />
+                            </div>
                           )}
-                        </div>
-                        <p className="text-sm text-gray-600 mb-4 line-clamp-2">{item.description}</p>
-                        <div className="flex justify-between items-center pt-3 border-t border-gray-100">
-                          <span className="text-xl font-bold text-red-600 flex items-center">
-                            ₹{item.base_price.toFixed(0)}
-                          </span>
-                          <Button
-                            onClick={() => addToCart(item)}
-                            className="bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-700 text-white font-semibold shadow-lg"
-                            data-testid={`add-to-cart-${item.id}`}
-                          >
-                            <Plus className="mr-1 h-4 w-4" />
-                            Add
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                          <CardContent className="p-4">
+                            <div className="flex justify-between items-start mb-2">
+                              <h4 className="font-bold text-base text-gray-800 group-hover:text-red-600 transition-colors line-clamp-1">{item.name}</h4>
+                              {item.is_vegetarian && (
+                                <Badge variant="outline" className="bg-green-50 text-green-700 border-green-300 font-semibold text-xs">
+                                  <Leaf className="h-3 w-3 mr-1" />Veg
+                                </Badge>
+                              )}
+                            </div>
+                            <p className="text-xs text-gray-600 mb-3 line-clamp-2">{item.description}</p>
+                            <div className="flex justify-between items-center pt-2 border-t border-gray-100">
+                              <span className={`text-lg font-bold ${isSpecial && style ? style.accent : 'text-red-600'}`}>
+                                ₹{item.base_price.toFixed(0)}
+                              </span>
+                              <Button
+                                onClick={() => addToCart(item)}
+                                size="sm"
+                                className={`font-semibold shadow-md ${
+                                  isSpecial && style
+                                    ? `${style.badge} hover:opacity-90 text-white`
+                                    : 'bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-700 text-white'
+                                }`}
+                                data-testid={`add-to-cart-${item.id}`}
+                              >
+                                <Plus className="mr-1 h-4 w-4" />
+                                Add
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             );
           })}
