@@ -333,7 +333,7 @@ const AdminDashboard = () => {
 
       <div className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 mb-8">
+          <TabsList className="grid w-full grid-cols-7 mb-8">
             <TabsTrigger value="dashboard" data-testid="tab-dashboard">
               <LayoutDashboard className="mr-2 h-4 w-4" /> Dashboard
             </TabsTrigger>
@@ -348,6 +348,9 @@ const AdminDashboard = () => {
             </TabsTrigger>
             <TabsTrigger value="coupons" data-testid="tab-coupons">
               <Ticket className="mr-2 h-4 w-4" /> Coupons
+            </TabsTrigger>
+            <TabsTrigger value="reviews" data-testid="tab-reviews">
+              <Star className="mr-2 h-4 w-4" /> Reviews
             </TabsTrigger>
             <TabsTrigger value="reports" data-testid="tab-reports">
               <BarChart3 className="mr-2 h-4 w-4" /> Reports
