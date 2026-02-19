@@ -405,6 +405,17 @@ const CustomerDashboard = () => {
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* Review Popup */}
+      {reviewPopupOrder && (
+        <ReviewPopup
+          isOpen={!!reviewPopupOrder}
+          onClose={() => setReviewPopupOrder(null)}
+          order={reviewPopupOrder}
+          token={token}
+          onReviewSubmitted={handleReviewSubmitted}
+        />
+      )}
     </div>
   );
 };
