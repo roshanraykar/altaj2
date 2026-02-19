@@ -32,6 +32,7 @@ const LandingPage = () => {
   const [branchDistances, setBranchDistances] = useState({});
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [activeCategory, setActiveCategory] = useState(null);
+  const [openCategories, setOpenCategories] = useState({});
   const navigate = useNavigate();
   const { toast } = useToast();
 
