@@ -29,7 +29,23 @@ const DeliveryDashboard = () => {
   useEffect(() => {
     audioRef.current = new Audio('/notification.mp3');
     audioRef.current.volume = 1.0;
+    
+    return () => {
+      // Stop audio on unmount
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
+    };
   }, []);
+
+  // Stop audio immediately when sound is disabled
+  useEffect(() => {
+    if (!soundEnabled && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+  }, [soundEnabled]);
 
   // Play buzzer sound for new delivery assignments
   const playNotificationSound = () => {
