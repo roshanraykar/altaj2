@@ -548,6 +548,184 @@ async def get_me(current_user: dict = Depends(get_current_user)):
         current_user['created_at'] = datetime.fromisoformat(current_user['created_at'])
     return User(**{k: v for k, v in current_user.items() if k != "hashed_password"})
 
+# Social Login Models
+class GoogleSessionRequest(BaseModel):
+    session_id: str
+
+class FacebookAuthRequest(BaseModel):
+    access_token: str
+    user_id: str
+
+# ============================================================================
+# SOCIAL AUTH ROUTES - Google (Emergent Auth) & Facebook
+# ============================================================================
+
+@api_router.post("/auth/google/session", response_model=AuthResponse)
+async def google_auth_session(request: GoogleSessionRequest):
+    """
+    Exchange Emergent Auth session_id for app JWT token.
+    This is called after the user returns from Google OAuth via Emergent Auth.
+    """
+    import httpx
+    
+    try:
+        # Call Emergent Auth to get session data
+        async with httpx.AsyncClient() as client:
+            response = await client.get(
+                "https://demobackend.emergentagent.com/auth/v1/env/oauth/session-data",
+                headers={"X-Session-ID": request.session_id},
+                timeout=10.0
+            )
+            
+            if response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid session ID")
+            
+            session_data = response.json()
+    except httpx.RequestError as e:
+        logger.error(f"Error calling Emergent Auth: {e}")
+        raise HTTPException(status_code=500, detail="Authentication service unavailable")
+    
+    # Extract user info from session data
+    google_id = session_data.get("id")
+    email = session_data.get("email")
+    name = session_data.get("name")
+    picture = session_data.get("picture")
+    
+    if not email or not google_id:
+        raise HTTPException(status_code=400, detail="Invalid session data from Google")
+    
+    # Check if user already exists by email or google_id
+    existing_user = await db.users.find_one(
+        {"$or": [{"email": email}, {"google_id": google_id}]},
+        {"_id": 0}
+    )
+    
+    if existing_user:
+        # Update google_id if not set (user registered via email before)
+        if not existing_user.get("google_id"):
+            await db.users.update_one(
+                {"email": email},
+                {"$set": {"google_id": google_id, "picture_url": picture}}
+            )
+            existing_user["google_id"] = google_id
+            existing_user["picture_url"] = picture
+        
+        if isinstance(existing_user['created_at'], str):
+            existing_user['created_at'] = datetime.fromisoformat(existing_user['created_at'])
+        
+        user_obj = User(**{k: v for k, v in existing_user.items() if k not in ["hashed_password", "google_id", "facebook_id", "picture_url"]})
+        access_token = create_access_token(data={"sub": user_obj.id, "role": user_obj.role})
+        
+        return AuthResponse(access_token=access_token, user=user_obj)
+    else:
+        # Create new user
+        user_data = {
+            "email": email,
+            "name": name or email.split("@")[0],
+            "phone": None,
+            "role": "customer",
+            "is_active": True,
+            "google_id": google_id,
+            "picture_url": picture
+        }
+        
+        user = User(**{k: v for k, v in user_data.items() if k not in ["google_id", "picture_url"]})
+        doc = user.model_dump()
+        doc["created_at"] = doc["created_at"].isoformat()
+        doc["hashed_password"] = ""  # No password for social login users
+        doc["google_id"] = google_id
+        doc["picture_url"] = picture
+        
+        await db.users.insert_one(doc)
+        
+        access_token = create_access_token(data={"sub": user.id, "role": user.role})
+        
+        return AuthResponse(access_token=access_token, user=user)
+
+@api_router.post("/auth/facebook", response_model=AuthResponse)
+async def facebook_auth(request: FacebookAuthRequest):
+    """
+    Authenticate with Facebook access token.
+    Verifies token with Facebook Graph API and creates/updates user.
+    """
+    import httpx
+    
+    try:
+        async with httpx.AsyncClient() as client:
+            # Verify token and get user data from Facebook
+            user_url = "https://graph.facebook.com/v20.0/me"
+            user_params = {
+                "fields": "id,name,email,picture",
+                "access_token": request.access_token,
+            }
+            
+            response = await client.get(user_url, params=user_params, timeout=10.0)
+            
+            if response.status_code != 200:
+                raise HTTPException(status_code=401, detail="Invalid Facebook token")
+            
+            fb_data = response.json()
+    except httpx.RequestError as e:
+        logger.error(f"Error calling Facebook API: {e}")
+        raise HTTPException(status_code=500, detail="Facebook authentication service unavailable")
+    
+    # Extract user info
+    facebook_id = fb_data.get("id")
+    name = fb_data.get("name")
+    email = fb_data.get("email")
+    picture = fb_data.get("picture", {}).get("data", {}).get("url")
+    
+    if not facebook_id:
+        raise HTTPException(status_code=400, detail="Invalid data from Facebook")
+    
+    # If no email from Facebook, generate a placeholder
+    if not email:
+        email = f"fb_{facebook_id}@altaj.temp"
+    
+    # Check if user already exists
+    existing_user = await db.users.find_one(
+        {"$or": [{"email": email}, {"facebook_id": facebook_id}]},
+        {"_id": 0}
+    )
+    
+    if existing_user:
+        # Update facebook_id if not set
+        if not existing_user.get("facebook_id"):
+            await db.users.update_one(
+                {"email": email},
+                {"$set": {"facebook_id": facebook_id, "picture_url": picture}}
+            )
+        
+        if isinstance(existing_user['created_at'], str):
+            existing_user['created_at'] = datetime.fromisoformat(existing_user['created_at'])
+        
+        user_obj = User(**{k: v for k, v in existing_user.items() if k not in ["hashed_password", "google_id", "facebook_id", "picture_url"]})
+        access_token = create_access_token(data={"sub": user_obj.id, "role": user_obj.role})
+        
+        return AuthResponse(access_token=access_token, user=user_obj)
+    else:
+        # Create new user
+        user_data = {
+            "email": email,
+            "name": name or f"User_{facebook_id[:8]}",
+            "phone": None,
+            "role": "customer",
+            "is_active": True
+        }
+        
+        user = User(**user_data)
+        doc = user.model_dump()
+        doc["created_at"] = doc["created_at"].isoformat()
+        doc["hashed_password"] = ""
+        doc["facebook_id"] = facebook_id
+        doc["picture_url"] = picture
+        
+        await db.users.insert_one(doc)
+        
+        access_token = create_access_token(data={"sub": user.id, "role": user.role})
+        
+        return AuthResponse(access_token=access_token, user=user)
+
 # ============================================================================
 # BRANCH ROUTES
 # ============================================================================
