@@ -372,6 +372,31 @@ class PaymentVerification(BaseModel):
     razorpay_signature: str
     order_id: str  # Our internal order ID
 
+# Review Models
+class ReviewCreate(BaseModel):
+    order_id: str
+    star_rating: int = Field(ge=1, le=5)
+    review_text: Optional[str] = Field(default=None, max_length=500)
+
+class ReviewUpdate(BaseModel):
+    status: Optional[str] = None  # "private" or "published"
+    admin_response: Optional[str] = Field(default=None, max_length=300)
+
+class Review(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    order_id: str
+    customer_id: str
+    customer_name: str
+    customer_email: Optional[str] = None
+    star_rating: int
+    review_text: Optional[str] = None
+    status: str = "private"  # "private" or "published"
+    admin_response: Optional[str] = None
+    order_details: Optional[dict] = None  # Store order info for admin reference
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
 # ============================================================================
 # AUTHENTICATION ROUTES
 # ============================================================================
