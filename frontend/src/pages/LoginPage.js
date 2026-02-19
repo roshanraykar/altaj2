@@ -22,6 +22,29 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+  // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
+  const handleGoogleLogin = () => {
+    const redirectUrl = window.location.origin + '/my-orders';
+    window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+  };
+
+  const handleFacebookLogin = () => {
+    // Facebook OAuth via popup
+    const appId = ''; // Facebook App ID - will be configured when user provides it
+    if (!appId) {
+      toast({ 
+        title: 'Facebook Login', 
+        description: 'Facebook login requires app configuration. Please use Google or Email login.',
+        variant: 'destructive'
+      });
+      return;
+    }
+    
+    const redirectUri = encodeURIComponent(window.location.origin + '/auth/facebook/callback');
+    const scope = 'email,public_profile';
+    window.location.href = `https://www.facebook.com/v20.0/dialog/oauth?client_id=${appId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=token`;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
