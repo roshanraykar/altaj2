@@ -157,6 +157,155 @@ const KitchenDashboard = () => {
 
   const isOrderAlerting = (orderId) => alertingOrders.has(orderId);
 
+  // Print order receipt for thermal printer (58mm / 2 inch width)
+  const printOrderReceipt = (order) => {
+    const printWindow = window.open('', '_blank', 'width=300,height=600');
+    
+    const receiptContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Order #${order.order_number}</title>
+        <style>
+          @page {
+            size: 58mm auto;
+            margin: 0;
+          }
+          * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+          }
+          body {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            width: 58mm;
+            padding: 3mm;
+            line-height: 1.4;
+          }
+          .header {
+            text-align: center;
+            border-bottom: 1px dashed #000;
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+          }
+          .restaurant-name {
+            font-size: 16px;
+            font-weight: bold;
+          }
+          .order-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px 0;
+          }
+          .order-type {
+            font-size: 14px;
+            text-transform: uppercase;
+            font-weight: bold;
+            background: #000;
+            color: #fff;
+            padding: 4px;
+            margin: 5px 0;
+          }
+          .divider {
+            border-top: 1px dashed #000;
+            margin: 8px 0;
+          }
+          .items-section {
+            margin: 10px 0;
+          }
+          .item {
+            display: flex;
+            justify-content: space-between;
+            margin: 6px 0;
+            font-size: 14px;
+          }
+          .item-qty {
+            font-weight: bold;
+            min-width: 30px;
+          }
+          .item-name {
+            flex: 1;
+            padding-left: 5px;
+          }
+          .instructions {
+            border: 1px solid #000;
+            padding: 8px;
+            margin: 10px 0;
+            font-size: 12px;
+          }
+          .instructions-label {
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+          }
+          .footer {
+            text-align: center;
+            border-top: 1px dashed #000;
+            padding-top: 8px;
+            margin-top: 8px;
+            font-size: 10px;
+          }
+          .time {
+            font-size: 11px;
+            margin-top: 5px;
+          }
+          @media print {
+            body {
+              width: 58mm;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <div class="restaurant-name">AL TAJ RESTAURANT</div>
+          <div class="order-number">#${order.order_number}</div>
+          <div class="order-type">${order.order_type === 'delivery' ? '🚗 DELIVERY' : '📦 TAKEAWAY'}</div>
+        </div>
+        
+        <div class="divider"></div>
+        
+        <div class="items-section">
+          ${order.items.map(item => `
+            <div class="item">
+              <span class="item-qty">${item.quantity}x</span>
+              <span class="item-name">${item.menu_item_name}</span>
+            </div>
+          `).join('')}
+        </div>
+        
+        ${order.special_instructions ? `
+          <div class="instructions">
+            <div class="instructions-label">⚠️ SPECIAL INSTRUCTIONS:</div>
+            <div>${order.special_instructions}</div>
+          </div>
+        ` : ''}
+        
+        <div class="divider"></div>
+        
+        <div class="footer">
+          <div class="time">Printed: ${new Date().toLocaleString('en-IN', { 
+            day: '2-digit', 
+            month: 'short', 
+            hour: '2-digit', 
+            minute: '2-digit'
+          })}</div>
+        </div>
+      </body>
+      </html>
+    `;
+    
+    printWindow.document.write(receiptContent);
+    printWindow.document.close();
+    
+    // Wait for content to load then print
+    printWindow.onload = () => {
+      printWindow.print();
+      printWindow.close();
+    };
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100" data-testid="kitchen-dashboard">
       {/* Header with brand colors */}
