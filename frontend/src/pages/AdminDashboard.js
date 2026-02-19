@@ -38,6 +38,7 @@ const AdminDashboard = () => {
   const [showAddCouponDialog, setShowAddCouponDialog] = useState(false);
   const [newCoupon, setNewCoupon] = useState({
     code: '',
+    description: '',
     discount_type: 'percentage',
     discount_value: 10,
     min_order_value: 0,
