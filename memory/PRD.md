@@ -155,32 +155,26 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 
 ### ⏳ Pending Features
 
-1. **Push Notifications (Firebase)**
+1. **SMS Notifications (Twilio)**
+   - User confirmed Twilio for SMS + WhatsApp
+   - Awaiting Twilio credentials from user
+
+2. **WhatsApp Notifications (Twilio)**
+   - Same Twilio account for WhatsApp Business API
+   - Awaiting credentials
+
+3. **Push Notifications (Firebase)**
    - Requires Firebase project setup
-   - User needs to provide:
-     - Firebase config (apiKey, projectId, etc.)
-     - Server key
-     - VAPID key
+   - User needs to provide Firebase config
 
-2. **OTP Login (SMS)**
-   - Backend ready but awaiting SMS provider credentials (Twilio/MSG91)
+4. **OTP Login (SMS)**
+   - Backend ready but awaiting SMS provider credentials
 
-3. **Facebook Login Complete Setup**
-   - Requires Facebook App ID from user
-   - Backend endpoint ready
+5. **Coupon Frontend Integration (Checkout)**
+   - Apply coupon field on checkout page
+   - Backend validation ready
 
-4. **Rating System**
-   - Allow customers to rate food quality, delivery, and ordering experience
-   - Requires DB schema changes and UI component
-
-5. **Admin Menu Management**
-   - CRUD for menu items with image upload capability
-
-6. **Coupon Frontend Integration**
-   - Backend ready, needs frontend "Apply Coupon" field on checkout
-   - Admin panel section for managing coupons
-
-7. **Native Mobile Apps**
+6. **Native Mobile Apps**
    - To be built using Mobile Agent (Expo/React Native)
    - Prompt prepared for user
 
