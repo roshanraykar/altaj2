@@ -410,6 +410,16 @@ const KitchenDashboard = () => {
                       </Button>
                     )}
                     
+                    {/* Print Receipt Button */}
+                    <Button
+                      onClick={() => printOrderReceipt(order)}
+                      variant="outline"
+                      className="w-full mb-2 border-gray-400 text-gray-700 hover:bg-gray-100"
+                      data-testid={`print-order-${order.id}`}
+                    >
+                      <Printer className="mr-2 h-4 w-4" /> Print Order
+                    </Button>
+                    
                     <Button
                       onClick={() => updateOrderStatus(order.id, 'confirmed')}
                       className="w-full bg-blue-600 hover:bg-blue-700"
