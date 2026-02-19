@@ -69,64 +69,69 @@ const NewLandingPage = () => {
         </div>
       </header>
 
-      {/* Hero Section - Premium Arabic themed */}
-      <section className="pt-28 pb-20 px-6 relative overflow-hidden">
-        {/* Arabic Pattern Background */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23b2101f' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
+      {/* Hero Section with Video Background */}
+      <section className="pt-20 relative overflow-hidden min-h-[80vh] flex items-center">
+        {/* Video Background */}
+        <div className="absolute inset-0 z-0">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover"
+          >
+            <source src="/hero-video.mp4" type="video/mp4" />
+          </video>
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40"></div>
+        </div>
         
-        <div className="container mx-auto max-w-6xl relative">
-          <div className="grid md:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              {/* Arabic decorative element */}
-              <div className="flex items-center space-x-3">
-                <div className="h-[1px] w-12 bg-gradient-to-r from-[#c59433] to-transparent"></div>
-                <span className="text-[#c59433] text-sm font-medium tracking-[0.3em] uppercase">Est. Hubballi</span>
-                <div className="h-[1px] w-12 bg-gradient-to-l from-[#c59433] to-transparent"></div>
-              </div>
-              
-              <div className="space-y-4">
-                <h1 className="text-5xl md:text-6xl font-light text-gray-900 leading-tight">
-                  <span className="text-[#b2101f] font-serif italic">Taste</span> the
-                  <span className="block font-semibold bg-gradient-to-r from-[#b2101f] to-[#e70825] bg-clip-text text-transparent">Tradition</span>
-                </h1>
-                <p className="text-lg text-gray-600 leading-relaxed max-w-md">
-                  Experience the rich flavors of North Indian and Chinese cuisine, crafted with passion and served with pride.
-                </p>
-              </div>
-              
-              {/* Decorative line */}
-              <div className="flex items-center space-x-4">
-                <div className="h-[2px] w-16 bg-gradient-to-r from-[#c59433] to-[#b2101f]"></div>
-                <div className="h-2 w-2 bg-[#c59433] rotate-45"></div>
-                <div className="h-[2px] w-16 bg-gradient-to-l from-[#c59433] to-[#b2101f]"></div>
-              </div>
-              
-              <div className="flex items-center space-x-4 pt-4">
-                <Button onClick={() => navigate('/order')} size="lg" className="bg-gradient-to-r from-[#b2101f] to-[#e70825] hover:from-[#8a0c18] hover:to-[#b2101f] text-white px-8 h-14 text-base font-medium shadow-xl shadow-red-200 border-b-4 border-[#8a0c18]">
-                  Order Online <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button onClick={() => document.getElementById('locations').scrollIntoView({behavior: 'smooth'})} variant="outline" size="lg" className="h-14 px-8 text-base font-medium border-2 border-[#c59433] text-[#c59433] hover:bg-[#c59433] hover:text-white">
-                  Find Us
-                </Button>
-              </div>
-              
-              <div className="flex items-center space-x-6 pt-4">
-                <div className="flex items-center space-x-2">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 text-[#c59433] fill-current" />)}
-                  </div>
-                  <span className="text-sm text-gray-600 ml-2">10,000+ happy customers</span>
-                </div>
-              </div>
+        <div className="container mx-auto max-w-6xl relative z-10 px-6 py-16">
+          <div className="max-w-2xl space-y-8">
+            {/* Arabic decorative element */}
+            <div className="flex items-center space-x-3">
+              <div className="h-[1px] w-12 bg-gradient-to-r from-[#c59433] to-transparent"></div>
+              <span className="text-[#c59433] text-sm font-medium tracking-[0.3em] uppercase">Est. Hubballi</span>
+              <div className="h-[1px] w-12 bg-gradient-to-l from-[#c59433] to-transparent"></div>
             </div>
             
-            <div className="relative">
-              {/* Premium card with shadow and border */}
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-[#fef7e7] to-[#fff5f5] overflow-hidden flex items-center justify-center p-8 shadow-2xl border-4 border-white ring-1 ring-[#c59433]/20">
-                <img src="/altaj-logo.png" alt="Al Taj Restaurant" className="w-full h-auto max-w-xs drop-shadow-xl" />
+            <div className="space-y-4">
+              <h1 className="text-5xl md:text-7xl font-light text-white leading-tight">
+                <span className="text-[#c59433] font-serif italic">Taste</span> the
+                <span className="block font-semibold text-white">Tradition</span>
+              </h1>
+              <p className="text-xl text-gray-200 leading-relaxed max-w-lg">
+                Experience the rich flavors of North Indian and Chinese cuisine, crafted with passion and served with pride.
+              </p>
+            </div>
+            
+            {/* Decorative line */}
+            <div className="flex items-center space-x-4">
+              <div className="h-[2px] w-16 bg-gradient-to-r from-[#c59433] to-[#b2101f]"></div>
+              <div className="h-2 w-2 bg-[#c59433] rotate-45"></div>
+              <div className="h-[2px] w-16 bg-gradient-to-l from-[#c59433] to-[#b2101f]"></div>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-4 pt-4">
+              <Button onClick={() => navigate('/order')} size="lg" className="bg-gradient-to-r from-[#b2101f] to-[#e70825] hover:from-[#8a0c18] hover:to-[#b2101f] text-white px-8 h-14 text-lg font-semibold shadow-xl border-b-4 border-[#8a0c18]">
+                Order Online <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button onClick={() => document.getElementById('locations').scrollIntoView({behavior: 'smooth'})} variant="outline" size="lg" className="h-14 px-8 text-lg font-medium border-2 border-[#c59433] text-[#c59433] hover:bg-[#c59433] hover:text-white bg-black/30 backdrop-blur-sm">
+                Find Us
+              </Button>
+            </div>
+            
+            <div className="flex items-center space-x-6 pt-4">
+              <div className="flex items-center space-x-2 bg-black/40 backdrop-blur-sm px-4 py-2 rounded-full">
+                <div className="flex">
+                  {[...Array(5)].map((_, i) => <Star key={i} className="h-5 w-5 text-[#c59433] fill-current" />)}
+                </div>
+                <span className="text-sm text-white ml-2">10,000+ happy customers</span>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
               
               {/* Decorative corner elements */}
               <div className="absolute -top-4 -left-4 w-12 h-12 border-l-4 border-t-4 border-[#c59433]"></div>
