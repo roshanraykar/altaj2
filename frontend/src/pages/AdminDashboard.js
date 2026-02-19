@@ -34,6 +34,18 @@ const AdminDashboard = () => {
     role: 'waiter',
     branch_id: ''
   });
+  const [coupons, setCoupons] = useState([]);
+  const [showAddCouponDialog, setShowAddCouponDialog] = useState(false);
+  const [newCoupon, setNewCoupon] = useState({
+    code: '',
+    discount_type: 'percentage',
+    discount_value: 10,
+    min_order_value: 0,
+    max_discount: 0,
+    usage_limit: 0,
+    valid_from: new Date().toISOString().split('T')[0],
+    valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+  });
 
   const headers = { Authorization: `Bearer ${token}` };
 
