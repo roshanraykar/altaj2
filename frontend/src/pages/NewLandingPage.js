@@ -132,24 +132,6 @@ const NewLandingPage = () => {
           </div>
         </div>
       </section>
-              
-              {/* Decorative corner elements */}
-              <div className="absolute -top-4 -left-4 w-12 h-12 border-l-4 border-t-4 border-[#c59433]"></div>
-              <div className="absolute -bottom-4 -right-4 w-12 h-12 border-r-4 border-b-4 border-[#c59433]"></div>
-              
-              {/* Rating card */}
-              <div className="absolute -bottom-6 -left-6 bg-white p-5 rounded-2xl shadow-2xl border border-[#c59433]/20">
-                <div className="flex items-center space-x-3">
-                  <div className="flex text-[#c59433]">
-                    {[...Array(5)].map((_, i) => <Star key={i} className="h-4 w-4 fill-current" />)}
-                  </div>
-                  <span className="text-sm font-semibold text-gray-800">4.8/5 Rating</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Features Section with premium styling */}
       <section className="py-20 bg-gradient-to-b from-gray-50 to-white relative">
