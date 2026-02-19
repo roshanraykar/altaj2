@@ -26,6 +26,39 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 
 ## Current Implementation Status
 
+### ✅ Completed Features (Feb 19, 2025)
+
+1. **Homepage Product Images Updated**
+   - Chicken Biryani, Butter Chicken, Tandoori Chicken with real food photos
+   - Images hosted on customer-assets.emergentagent.com
+
+2. **Homepage Special Sections**
+   - **Combos Highlight**: 3 combo cards (Family Feast, Couple Special, Solo Delight) with gradient styling
+   - **Raw Meat & Ready to Cook Section**: Cards with icons, tags (Chicken, Mutton, Fish), gradient backgrounds
+
+3. **Order Page Accordion Menu**
+   - All menu categories displayed as collapsible accordions
+   - Collapsed by default for optimized space
+   - Click to expand/collapse each category
+   - Menu items shown in grid layout when expanded
+
+4. **Sticky Category Navigation Improved**
+   - Flex-wrap layout (no horizontal scrollbar)
+   - Special color-coding for categories:
+     - **Combos**: Purple theme
+     - **Raw Meat**: Red/orange theme
+     - **Ready to Cook**: Amber/yellow theme
+   - Click scrolls to and expands the target category
+
+5. **Floating Download Button Removed**
+   - Removed from bottom-right of order page as requested
+   - "Get App" button remains in header
+
+6. **Social Login Integration**
+   - **Google Login**: Integrated via Emergent Auth (auth.emergentagent.com)
+   - **Facebook Login**: Button present (requires Facebook App ID configuration)
+   - Backend endpoints: `/api/auth/google/session`, `/api/auth/facebook`
+
 ### ✅ Completed Features (Feb 18, 2025)
 
 1. **Brand Theme Update**
