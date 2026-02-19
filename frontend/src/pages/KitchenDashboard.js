@@ -32,10 +32,29 @@ const KitchenDashboard = () => {
       if (alertIntervalRef.current) {
         clearInterval(alertIntervalRef.current);
       }
+      // Stop audio on unmount
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     };
   }, []);
 
-  // Play buzzer sound
+  // Stop audio immediately when sound is disabled
+  useEffect(() => {
+    if (!soundEnabled && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    
+    // Clear interval when sound is disabled
+    if (!soundEnabled && alertIntervalRef.current) {
+      clearInterval(alertIntervalRef.current);
+      alertIntervalRef.current = null;
+    }
+  }, [soundEnabled]);
+
+  // Play buzzer sound - only if sound is enabled
   const playBuzzer = useCallback(() => {
     if (soundEnabled && audioRef.current) {
       audioRef.current.currentTime = 0;
