@@ -115,6 +115,73 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchCoupons = async () => {
+    try {
+      const response = await axios.get(`${API}/coupons`, { headers });
+      setCoupons(response.data);
+    } catch (error) {
+      console.error('Failed to fetch coupons:', error);
+    }
+  };
+
+  const handleCreateCoupon = async () => {
+    try {
+      if (!newCoupon.code) {
+        toast({ title: 'Error', description: 'Please enter a coupon code', variant: 'destructive' });
+        return;
+      }
+      
+      const couponData = {
+        ...newCoupon,
+        code: newCoupon.code.toUpperCase(),
+        valid_from: new Date(newCoupon.valid_from).toISOString(),
+        valid_until: new Date(newCoupon.valid_until).toISOString()
+      };
+      
+      await axios.post(`${API}/coupons`, couponData, { headers });
+      toast({ title: 'Success', description: 'Coupon created successfully!' });
+      setShowAddCouponDialog(false);
+      setNewCoupon({
+        code: '',
+        discount_type: 'percentage',
+        discount_value: 10,
+        min_order_value: 0,
+        max_discount: 0,
+        usage_limit: 0,
+        valid_from: new Date().toISOString().split('T')[0],
+        valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+      });
+      fetchCoupons();
+    } catch (error) {
+      toast({ 
+        title: 'Failed to create coupon', 
+        description: error.response?.data?.detail || 'Please try again', 
+        variant: 'destructive' 
+      });
+    }
+  };
+
+  const toggleCouponStatus = async (couponId, currentStatus) => {
+    try {
+      await axios.put(`${API}/coupons/${couponId}`, { is_active: !currentStatus }, { headers });
+      toast({ title: 'Success', description: `Coupon ${!currentStatus ? 'activated' : 'deactivated'}` });
+      fetchCoupons();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to update coupon', variant: 'destructive' });
+    }
+  };
+
+  const deleteCoupon = async (couponId) => {
+    if (!window.confirm('Are you sure you want to delete this coupon?')) return;
+    try {
+      await axios.delete(`${API}/coupons/${couponId}`, { headers });
+      toast({ title: 'Success', description: 'Coupon deleted' });
+      fetchCoupons();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to delete coupon', variant: 'destructive' });
+    }
+  };
+
   const handleCreateUser = async () => {
     try {
       // Validate required fields
