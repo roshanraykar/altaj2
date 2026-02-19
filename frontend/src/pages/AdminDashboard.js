@@ -160,9 +160,21 @@ const AdminDashboard = () => {
       });
       fetchCoupons();
     } catch (error) {
+      let errorMsg = 'Please try again';
+      if (error.response?.data?.detail) {
+        const detail = error.response.data.detail;
+        // Handle Pydantic validation errors (array of objects)
+        if (Array.isArray(detail)) {
+          errorMsg = detail.map(e => e.msg || e.message || JSON.stringify(e)).join(', ');
+        } else if (typeof detail === 'string') {
+          errorMsg = detail;
+        } else if (typeof detail === 'object') {
+          errorMsg = detail.msg || detail.message || JSON.stringify(detail);
+        }
+      }
       toast({ 
         title: 'Failed to create coupon', 
-        description: error.response?.data?.detail || 'Please try again', 
+        description: errorMsg, 
         variant: 'destructive' 
       });
     }
