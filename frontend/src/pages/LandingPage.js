@@ -13,7 +13,7 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { ChevronDown, ChevronUp, Sparkles } from 'lucide-react';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
-const GOOGLE_MAPS_API_KEY = 'AIzaSyAHZ50WSteOfJNHAE6eCn5Bf8Py1vGQAmE';
+const GOOGLE_MAPS_API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '';
 
 const LandingPage = () => {
   const [branches, setBranches] = useState([]);
