@@ -1076,7 +1076,9 @@ async def get_orders(
     branch_id: Optional[str] = None,
     status: Optional[str] = None,
     order_type: Optional[str] = None,
-    customer_id: Optional[str] = None
+    customer_id: Optional[str] = None,
+    limit: Optional[int] = 50,
+    skip: Optional[int] = 0
 ):
     query = {}
     if branch_id:
