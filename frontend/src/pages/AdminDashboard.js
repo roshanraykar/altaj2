@@ -46,6 +46,11 @@ const AdminDashboard = () => {
     valid_from: new Date().toISOString().split('T')[0],
     valid_until: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
   });
+  const [reviews, setReviews] = useState([]);
+  const [reviewStats, setReviewStats] = useState(null);
+  const [reviewFilter, setReviewFilter] = useState({ status: 'all', rating: 'all' });
+  const [replyText, setReplyText] = useState({});
+  const [expandedReview, setExpandedReview] = useState(null);
 
   const headers = { Authorization: `Bearer ${token}` };
 
