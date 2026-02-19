@@ -549,6 +549,202 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
+          {/* Coupons Tab */}
+          <TabsContent value="coupons">
+            <Card data-testid="coupons-card">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                  <CardTitle>Discount Coupons</CardTitle>
+                  <CardDescription>Create and manage promotional coupons</CardDescription>
+                </div>
+                <Dialog open={showAddCouponDialog} onOpenChange={setShowAddCouponDialog}>
+                  <DialogTrigger asChild>
+                    <Button className="bg-red-600 hover:bg-red-700" data-testid="add-coupon-btn">
+                      <Plus className="mr-2 h-4 w-4" /> Create Coupon
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Create New Coupon</DialogTitle>
+                      <DialogDescription>Set up a promotional discount coupon</DialogDescription>
+                    </DialogHeader>
+                    <div className="space-y-4 py-4">
+                      <div>
+                        <Label htmlFor="coupon-code">Coupon Code *</Label>
+                        <Input
+                          id="coupon-code"
+                          placeholder="e.g., SAVE20"
+                          value={newCoupon.code}
+                          onChange={(e) => setNewCoupon({ ...newCoupon, code: e.target.value.toUpperCase() })}
+                          className="uppercase"
+                          data-testid="coupon-code-input"
+                        />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="discount-type">Discount Type</Label>
+                          <Select
+                            value={newCoupon.discount_type}
+                            onValueChange={(value) => setNewCoupon({ ...newCoupon, discount_type: value })}
+                          >
+                            <SelectTrigger data-testid="discount-type-select">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="percentage">Percentage (%)</SelectItem>
+                              <SelectItem value="fixed">Fixed Amount (₹)</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label htmlFor="discount-value">
+                            {newCoupon.discount_type === 'percentage' ? 'Discount %' : 'Discount ₹'}
+                          </Label>
+                          <Input
+                            id="discount-value"
+                            type="number"
+                            value={newCoupon.discount_value}
+                            onChange={(e) => setNewCoupon({ ...newCoupon, discount_value: parseFloat(e.target.value) || 0 })}
+                            data-testid="discount-value-input"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="min-order">Min Order Value (₹)</Label>
+                          <Input
+                            id="min-order"
+                            type="number"
+                            value={newCoupon.min_order_value}
+                            onChange={(e) => setNewCoupon({ ...newCoupon, min_order_value: parseFloat(e.target.value) || 0 })}
+                            data-testid="min-order-input"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="max-discount">Max Discount (₹)</Label>
+                          <Input
+                            id="max-discount"
+                            type="number"
+                            placeholder="0 = No limit"
+                            value={newCoupon.max_discount}
+                            onChange={(e) => setNewCoupon({ ...newCoupon, max_discount: parseFloat(e.target.value) || 0 })}
+                            data-testid="max-discount-input"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="valid-from">Valid From</Label>
+                          <Input
+                            id="valid-from"
+                            type="date"
+                            value={newCoupon.valid_from}
+                            onChange={(e) => setNewCoupon({ ...newCoupon, valid_from: e.target.value })}
+                            data-testid="valid-from-input"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="valid-until">Valid Until</Label>
+                          <Input
+                            id="valid-until"
+                            type="date"
+                            value={newCoupon.valid_until}
+                            onChange={(e) => setNewCoupon({ ...newCoupon, valid_until: e.target.value })}
+                            data-testid="valid-until-input"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label htmlFor="usage-limit">Usage Limit (0 = Unlimited)</Label>
+                        <Input
+                          id="usage-limit"
+                          type="number"
+                          value={newCoupon.usage_limit}
+                          onChange={(e) => setNewCoupon({ ...newCoupon, usage_limit: parseInt(e.target.value) || 0 })}
+                          data-testid="usage-limit-input"
+                        />
+                      </div>
+                      <Button onClick={handleCreateCoupon} className="w-full bg-red-600 hover:bg-red-700" data-testid="create-coupon-submit">
+                        Create Coupon
+                      </Button>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {coupons.length === 0 ? (
+                    <div className="text-center py-12 text-gray-500">
+                      <Ticket className="h-12 w-12 mx-auto mb-4 opacity-50" />
+                      <p>No coupons created yet</p>
+                      <p className="text-sm">Click "Create Coupon" to add your first discount code</p>
+                    </div>
+                  ) : (
+                    coupons.map(coupon => (
+                      <div 
+                        key={coupon.id} 
+                        className={`p-4 border-2 rounded-lg ${coupon.is_active ? 'border-green-200 bg-green-50' : 'border-gray-200 bg-gray-50'}`}
+                        data-testid={`coupon-${coupon.id}`}
+                      >
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <span className="font-mono text-xl font-bold text-red-600">{coupon.code}</span>
+                              <Badge className={coupon.is_active ? 'bg-green-600' : 'bg-gray-500'}>
+                                {coupon.is_active ? 'Active' : 'Inactive'}
+                              </Badge>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm text-gray-600">
+                              <div>
+                                <span className="font-medium">Discount:</span>{' '}
+                                {coupon.discount_type === 'percentage' ? `${coupon.discount_value}%` : `₹${coupon.discount_value}`}
+                              </div>
+                              <div>
+                                <span className="font-medium">Min Order:</span> ₹{coupon.min_order_value}
+                              </div>
+                              <div>
+                                <span className="font-medium">Max Discount:</span>{' '}
+                                {coupon.max_discount > 0 ? `₹${coupon.max_discount}` : 'No limit'}
+                              </div>
+                              <div>
+                                <span className="font-medium">Uses:</span>{' '}
+                                {coupon.times_used || 0}{coupon.usage_limit > 0 ? `/${coupon.usage_limit}` : ''}
+                              </div>
+                            </div>
+                            <div className="mt-2 text-xs text-gray-500">
+                              Valid: {new Date(coupon.valid_from).toLocaleDateString()} - {new Date(coupon.valid_until).toLocaleDateString()}
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => toggleCouponStatus(coupon.id, coupon.is_active)}
+                              className={coupon.is_active ? 'text-orange-600 border-orange-300' : 'text-green-600 border-green-300'}
+                              data-testid={`toggle-coupon-${coupon.id}`}
+                            >
+                              {coupon.is_active ? <ToggleRight className="h-4 w-4 mr-1" /> : <ToggleLeft className="h-4 w-4 mr-1" />}
+                              {coupon.is_active ? 'Deactivate' : 'Activate'}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteCoupon(coupon.id)}
+                              className="text-red-600 border-red-300 hover:bg-red-50"
+                              data-testid={`delete-coupon-${coupon.id}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Reports Tab */}
           <TabsContent value="reports">
             <Card data-testid="performance-report-card">
