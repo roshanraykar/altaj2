@@ -138,6 +138,10 @@ const AdminDashboard = () => {
         toast({ title: 'Error', description: 'Please enter a coupon code', variant: 'destructive' });
         return;
       }
+      if (!newCoupon.description) {
+        toast({ title: 'Error', description: 'Please enter a description', variant: 'destructive' });
+        return;
+      }
       
       const couponData = {
         ...newCoupon,
