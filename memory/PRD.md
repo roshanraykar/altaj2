@@ -188,21 +188,24 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 ```
 /app/
 ├── backend/
-│   ├── server.py (All routes & models)
+│   ├── server.py (All routes & models including social auth)
 │   ├── seed_data.py (Database seeding)
 │   └── .env (MONGO_URL, RAZORPAY keys)
 ├── frontend/
 │   ├── src/
 │   │   ├── pages/
-│   │   │   ├── NewLandingPage.js (Home)
-│   │   │   ├── LandingPage.js (Order page)
+│   │   │   ├── NewLandingPage.js (Home with product images, combos, raw meat sections)
+│   │   │   ├── LandingPage.js (Order page with accordion menu)
+│   │   │   ├── LoginPage.js (Email, Mobile, Google, Facebook login)
+│   │   │   ├── AuthCallback.js (Handles Google OAuth callback)
 │   │   │   ├── KitchenDashboard.js (with buzzer)
 │   │   │   ├── DeliveryDashboard.js
 │   │   │   └── ...
 │   │   └── components/
-│   │       └── PWAInstallPrompt.js (Get App popup)
+│   │       └── PWAInstallPrompt.js (Get App popup components)
 │   └── public/
 │       ├── altaj-logo.png
+│       ├── hero-video.mp4
 │       └── notification.mp3 (buzzer sound)
 └── memory/
     └── PRD.md
