@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { LogOut, ChefHat, Clock, CheckCircle2, Volume2, VolumeX, Bell, BellOff } from 'lucide-react';
+import { LogOut, ChefHat, Clock, CheckCircle2, Volume2, VolumeX, Bell, BellOff, Printer } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
