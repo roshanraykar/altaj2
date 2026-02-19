@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ArrowRight, MapPin, Star, Phone, Utensils, Package, Truck, MessageCircle } from 'lucide-react';
+import { ArrowRight, MapPin, Star, Phone, Utensils, Package, Truck, MessageCircle, Sparkles } from 'lucide-react';
 import { InstallBanner, HeaderInstallButton, FooterInstallSection } from '@/components/PWAInstallPrompt';
 
 const NewLandingPage = () => {
@@ -179,18 +179,20 @@ const NewLandingPage = () => {
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { name: "Chicken Biryani", price: "₹170 - ₹320", desc: "Fragrant basmati rice with tender chicken" },
-              { name: "Butter Chicken", price: "₹200 - ₹400", desc: "Creamy tomato curry, rich and flavorful" },
-              { name: "Tandoori Chicken", price: "₹210 - ₹410", desc: "Tandoor grilled to smoky perfection" }
+              { name: "Chicken Biryani", price: "₹170 - ₹320", desc: "Fragrant basmati rice with tender chicken", image: "https://customer-assets.emergentagent.com/job_2c3e4b1d-386d-4b8e-b0fa-3902fd25959d/artifacts/djegw7j0_chicken%20biriyani.png" },
+              { name: "Butter Chicken", price: "₹200 - ₹400", desc: "Creamy tomato curry, rich and flavorful", image: "https://customer-assets.emergentagent.com/job_2c3e4b1d-386d-4b8e-b0fa-3902fd25959d/artifacts/y0g83q2q_Butter%20Chicken.png" },
+              { name: "Tandoori Chicken", price: "₹210 - ₹410", desc: "Tandoor grilled to smoky perfection", image: "https://customer-assets.emergentagent.com/job_2c3e4b1d-386d-4b8e-b0fa-3902fd25959d/artifacts/jog5s7kr_tandoori%20chicken.png" }
             ].map((item, index) => (
-              <div key={index} className="group cursor-pointer">
+              <div key={index} className="group cursor-pointer" onClick={() => navigate('/order')}>
                 <div className="aspect-square bg-gradient-to-br from-[#fef7e7] to-[#fff5f5] rounded-2xl mb-4 overflow-hidden relative border-2 border-gray-100 group-hover:border-[#c59433] transition-all shadow-lg group-hover:shadow-2xl">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Utensils className="h-24 w-24 text-[#c59433]/30 group-hover:text-[#b2101f]/30 transition-colors" />
-                  </div>
+                  <img 
+                    src={item.image} 
+                    alt={item.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
                   {/* Decorative corner */}
-                  <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-[#c59433]/30"></div>
-                  <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-[#c59433]/30"></div>
+                  <div className="absolute top-4 right-4 w-8 h-8 border-t-2 border-r-2 border-white/50"></div>
+                  <div className="absolute bottom-4 left-4 w-8 h-8 border-b-2 border-l-2 border-white/50"></div>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-1">{item.name}</h3>
                 <p className="text-sm text-gray-600 mb-2">{item.desc}</p>
@@ -198,6 +200,88 @@ const NewLandingPage = () => {
               </div>
             ))}
           </div>
+
+          {/* Combos Highlight Section */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <div className="h-[1px] w-16 bg-gradient-to-r from-transparent to-[#c59433]"></div>
+                <span className="text-[#c59433] text-sm font-medium tracking-[0.2em] uppercase">Value Packs</span>
+                <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-[#c59433]"></div>
+              </div>
+              <h2 className="text-3xl font-light text-gray-900 mb-2">Special <span className="font-semibold text-[#b2101f]">Combos</span></h2>
+              <p className="text-gray-600 max-w-xl mx-auto">Great taste, great value - curated meal deals for every appetite</p>
+            </div>
+            <div className="bg-gradient-to-br from-[#b2101f]/5 to-[#c59433]/10 rounded-3xl p-8 border border-[#c59433]/20">
+              <div className="grid md:grid-cols-3 gap-6">
+                {[
+                  { name: "Family Feast", desc: "Biryani + Starters + Dessert", tag: "Best Seller" },
+                  { name: "Couple Special", desc: "2 Curries + Rice + Naan", tag: "Popular" },
+                  { name: "Solo Delight", desc: "Mini Biryani + Kebab", tag: "Quick Meal" }
+                ].map((combo, index) => (
+                  <div key={index} className="bg-white rounded-xl p-5 shadow-md hover:shadow-xl transition-all cursor-pointer group" onClick={() => navigate('/order')}>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="bg-[#b2101f] text-white text-xs font-bold px-3 py-1 rounded-full">{combo.tag}</span>
+                      <Package className="h-5 w-5 text-[#c59433]" />
+                    </div>
+                    <h4 className="font-bold text-lg text-gray-900 mb-1 group-hover:text-[#b2101f] transition-colors">{combo.name}</h4>
+                    <p className="text-sm text-gray-600">{combo.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Raw Meat & Ready to Cook Highlight */}
+          <div className="mt-20">
+            <div className="text-center mb-10">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <div className="h-[1px] w-16 bg-gradient-to-r from-transparent to-[#c59433]"></div>
+                <span className="text-[#c59433] text-sm font-medium tracking-[0.2em] uppercase">Fresh & Convenient</span>
+                <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-[#c59433]"></div>
+              </div>
+              <h2 className="text-3xl font-light text-gray-900 mb-2">Raw Meat & <span className="font-semibold text-[#b2101f]">Ready to Cook</span></h2>
+              <p className="text-gray-600 max-w-xl mx-auto">Premium quality meats - fresh cuts or marinated and ready for your kitchen</p>
+            </div>
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Raw Meat Card */}
+              <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-6 border-2 border-red-100 hover:border-red-300 transition-all cursor-pointer group" onClick={() => navigate('/order')}>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#b2101f] to-[#e70825] rounded-xl flex items-center justify-center shadow-lg">
+                    <Package className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#b2101f] transition-colors">Fresh Raw Meat</h3>
+                    <p className="text-sm text-gray-600">Premium cuts, daily fresh</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {['Chicken', 'Mutton', 'Fish'].map((item) => (
+                    <span key={item} className="bg-white px-3 py-1 rounded-full text-sm font-medium text-gray-700 shadow-sm">{item}</span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Ready to Cook Card */}
+              <div className="bg-gradient-to-br from-amber-50 to-yellow-50 rounded-2xl p-6 border-2 border-amber-100 hover:border-amber-300 transition-all cursor-pointer group" onClick={() => navigate('/order')}>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 bg-gradient-to-br from-[#c59433] to-[#d4a84b] rounded-xl flex items-center justify-center shadow-lg">
+                    <Utensils className="h-7 w-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#c59433] transition-colors">Ready to Cook</h3>
+                    <p className="text-sm text-gray-600">Marinated & seasoned to perfection</p>
+                  </div>
+                </div>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {['Tandoori Chicken', 'Seekh Kebab', 'Chicken Tikka'].map((item) => (
+                    <span key={item} className="bg-white px-3 py-1 rounded-full text-sm font-medium text-gray-700 shadow-sm">{item}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="text-center mt-12">
             <Button onClick={() => navigate('/order')} size="lg" className="border-2 border-[#b2101f] bg-transparent text-[#b2101f] hover:bg-[#b2101f] hover:text-white px-10 h-14 text-base font-medium transition-all">
               View Full Menu <ArrowRight className="ml-2 h-5 w-5" />
