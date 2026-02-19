@@ -1443,7 +1443,8 @@ async def get_all_reviews(
         sort_field = "star_rating"
         sort_order = 1
     
-    reviews = await db.reviews.find(query, {"_id": 0}).sort(sort_field, sort_order).to_list(1000)
+    # Reasonable limit for reviews
+    reviews = await db.reviews.find(query, {"_id": 0}).sort(sort_field, sort_order).to_list(200)
     
     for review in reviews:
         if isinstance(review.get('created_at'), str):
@@ -1473,7 +1474,7 @@ async def get_public_reviews():
 @api_router.get("/reviews/stats")
 async def get_review_stats(current_user: dict = Depends(require_role(["admin"]))):
     """Get aggregated review statistics"""
-    all_reviews = await db.reviews.find({}, {"_id": 0, "star_rating": 1, "status": 1}).to_list(10000)
+    all_reviews = await db.reviews.find({}, {"_id": 0, "star_rating": 1, "status": 1}).to_list(1000)
     
     total_reviews = len(all_reviews)
     if total_reviews == 0:
