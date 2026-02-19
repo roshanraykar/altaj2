@@ -1088,7 +1088,11 @@ async def get_orders(
     if customer_id:
         query["customer_id"] = customer_id
     
-    orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(1000)
+    # Pagination with reasonable defaults
+    limit = min(limit or 50, 100)  # Max 100 per request
+    skip = skip or 0
+    
+    orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).to_list(limit)
     for order in orders:
         if isinstance(order['created_at'], str):
             order['created_at'] = datetime.fromisoformat(order['created_at'])
@@ -1097,7 +1101,11 @@ async def get_orders(
     return orders
 
 @api_router.get("/orders/my-orders", response_model=List[Order])
-async def get_my_orders(current_user: dict = Depends(get_current_user)):
+async def get_my_orders(
+    limit: Optional[int] = 50,
+    skip: Optional[int] = 0,
+    current_user: dict = Depends(get_current_user)
+):
     """Get orders for the current logged-in customer"""
     query = {}
     
@@ -1113,7 +1121,11 @@ async def get_my_orders(current_user: dict = Depends(get_current_user)):
         # Fallback to customer_id if stored
         query["customer_id"] = current_user.get("id")
     
-    orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).to_list(100)
+    # Pagination
+    limit = min(limit or 50, 100)
+    skip = skip or 0
+    
+    orders = await db.orders.find(query, {"_id": 0}).sort("created_at", -1).skip(skip).to_list(limit)
     
     for order in orders:
         if isinstance(order['created_at'], str):
