@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { Toaster } from '@/components/ui/toaster';
 import PWAInstallPrompt from '@/components/PWAInstallPrompt';
@@ -13,6 +13,7 @@ import WaiterDashboard from '@/pages/WaiterDashboard';
 import KitchenDashboard from '@/pages/KitchenDashboard';
 import DeliveryDashboard from '@/pages/DeliveryDashboard';
 import CustomerDashboard from '@/pages/CustomerDashboard';
+import AuthCallback from '@/pages/AuthCallback';
 import '@/App.css';
 
 // Register Service Worker for PWA
