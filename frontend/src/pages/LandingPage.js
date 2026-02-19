@@ -549,23 +549,28 @@ const LandingPage = () => {
             </div>
           </div>
 
-          {/* Sticky Category Navigation */}
+          {/* Sticky Category Navigation - Compact Grid */}
           <div className="sticky top-[70px] z-40 bg-white/95 backdrop-blur-md py-3 mb-6 border-b border-[#c59433]/20 shadow-sm -mx-4 px-4">
-            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-              {categories.map(category => (
-                <button
-                  key={category.id}
-                  onClick={() => scrollToCategory(category.id)}
-                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${
-                    activeCategory === category.id
-                      ? 'bg-gradient-to-r from-[#b2101f] to-[#e70825] text-white shadow-lg'
-                      : 'bg-gray-100 text-gray-700 hover:bg-[#c59433]/20 hover:text-[#b2101f]'
-                  }`}
-                  data-testid={`category-nav-${category.id}`}
-                >
-                  {category.name}
-                </button>
-              ))}
+            <div className="flex flex-wrap gap-2 justify-center">
+              {categories.map(category => {
+                const style = getCategoryStyle(category.name);
+                return (
+                  <button
+                    key={category.id}
+                    onClick={() => scrollToCategory(category.id)}
+                    className={`px-3 py-1.5 rounded-full text-xs sm:text-sm font-medium transition-all whitespace-nowrap ${
+                      activeCategory === category.id
+                        ? 'bg-gradient-to-r from-[#b2101f] to-[#e70825] text-white shadow-lg scale-105'
+                        : style 
+                          ? `${style.bg} ${style.accent} ${style.border} border`
+                          : 'bg-gray-100 text-gray-700 hover:bg-[#c59433]/20 hover:text-[#b2101f]'
+                    }`}
+                    data-testid={`category-nav-${category.id}`}
+                  >
+                    {category.name}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
