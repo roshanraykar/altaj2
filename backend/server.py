@@ -812,7 +812,7 @@ async def create_category(category_data: MenuCategoryCreate, current_user: dict 
 
 @api_router.get("/menu/categories", response_model=List[MenuCategory])
 async def get_categories():
-    categories = await db.menu_categories.find({"is_active": True}, {"_id": 0}).sort("display_order", 1).to_list(1000)
+    categories = await db.menu_categories.find({"is_active": True}, {"_id": 0}).sort("display_order", 1).to_list(100)
     for category in categories:
         if isinstance(category['created_at'], str):
             category['created_at'] = datetime.fromisoformat(category['created_at'])
@@ -836,12 +836,14 @@ async def create_menu_item(item_data: MenuItemCreate, current_user: dict = Depen
     return item
 
 @api_router.get("/menu/items", response_model=List[MenuItem])
-async def get_menu_items(category_id: Optional[str] = None, branch_id: Optional[str] = None):
+async def get_menu_items(category_id: Optional[str] = None, branch_id: Optional[str] = None, limit: Optional[int] = 500):
     query = {"is_available": True}
     if category_id:
         query["category_id"] = category_id
     
-    items = await db.menu_items.find(query, {"_id": 0}).to_list(1000)
+    # Reasonable limit for menu items
+    limit = min(limit or 500, 500)
+    items = await db.menu_items.find(query, {"_id": 0}).to_list(limit)
     
     # Filter by branch if specified
     if branch_id:
