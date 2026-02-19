@@ -214,8 +214,22 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 
 ### 🔗 Key API Endpoints
 
-- `POST /api/auth/google/session` - Exchange Emergent Auth session for JWT
-- `POST /api/auth/facebook` - Facebook OAuth login
+**Reviews:**
+- `POST /api/reviews` - Customer submits review
+- `GET /api/reviews` - Admin gets all reviews (with filters)
+- `GET /api/reviews/public` - Public published reviews
+- `GET /api/reviews/stats` - Aggregated stats for admin
+- `PATCH /api/reviews/{id}/publish` - Admin publishes
+- `PATCH /api/reviews/{id}/unpublish` - Admin unpublishes
+- `PATCH /api/reviews/{id}/reply` - Admin adds response
+- `DELETE /api/reviews/{id}` - Admin deletes
+- `GET /api/orders/{id}/review-status` - Check if order reviewed
+
+**Auth:**
+- `POST /api/auth/google/session` - Exchange Emergent Auth session for JWT (REMOVED)
+- `POST /api/auth/facebook` - Facebook OAuth login (REMOVED)
+
+**Coupons:**
 - `POST /api/coupons` - Create coupon (Admin)
 - `GET /api/coupons` - List coupons (Admin)
 - `POST /api/coupons/apply` - Validate and apply coupon
