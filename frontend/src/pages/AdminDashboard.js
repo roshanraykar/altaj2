@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { LayoutDashboard, Store, UtensilsCrossed, ShoppingBag, BarChart3, LogOut, ChefHat, Users, UserPlus, Ticket, Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react';
+import { LayoutDashboard, Store, UtensilsCrossed, ShoppingBag, BarChart3, LogOut, ChefHat, Users, UserPlus, Ticket, Plus, Trash2, ToggleLeft, ToggleRight, Star, MessageSquare, Eye, EyeOff, Reply } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
