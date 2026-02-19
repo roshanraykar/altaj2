@@ -9,9 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   LogOut, ShoppingBag, Clock, MapPin, Phone, User, Package, 
   Truck, Utensils, CheckCircle2, XCircle, RefreshCw, ChefHat,
-  Calendar, CreditCard, Receipt
+  Calendar, CreditCard, Receipt, Star
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import ReviewPopup, { OrderReviewCard } from '@/components/ReviewPopup';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 
@@ -22,6 +23,8 @@ const CustomerDashboard = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('active');
+  const [reviewPopupOrder, setReviewPopupOrder] = useState(null);
+  const [reviewedOrders, setReviewedOrders] = useState(new Set());
 
   const headers = { Authorization: `Bearer ${token}` };
 
@@ -34,16 +37,76 @@ const CustomerDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Check for orders that need review popup
+  useEffect(() => {
+    if (orders.length > 0) {
+      checkForReviewPrompt();
+    }
+  }, [orders]);
+
   const fetchOrders = async () => {
     try {
       const response = await axios.get(`${API}/orders/my-orders`, { headers });
-      setOrders(response.data);
+      const ordersData = response.data;
+      
+      // Check review status for delivered orders
+      const deliveredOrders = ordersData.filter(o => ['delivered', 'completed'].includes(o.status));
+      const reviewStatuses = await Promise.all(
+        deliveredOrders.map(async (order) => {
+          try {
+            const res = await axios.get(`${API}/orders/${order.id}/review-status`, { headers });
+            return { orderId: order.id, ...res.data };
+          } catch {
+            return { orderId: order.id, reviewed: false };
+          }
+        })
+      );
+      
+      // Mark orders with review status
+      const reviewMap = {};
+      reviewStatuses.forEach(r => {
+        reviewMap[r.orderId] = r;
+      });
+      
+      const enrichedOrders = ordersData.map(order => ({
+        ...order,
+        isReviewed: reviewMap[order.id]?.reviewed || false,
+        existingRating: reviewMap[order.id]?.rating || 0
+      }));
+      
+      setOrders(enrichedOrders);
+      setReviewedOrders(new Set(reviewStatuses.filter(r => r.reviewed).map(r => r.orderId)));
     } catch (error) {
       console.error('Failed to fetch orders:', error);
       toast({ title: 'Error', description: 'Failed to load orders', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
+  };
+
+  const checkForReviewPrompt = () => {
+    // Find delivered orders that haven't been reviewed and haven't been dismissed 3 times
+    const deliveredOrders = orders.filter(o => 
+      ['delivered', 'completed'].includes(o.status) && !o.isReviewed
+    );
+    
+    for (const order of deliveredOrders) {
+      const dismissKey = `review_dismiss_${order.id}`;
+      const dismissCount = parseInt(localStorage.getItem(dismissKey) || '0');
+      
+      if (dismissCount < 3) {
+        // Show popup for this order
+        setReviewPopupOrder(order);
+        break;
+      }
+    }
+  };
+
+  const handleReviewSubmitted = (orderId) => {
+    setReviewedOrders(prev => new Set([...prev, orderId]));
+    setOrders(prev => prev.map(o => 
+      o.id === orderId ? { ...o, isReviewed: true } : o
+    ));
   };
 
   const handleLogout = () => {
