@@ -798,9 +798,6 @@ const LandingPage = () => {
             <ArrowUp className="h-5 w-5" />
           </button>
         )}
-        
-        {/* Get App Button */}
-        <FloatingInstallButton />
       </div>
 
       {/* WhatsApp Floating Button */}
