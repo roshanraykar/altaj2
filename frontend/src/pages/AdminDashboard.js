@@ -189,6 +189,82 @@ const AdminDashboard = () => {
     }
   };
 
+  // Review Management Functions
+  const fetchReviews = async () => {
+    try {
+      let url = `${API}/reviews?sort_by=newest`;
+      if (reviewFilter.status !== 'all') url += `&status=${reviewFilter.status}`;
+      if (reviewFilter.rating !== 'all') url += `&rating=${reviewFilter.rating}`;
+      
+      const response = await axios.get(url, { headers });
+      setReviews(response.data);
+    } catch (error) {
+      console.error('Failed to fetch reviews:', error);
+    }
+  };
+
+  const fetchReviewStats = async () => {
+    try {
+      const response = await axios.get(`${API}/reviews/stats`, { headers });
+      setReviewStats(response.data);
+    } catch (error) {
+      console.error('Failed to fetch review stats:', error);
+    }
+  };
+
+  const handlePublishReview = async (reviewId) => {
+    try {
+      await axios.patch(`${API}/reviews/${reviewId}/publish`, {}, { headers });
+      toast({ title: 'Review published' });
+      fetchReviews();
+      fetchReviewStats();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to publish review', variant: 'destructive' });
+    }
+  };
+
+  const handleUnpublishReview = async (reviewId) => {
+    try {
+      await axios.patch(`${API}/reviews/${reviewId}/unpublish`, {}, { headers });
+      toast({ title: 'Review unpublished' });
+      fetchReviews();
+      fetchReviewStats();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to unpublish review', variant: 'destructive' });
+    }
+  };
+
+  const handleReplyToReview = async (reviewId) => {
+    const reply = replyText[reviewId];
+    if (!reply?.trim()) return;
+    
+    try {
+      await axios.patch(`${API}/reviews/${reviewId}/reply?admin_response=${encodeURIComponent(reply)}`, {}, { headers });
+      toast({ title: 'Reply added' });
+      setReplyText(prev => ({ ...prev, [reviewId]: '' }));
+      fetchReviews();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to add reply', variant: 'destructive' });
+    }
+  };
+
+  const handleDeleteReview = async (reviewId) => {
+    if (!window.confirm('Are you sure you want to permanently delete this review?')) return;
+    try {
+      await axios.delete(`${API}/reviews/${reviewId}`, { headers });
+      toast({ title: 'Review deleted' });
+      fetchReviews();
+      fetchReviewStats();
+    } catch (error) {
+      toast({ title: 'Error', description: 'Failed to delete review', variant: 'destructive' });
+    }
+  };
+
+  // Re-fetch reviews when filter changes
+  useEffect(() => {
+    if (token) fetchReviews();
+  }, [reviewFilter]);
+
   const handleCreateUser = async () => {
     try {
       // Validate required fields
