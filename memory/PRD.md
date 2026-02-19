@@ -117,14 +117,25 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
      - Server key
      - VAPID key
 
-2. **Hero Video on Home Page**
-   - User needs to upload video file
+2. **OTP Login (SMS)**
+   - Backend ready but awaiting SMS provider credentials (Twilio/MSG91)
 
-3. **Petpooja CRM Integration**
-   - Awaiting API credentials from Petpooja
-   - Cost: ₹4,500 + GST per outlet per year
+3. **Facebook Login Complete Setup**
+   - Requires Facebook App ID from user
+   - Backend endpoint ready
 
-4. **Native Mobile Apps**
+4. **Rating System**
+   - Allow customers to rate food quality, delivery, and ordering experience
+   - Requires DB schema changes and UI component
+
+5. **Admin Menu Management**
+   - CRUD for menu items with image upload capability
+
+6. **Coupon Frontend Integration**
+   - Backend ready, needs frontend "Apply Coupon" field on checkout
+   - Admin panel section for managing coupons
+
+7. **Native Mobile Apps**
    - To be built using Mobile Agent (Expo/React Native)
    - Prompt prepared for user
 
