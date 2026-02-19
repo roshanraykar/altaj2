@@ -151,6 +151,7 @@ const AdminDashboard = () => {
       setShowAddCouponDialog(false);
       setNewCoupon({
         code: '',
+        description: '',
         discount_type: 'percentage',
         discount_value: 10,
         min_order_value: 0,
