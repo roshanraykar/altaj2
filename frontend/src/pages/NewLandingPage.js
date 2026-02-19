@@ -383,6 +383,86 @@ const NewLandingPage = () => {
         </div>
       </section>
 
+      {/* Customer Reviews Section */}
+      {publicReviews.length > 0 && (
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-white px-6 relative">
+          <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[#c59433] to-transparent"></div>
+          
+          <div className="container mx-auto max-w-6xl">
+            <div className="text-center mb-12">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <div className="h-[1px] w-16 bg-gradient-to-r from-transparent to-[#c59433]"></div>
+                <span className="text-[#c59433] text-sm font-medium tracking-[0.2em] uppercase">What Our Customers Say</span>
+                <div className="h-[1px] w-16 bg-gradient-to-l from-transparent to-[#c59433]"></div>
+              </div>
+              <h2 className="text-4xl font-light text-gray-900 mb-4">Customer <span className="font-semibold text-[#b2101f]">Reviews</span></h2>
+              
+              {/* Overall Rating */}
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <div className="flex">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <Star 
+                      key={star} 
+                      className={`h-6 w-6 ${star <= Math.round(reviewStats.average) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                    />
+                  ))}
+                </div>
+                <span className="text-2xl font-bold text-gray-800">{reviewStats.average}</span>
+                <span className="text-gray-500">based on {reviewStats.count} reviews</span>
+              </div>
+            </div>
+
+            {/* Reviews Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {publicReviews.slice(0, 6).map((review, index) => (
+                <Card 
+                  key={review.id || index} 
+                  className="p-6 bg-white border-2 border-gray-100 hover:border-[#c59433]/50 hover:shadow-lg transition-all duration-300 relative"
+                >
+                  {/* Quote Icon */}
+                  <Quote className="absolute top-4 right-4 h-8 w-8 text-[#c59433]/20" />
+                  
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-gradient-to-br from-[#b2101f] to-[#e70825] rounded-full flex items-center justify-center text-white font-bold">
+                      {review.customer_name?.charAt(0) || 'C'}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-gray-800">{review.customer_name}</p>
+                      <div className="flex">
+                        {[1, 2, 3, 4, 5].map(star => (
+                          <Star 
+                            key={star} 
+                            className={`h-4 w-4 ${star <= review.star_rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} 
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {review.review_text && (
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-3">"{review.review_text}"</p>
+                  )}
+
+                  {/* Admin Response */}
+                  {review.admin_response && (
+                    <div className="bg-red-50 p-3 rounded-lg mt-3 border-l-4 border-[#b2101f]">
+                      <p className="text-xs font-medium text-[#b2101f] mb-1">Restaurant replied:</p>
+                      <p className="text-sm text-gray-700">{review.admin_response}</p>
+                    </div>
+                  )}
+
+                  <p className="text-xs text-gray-400 mt-3">
+                    {new Date(review.created_at).toLocaleDateString('en-IN', { 
+                      day: 'numeric', month: 'short', year: 'numeric' 
+                    })}
+                  </p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-[#b2101f] to-[#e70825] px-6 relative overflow-hidden">
         {/* Arabic pattern overlay */}
