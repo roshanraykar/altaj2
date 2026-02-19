@@ -1357,6 +1357,189 @@ async def delete_coupon(coupon_id: str, current_user: dict = Depends(require_rol
     return {"message": "Coupon deleted successfully"}
 
 # ============================================================================
+# REVIEW ROUTES
+# ============================================================================
+
+@api_router.post("/reviews", response_model=Review)
+async def create_review(review_data: ReviewCreate, current_user: dict = Depends(get_current_user)):
+    """Customer submits a review for a delivered order"""
+    # Check if order exists and belongs to this customer
+    order = await db.orders.find_one({"id": review_data.order_id}, {"_id": 0})
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+    
+    # Verify order is delivered
+    if order.get("status") not in ["delivered", "completed"]:
+        raise HTTPException(status_code=400, detail="Can only review delivered orders")
+    
+    # Check if already reviewed
+    existing_review = await db.reviews.find_one({"order_id": review_data.order_id})
+    if existing_review:
+        raise HTTPException(status_code=400, detail="Order already reviewed")
+    
+    # Create review
+    review = Review(
+        order_id=review_data.order_id,
+        customer_id=current_user["id"],
+        customer_name=current_user.get("name", "Customer"),
+        customer_email=current_user.get("email"),
+        star_rating=review_data.star_rating,
+        review_text=review_data.review_text,
+        order_details={
+            "order_number": order.get("order_number"),
+            "items": order.get("items", []),
+            "total": order.get("total"),
+            "order_type": order.get("order_type"),
+            "created_at": order.get("created_at")
+        }
+    )
+    
+    doc = review.model_dump()
+    doc["created_at"] = doc["created_at"].isoformat()
+    doc["updated_at"] = doc["updated_at"].isoformat()
+    await db.reviews.insert_one(doc)
+    
+    return review
+
+@api_router.get("/reviews")
+async def get_all_reviews(
+    status: Optional[str] = None,
+    rating: Optional[int] = None,
+    sort_by: str = "newest",
+    current_user: dict = Depends(require_role(["admin"]))
+):
+    """Get all reviews (Admin only)"""
+    query = {}
+    if status:
+        query["status"] = status
+    if rating:
+        query["star_rating"] = rating
+    
+    # Determine sort order
+    sort_field = "created_at"
+    sort_order = -1  # Newest first by default
+    if sort_by == "oldest":
+        sort_order = 1
+    elif sort_by == "highest":
+        sort_field = "star_rating"
+        sort_order = -1
+    elif sort_by == "lowest":
+        sort_field = "star_rating"
+        sort_order = 1
+    
+    reviews = await db.reviews.find(query, {"_id": 0}).sort(sort_field, sort_order).to_list(1000)
+    
+    for review in reviews:
+        if isinstance(review.get('created_at'), str):
+            review['created_at'] = datetime.fromisoformat(review['created_at'])
+        if isinstance(review.get('updated_at'), str):
+            review['updated_at'] = datetime.fromisoformat(review['updated_at'])
+    
+    return reviews
+
+@api_router.get("/reviews/public")
+async def get_public_reviews():
+    """Get published reviews for public display"""
+    reviews = await db.reviews.find(
+        {"status": "published"}, 
+        {"_id": 0, "customer_id": 0, "customer_email": 0, "order_details": 0}
+    ).sort("created_at", -1).limit(10).to_list(10)
+    
+    for review in reviews:
+        if isinstance(review.get('created_at'), str):
+            review['created_at'] = datetime.fromisoformat(review['created_at'])
+        # Only show first name for privacy
+        if review.get("customer_name"):
+            review["customer_name"] = review["customer_name"].split()[0]
+    
+    return reviews
+
+@api_router.get("/reviews/stats")
+async def get_review_stats(current_user: dict = Depends(require_role(["admin"]))):
+    """Get aggregated review statistics"""
+    all_reviews = await db.reviews.find({}, {"_id": 0, "star_rating": 1, "status": 1}).to_list(10000)
+    
+    total_reviews = len(all_reviews)
+    if total_reviews == 0:
+        return {
+            "average_rating": 0,
+            "total_reviews": 0,
+            "published_count": 0,
+            "private_count": 0,
+            "rating_distribution": {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+        }
+    
+    total_rating = sum(r["star_rating"] for r in all_reviews)
+    avg_rating = round(total_rating / total_reviews, 1)
+    
+    published_count = sum(1 for r in all_reviews if r.get("status") == "published")
+    private_count = total_reviews - published_count
+    
+    rating_distribution = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0}
+    for r in all_reviews:
+        rating_distribution[r["star_rating"]] = rating_distribution.get(r["star_rating"], 0) + 1
+    
+    return {
+        "average_rating": avg_rating,
+        "total_reviews": total_reviews,
+        "published_count": published_count,
+        "private_count": private_count,
+        "rating_distribution": rating_distribution
+    }
+
+@api_router.patch("/reviews/{review_id}/publish")
+async def publish_review(review_id: str, current_user: dict = Depends(require_role(["admin"]))):
+    """Publish a review to public"""
+    result = await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"status": "published", "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"message": "Review published"}
+
+@api_router.patch("/reviews/{review_id}/unpublish")
+async def unpublish_review(review_id: str, current_user: dict = Depends(require_role(["admin"]))):
+    """Unpublish a review (make private)"""
+    result = await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"status": "private", "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"message": "Review unpublished"}
+
+@api_router.patch("/reviews/{review_id}/reply")
+async def reply_to_review(review_id: str, admin_response: str, current_user: dict = Depends(require_role(["admin"]))):
+    """Admin adds a response to a review"""
+    if len(admin_response) > 300:
+        raise HTTPException(status_code=400, detail="Response must be 300 characters or less")
+    
+    result = await db.reviews.update_one(
+        {"id": review_id},
+        {"$set": {"admin_response": admin_response, "updated_at": datetime.now(timezone.utc).isoformat()}}
+    )
+    if result.modified_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"message": "Reply added"}
+
+@api_router.delete("/reviews/{review_id}")
+async def delete_review(review_id: str, current_user: dict = Depends(require_role(["admin"]))):
+    """Delete a review permanently"""
+    result = await db.reviews.delete_one({"id": review_id})
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Review not found")
+    return {"message": "Review deleted"}
+
+@api_router.get("/orders/{order_id}/review-status")
+async def get_order_review_status(order_id: str, current_user: dict = Depends(get_current_user)):
+    """Check if an order has been reviewed"""
+    review = await db.reviews.find_one({"order_id": order_id}, {"_id": 0, "id": 1, "star_rating": 1})
+    if review:
+        return {"reviewed": True, "rating": review.get("star_rating")}
+    return {"reviewed": False}
+
+# ============================================================================
 # REPORTS & ANALYTICS ROUTES
 # ============================================================================
 
