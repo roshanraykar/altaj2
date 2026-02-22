@@ -259,13 +259,15 @@ class OrderCreate(BaseModel):
     customer_name: str
     customer_phone: str
     customer_email: Optional[EmailStr] = None
-    branch_id: str
+    branch_id: Optional[str] = None  # Auto-assigned if not provided
     order_type: Literal["dine_in", "takeaway", "delivery"]
     items: List[OrderItem]
     delivery_address: Optional[str] = None
     table_id: Optional[str] = None  # For dine-in orders
     special_instructions: Optional[str] = None
     payment_method: Literal["cod", "online"] = "cod"  # Default to COD
+    user_latitude: Optional[float] = None
+    user_longitude: Optional[float] = None
 
 class Order(BaseModel):
     model_config = ConfigDict(extra="ignore")
