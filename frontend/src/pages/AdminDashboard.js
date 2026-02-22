@@ -1161,6 +1161,108 @@ const AdminDashboard = () => {
             </Card>
           </TabsContent>
 
+          {/* Menu Images Tab */}
+          <TabsContent value="menu-images">
+            <Card data-testid="menu-images-card">
+              <CardHeader>
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div>
+                    <CardTitle>Menu Item Images</CardTitle>
+                    <CardDescription>Manage product images for your menu items</CardDescription>
+                  </div>
+                  <div className="flex gap-3 flex-wrap">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                      <Input
+                        placeholder="Search items..."
+                        value={menuSearchQuery}
+                        onChange={(e) => setMenuSearchQuery(e.target.value)}
+                        className="pl-9 w-64"
+                        data-testid="menu-image-search"
+                      />
+                    </div>
+                    <Select value={menuCategoryFilter} onValueChange={setMenuCategoryFilter}>
+                      <SelectTrigger className="w-48" data-testid="menu-image-category-filter">
+                        <SelectValue placeholder="All Categories" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Categories</SelectItem>
+                        {menuCategories.map(cat => (
+                          <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="mb-4 flex items-center gap-4 text-sm text-gray-600">
+                  <span>Total items: <strong>{menuItems.length}</strong></span>
+                  <span>With images: <strong>{menuItems.filter(i => i.image_url).length}</strong></span>
+                  <span>Without images: <strong>{menuItems.filter(i => !i.image_url).length}</strong></span>
+                </div>
+                
+                {menuCategories.map(category => {
+                  const catItems = getFilteredMenuItems().filter(i => i.category_id === category.id);
+                  if (catItems.length === 0) return null;
+                  
+                  return (
+                    <div key={category.id} className="mb-8" data-testid={`menu-image-category-${category.id}`}>
+                      <h3 className="text-lg font-bold text-gray-800 mb-3 pb-2 border-b-2 border-red-200">
+                        {category.name} <Badge variant="outline" className="ml-2">{catItems.length} items</Badge>
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {catItems.map(item => (
+                          <div key={item.id} className="border rounded-lg p-3 bg-white hover:shadow-md transition-shadow" data-testid={`menu-image-item-${item.id}`}>
+                            <div className="flex gap-3">
+                              {/* Image Preview */}
+                              <div className="w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden border">
+                                {(imageEdits[item.id] || item.image_url) ? (
+                                  <img
+                                    src={imageEdits[item.id] || item.image_url}
+                                    alt={item.name}
+                                    className="w-full h-full object-cover"
+                                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                                  />
+                                ) : null}
+                                <div className={`w-full h-full items-center justify-center text-gray-400 ${(imageEdits[item.id] || item.image_url) ? 'hidden' : 'flex'}`}>
+                                  <ImageIcon className="h-8 w-8" />
+                                </div>
+                              </div>
+                              {/* Item Details */}
+                              <div className="flex-1 min-w-0">
+                                <p className="font-semibold text-sm truncate" title={item.name}>{item.name}</p>
+                                <p className="text-xs text-gray-500">₹{item.base_price}</p>
+                                <div className="flex gap-1 mt-1.5">
+                                  <Input
+                                    placeholder="Paste image URL..."
+                                    value={imageEdits[item.id] !== undefined ? imageEdits[item.id] : (item.image_url || '')}
+                                    onChange={(e) => handleImageUrlChange(item.id, e.target.value)}
+                                    className="h-7 text-xs flex-1"
+                                    data-testid={`image-url-input-${item.id}`}
+                                  />
+                                  <Button
+                                    size="sm"
+                                    className="h-7 px-2 bg-green-600 hover:bg-green-700"
+                                    onClick={() => saveItemImage(item.id)}
+                                    disabled={savingImages[item.id] || imageEdits[item.id] === undefined}
+                                    data-testid={`save-image-btn-${item.id}`}
+                                  >
+                                    <Save className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           {/* Reports Tab */}
           <TabsContent value="reports">
             <Card data-testid="performance-report-card">
