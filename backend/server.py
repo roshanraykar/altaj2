@@ -873,6 +873,44 @@ async def update_menu_item(item_id: str, item_data: MenuItemCreate, current_user
         updated_item['created_at'] = datetime.fromisoformat(updated_item['created_at'])
     return updated_item
 
+class MenuItemImageUpdate(BaseModel):
+    image_url: str
+
+@api_router.patch("/menu/items/{item_id}/image")
+async def update_menu_item_image(item_id: str, data: MenuItemImageUpdate, current_user: dict = Depends(require_role(["admin"]))):
+    """Update just the image URL of a menu item"""
+    result = await db.menu_items.update_one({"id": item_id}, {"$set": {"image_url": data.image_url}})
+    if result.matched_count == 0:
+        raise HTTPException(status_code=404, detail="Menu item not found")
+    return {"message": "Image updated", "item_id": item_id, "image_url": data.image_url}
+
+class BulkImageUpdate(BaseModel):
+    updates: List[dict]  # [{"item_id": "...", "image_url": "..."}]
+
+@api_router.patch("/menu/items/bulk-images")
+async def bulk_update_menu_images(data: BulkImageUpdate, current_user: dict = Depends(require_role(["admin"]))):
+    """Bulk update image URLs for multiple menu items"""
+    updated = 0
+    for update in data.updates:
+        result = await db.menu_items.update_one(
+            {"id": update["item_id"]},
+            {"$set": {"image_url": update["image_url"]}}
+        )
+        if result.modified_count > 0:
+            updated += 1
+    return {"message": f"Updated {updated} of {len(data.updates)} items"}
+
+@api_router.get("/menu/items/all")
+async def get_all_menu_items(current_user: dict = Depends(require_role(["admin"]))):
+    """Get all menu items including unavailable ones (admin only)"""
+    items = await db.menu_items.find({}, {"_id": 0}).to_list(1000)
+    for item in items:
+        if isinstance(item.get('created_at'), str):
+            item['created_at'] = datetime.fromisoformat(item['created_at'])
+    return items
+
+
+
 # ============================================================================
 # TABLE ROUTES
 # ============================================================================
