@@ -52,6 +52,12 @@ const AdminDashboard = () => {
   const [reviewFilter, setReviewFilter] = useState({ status: 'all', rating: 'all' });
   const [replyText, setReplyText] = useState({});
   const [expandedReview, setExpandedReview] = useState(null);
+  const [menuItems, setMenuItems] = useState([]);
+  const [menuCategories, setMenuCategories] = useState([]);
+  const [imageEdits, setImageEdits] = useState({});
+  const [savingImages, setSavingImages] = useState({});
+  const [menuSearchQuery, setMenuSearchQuery] = useState('');
+  const [menuCategoryFilter, setMenuCategoryFilter] = useState('all');
 
   const headers = { Authorization: `Bearer ${token}` };
 
