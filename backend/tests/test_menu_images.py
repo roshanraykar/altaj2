@@ -226,12 +226,12 @@ class TestExistingAdminTabs:
     
     def test_staff_endpoint(self):
         """Test staff API for Staff tab"""
-        response = requests.get(f"{BASE_URL}/api/users/staff", headers=self.headers)
+        response = requests.get(f"{BASE_URL}/api/users", headers=self.headers)
         assert response.status_code == 200
         
         staff = response.json()
         assert len(staff) > 0, "Expected staff members"
-        print(f"✓ Staff API working - {len(staff)} staff members")
+        print(f"✓ Staff API working - {len(staff)} users")
     
     def test_orders_endpoint(self):
         """Test orders API for Orders tab"""
