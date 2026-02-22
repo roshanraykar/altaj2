@@ -438,6 +438,9 @@ const AdminDashboard = () => {
             <TabsTrigger value="reviews" data-testid="tab-reviews">
               <Star className="mr-2 h-4 w-4" /> Reviews
             </TabsTrigger>
+            <TabsTrigger value="menu-images" data-testid="tab-menu-images">
+              <ImageIcon className="mr-2 h-4 w-4" /> Menu Images
+            </TabsTrigger>
             <TabsTrigger value="reports" data-testid="tab-reports">
               <BarChart3 className="mr-2 h-4 w-4" /> Reports
             </TabsTrigger>
