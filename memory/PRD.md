@@ -1,265 +1,95 @@
-# Al Taj Restaurant Management Platform - PRD
+# Al Taj Restaurant - Product Requirements Document
 
 ## Original Problem Statement
-Build a comprehensive, enterprise-level multi-branch restaurant management platform for "Al Taj Restaurant" based in Hubli, Karnataka, India. The system includes a full-stack web application with future native mobile apps.
+Build a comprehensive, enterprise-level multi-branch restaurant management platform for "Al Taj Restaurant." Full-stack web application (FastAPI backend, React frontend, MongoDB) that serves as the backend for future native mobile apps.
 
-## User Personas
-- **Admin**: Central control for branches, menu, pricing, staff management, and system-wide reporting
-- **Branch Manager**: Branch-specific operations and staff oversight
-- **Kitchen Staff**: Order queue management and preparation tracking
-- **Delivery Partner**: Pickup ready orders and manage delivery status
-- **Customer**: Browse menu, place orders (takeaway, delivery), track orders, view order history
-- **Waiter**: (Temporarily disabled)
+## Branding & UI
+- "Classy yet premium" UI using the brand's red (#b2101f) / gold (#c59433) / white color theme
+- Arabic-themed design elements
+- Hero video on homepage
 
-## Brand Colors
-- **Primary Red**: #b2101f, #e70825
-- **Gold Accent**: #c59433
-- **White Background**
-
-## Tech Stack
-- **Frontend**: React, Tailwind CSS, Shadcn UI, React Router
-- **Backend**: FastAPI, Pydantic
-- **Database**: MongoDB (motor async driver)
-- **Authentication**: JWT, passlib for password hashing
-- **Payments**: Razorpay (LIVE keys)
-- **Maps**: Google Maps API for location detection
-
-## Current Implementation Status
-
-### ✅ Completed Features (Feb 19, 2025 - Session 2)
-
-1. **Review/Feedback System (COMPLETE)**
-   - **Customer Side:**
-     - Auto-popup after delivery (max 3 dismissals per order)
-     - "Rate This Order" button in Order History for delivered orders
-     - 1-5 star rating with optional text review (500 chars max)
-     - Character counter and submission confirmation
-   - **Admin Side:**
-     - New "Reviews" tab in Admin Dashboard
-     - Stats cards: Average rating, Total reviews, Published/Private counts
-     - Rating distribution bar chart
-     - Filters by status (All/Private/Published) and rating
-     - Publish/Unpublish reviews
-     - Reply to reviews (300 chars max)
-     - Delete reviews with confirmation
-   - **Public Display:**
-     - "Customer Reviews" section on homepage
-     - Shows only published reviews
-     - Displays: name, stars, review text, admin reply, date
-     - Overall rating summary
-
-2. **Coupon Management System (COMPLETE)**
-   - Admin panel "Coupons" tab
-   - Create coupons: code, discount type (% or fixed), value, min order, max discount, dates, usage limit
-   - Toggle coupon active/inactive
-   - Delete coupons
-   - Backend validation endpoints ready
-
-3. **Print Order Feature (Kitchen)**
-   - "Print Order" button on each order card
-   - Formats for 58mm/2-inch thermal receipt printers
-   - Shows: Order #, items with quantity, special instructions, timestamp
-
-4. **Google/Facebook Login Removed**
-   - Only Email and Mobile OTP login options remain
-
-5. **Buzzer Sound Logic Fixed**
-   - Audio stops immediately when toggled off (Kitchen & Delivery dashboards)
-
-6. **UI Improvements:**
-   - "Detect Nearest Location" button text
-   - Gold-colored "Get App" button (visible on both pages)
-   - Floating download button removed from order page
-
-### ✅ Completed Features (Feb 19, 2025 - Session 1)
-
-1. **Homepage Product Images Updated**
-   - Chicken Biryani, Butter Chicken, Tandoori Chicken with real food photos
-   - Images hosted on customer-assets.emergentagent.com
-
-2. **Homepage Special Sections**
-   - **Combos Highlight**: 3 combo cards (Family Feast, Couple Special, Solo Delight) with gradient styling
-   - **Raw Meat & Ready to Cook Section**: Cards with icons, tags (Chicken, Mutton, Fish), gradient backgrounds
-
-3. **Order Page Accordion Menu**
-   - All menu categories displayed as collapsible accordions
-   - Collapsed by default for optimized space
-   - Click to expand/collapse each category
-   - Menu items shown in grid layout when expanded
-
-4. **Sticky Category Navigation Improved**
-   - Flex-wrap layout (no horizontal scrollbar)
-   - Special color-coding for categories:
-     - **Combos**: Purple theme
-     - **Raw Meat**: Red/orange theme
-     - **Ready to Cook**: Amber/yellow theme
-   - Click scrolls to and expands the target category
-
-5. **Floating Download Button Removed**
-   - Removed from bottom-right of order page as requested
-   - "Get App" button remains in header
-
-6. **Social Login Integration**
-   - **Google Login**: Integrated via Emergent Auth (auth.emergentagent.com)
-   - **Facebook Login**: Button present (requires Facebook App ID configuration)
-   - Backend endpoints: `/api/auth/google/session`, `/api/auth/facebook`
-
-### ✅ Completed Features (Feb 18, 2025)
-
-1. **Brand Theme Update**
-   - Updated to white-red color theme (#b2101f, #e70825, #c59433 gold)
-   - Arabic-themed decorative elements (golden lines, diamond patterns)
-   - Premium shadows and borders throughout
-
-2. **Google Maps Integration**
-   - Auto-detect user's current location
-   - Calculate distance to each branch
-   - Auto-select nearest branch
-   - "Detect Location" button
-
-3. **New Menu Categories**
-   - **Combos**: 5 value meal combos with discounts
-   - **Raw Meat**: Chicken leg piece, boneless, wings, breast, liver, mutton
-   - **Ready to Cook**: Pre-marinated meals for home cooking
-
-4. **Category Navigation**
-   - Sticky category sub-menu on order page
-   - Click to scroll to category section
-   - Back to top button (arrow up)
-
-5. **Buzzer Sound for New Orders**
-   - Kitchen Dashboard: Continuous alert until acknowledged
-   - "Stop Alert" button for each new order
-   - Sound On/Off toggle in header
-
-6. **Discount Coupons System**
-   - Admin can create coupons (percentage or fixed discount)
-   - Min order value, max discount, usage limits
-   - Apply coupon API endpoint
-
-7. **WhatsApp Chat Integration**
-   - Floating WhatsApp button on all pages
-   - Links to: wa.me/918123884771
-   - "Need help? Chat now" hover text
-
-8. **UI Improvements**
-   - Removed 24/7 service info
-   - Removed info@altajrestaurant.com
-   - Get App button visible in header
-   - Premium home page with Arabic styling
-
-9. **Waiter & Dine-in Disabled**
-   - Waiter module route disabled
-   - Dine-in tab removed from order page
-   - Only Takeaway and Delivery available
-
-### ⏳ Pending Features
-
-1. **SMS Notifications (Twilio)**
-   - User confirmed Twilio for SMS + WhatsApp
-   - Awaiting Twilio credentials from user
-
-2. **WhatsApp Notifications (Twilio)**
-   - Same Twilio account for WhatsApp Business API
-   - Awaiting credentials
-
-3. **Push Notifications (Firebase)**
-   - Requires Firebase project setup
-   - User needs to provide Firebase config
-
-4. **OTP Login (SMS)**
-   - Backend ready but awaiting SMS provider credentials
-
-5. **Coupon Frontend Integration (Checkout)**
-   - Apply coupon field on checkout page
-   - Backend validation ready
-
-6. **Native Mobile Apps**
-   - To be built using Mobile Agent (Expo/React Native)
-   - Prompt prepared for user
-
-### 📋 Test Credentials
-
-| Role | Email | Password |
-|------|-------|----------|
-| Admin | admin@altaj.com | admin123 |
-| Customer | cust@altaj.com | cust123 |
-| Kitchen | kitchen@altaj.com | kit123 |
-| Delivery | del@altaj.com | del123 |
-| Manager | mgr1@altaj.com | mgr123 |
-
-### 📍 URLs
-
-| Page | Path |
-|------|------|
-| Home | / |
-| Order Menu | /order |
-| Login | /login |
-| Customer Orders | /my-orders |
-| Kitchen Dashboard | /kitchen |
-| Delivery Dashboard | /delivery |
-| Admin Dashboard | /admin |
-
-### 💰 Cost Summary
-
-| Item | Cost |
-|------|------|
-| Emergent Deployment | 50 credits/month |
-| Google Play Account | $25 one-time |
-| Apple Developer | $99/year |
-| Petpooja (2 outlets) | ₹10,620/year |
-| Razorpay | 2% per transaction |
-| SMS (OTP) | ~₹800/month |
-| Google Maps | Free tier ($200 credit) |
-
-### 🔗 Key API Endpoints
-
-**Reviews:**
-- `POST /api/reviews` - Customer submits review
-- `GET /api/reviews` - Admin gets all reviews (with filters)
-- `GET /api/reviews/public` - Public published reviews
-- `GET /api/reviews/stats` - Aggregated stats for admin
-- `PATCH /api/reviews/{id}/publish` - Admin publishes
-- `PATCH /api/reviews/{id}/unpublish` - Admin unpublishes
-- `PATCH /api/reviews/{id}/reply` - Admin adds response
-- `DELETE /api/reviews/{id}` - Admin deletes
-- `GET /api/orders/{id}/review-status` - Check if order reviewed
-
-**Auth:**
-- `POST /api/auth/google/session` - Exchange Emergent Auth session for JWT (REMOVED)
-- `POST /api/auth/facebook` - Facebook OAuth login (REMOVED)
-
-**Coupons:**
-- `POST /api/coupons` - Create coupon (Admin)
-- `GET /api/coupons` - List coupons (Admin)
-- `POST /api/coupons/apply` - Validate and apply coupon
-- `PUT /api/coupons/{id}` - Enable/disable coupon
-- `DELETE /api/coupons/{id}` - Delete coupon
-
-### Architecture
-
+## Core Architecture
 ```
 /app/
 ├── backend/
-│   ├── server.py (All routes & models including social auth)
-│   ├── seed_data.py (Database seeding)
-│   └── .env (MONGO_URL, RAZORPAY keys)
+│   ├── .env (MONGO_URL, DB_NAME, JWT_SECRET, RAZORPAY keys)
+│   ├── server.py (Monolithic API - auth, orders, coupons, reviews, menu)
+│   ├── seed_data.py
+│   └── seed_images.py (New - seeds food images for menu items)
 ├── frontend/
-│   ├── src/
-│   │   ├── pages/
-│   │   │   ├── NewLandingPage.js (Home with product images, combos, raw meat sections)
-│   │   │   ├── LandingPage.js (Order page with accordion menu)
-│   │   │   ├── LoginPage.js (Email, Mobile, Google, Facebook login)
-│   │   │   ├── AuthCallback.js (Handles Google OAuth callback)
-│   │   │   ├── KitchenDashboard.js (with buzzer)
-│   │   │   ├── DeliveryDashboard.js
-│   │   │   └── ...
-│   │   └── components/
-│   │       └── PWAInstallPrompt.js (Get App popup components)
-│   └── public/
-│       ├── altaj-logo.png
-│       ├── hero-video.mp4
-│       └── notification.mp3 (buzzer sound)
-└── memory/
-    └── PRD.md
+│   ├── .env (REACT_APP_BACKEND_URL)
+│   ├── src/pages/ (Admin, Customer, Kitchen, Delivery dashboards, Landing, Login, Checkout, Order Tracking)
+│   └── src/components/ (PWAInstallPrompt, PrintableOrder, ReviewPopup)
+└── memory/PRD.md
 ```
+
+## Authentication
+- JWT-based email/password login
+- Social logins: EXPLICITLY REMOVED (do not re-implement)
+- Roles: admin, customer, kitchen_staff, delivery_partner, branch_manager, waiter
+
+## Test Credentials
+- Admin: admin@altaj.com / admin123
+- Customer: cust@altaj.com / cust123
+- Kitchen (Old Hubli): k1b1@altaj.com / kit123
+- Kitchen (Shirur Park): k1b2@altaj.com / kit123
+- Delivery (Old Hubli): d1b1@altaj.com / del123
+- Delivery (Shirur Park): d1b2@altaj.com / del123
+
+## Key API Endpoints
+- `/api/auth/login`, `/api/auth/register`
+- `/api/branches`, `/api/menu/categories`, `/api/menu/items`
+- `/api/menu/items/all` (admin), `/api/menu/items/{id}/image` (PATCH, admin)
+- `/api/menu/items/bulk-images` (PATCH, admin)
+- `/api/orders/*`, `/api/payment/*`
+- `/api/coupons/*`, `/api/coupons/apply`
+- `/api/reviews/*`, `/api/reviews/public`, `/api/reviews/stats`
+
+## DB Schema (Key Collections)
+- **menu_items**: {id, name, description, category_id, base_price, image_url, is_vegetarian, is_available, branch_ids, created_at}
+- **menu_categories**: {id, name, display_order}
+- **reviews**: {order_id, customer_id, star_rating, review_text, status, admin_response, created_at}
+- **coupons**: {code, description, discount_type, value, min_order_value, max_discount, valid_from, valid_until, usage_limit, is_active}
+
+## Implemented Features (Completed)
+1. Multi-role authentication (JWT)
+2. Branch management (2 branches: Old Hubli, Shirur Park)
+3. Full menu system (14 categories, 183 items)
+4. **Product Image Management** (Feb 2026) - All 183 items have food images, admin can manage via Menu Images tab
+5. Order system (create, track, update status)
+6. Cart with GST calculation
+7. Razorpay payment integration (LIVE keys)
+8. Coupon management system (CRUD + apply)
+9. Review & rating system (customer submit, admin moderate, public display)
+10. Kitchen dashboard with order printing (58mm thermal receipt)
+11. Delivery dashboard
+12. Customer dashboard with order history
+13. Buzzer/notification sound for new orders
+14. Google Maps integration for branch location
+15. PWA support with install prompts
+16. WhatsApp contact button
+17. Accordion-style menu with sticky category navigation
+18. Special category styling (Combos, Raw Meat, Ready to Cook)
+
+## Known Issues
+- **Buzzer Sound (P1)**: Does not stop immediately when toggled off (recurring, 2x)
+- **Custom Domain Sync (P2)**: altajfoods.com may show older version - .gitignore fix applied, needs redeploy
+- **.gitignore was corrupted**: Fixed - removed duplicate *.env blocking rules
+
+## Blocked Items
+- OTP Login: Awaiting SMS provider credentials
+- Push Notifications: Awaiting Firebase credentials
+- SMS/WhatsApp Notifications: Awaiting Twilio credentials
+
+## Upcoming Tasks (Prioritized)
+- P1: Fix buzzer sound logic reliably
+- P1: SMS & WhatsApp notifications (needs Twilio)
+- P2: Complete UI/theme consistency across all pages
+- P2: Backend refactoring (break server.py into routers/models/services)
+- P3: Frontend state management (Zustand)
+- P3: Native mobile apps (prompts provided to user)
+
+## 3rd Party Integrations
+- Razorpay (Payments) - LIVE keys integrated
+- Google Maps - API key integrated
+- react-to-print - Kitchen order printing
