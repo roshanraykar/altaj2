@@ -38,10 +38,12 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 
 ## Key API Endpoints
 - `/api/auth/login`, `/api/auth/register`
-- `/api/branches`, `/api/menu/categories`, `/api/menu/items`
+- `/api/branches`, `/api/nearest-branch?latitude=X&longitude=Y` (auto-detect nearest branch)
+- `/api/menu/categories`, `/api/menu/items`
 - `/api/menu/items/all` (admin), `/api/menu/items/{id}/image` (PATCH, admin)
 - `/api/menu/items/bulk-images` (PATCH, admin)
-- `/api/orders/*`, `/api/payment/*`
+- `/api/orders/*` (branch_id now optional, auto-assigned via user_latitude/user_longitude)
+- `/api/payment/*`
 - `/api/coupons/*`, `/api/coupons/apply`
 - `/api/reviews/*`, `/api/reviews/public`, `/api/reviews/stats`
 
