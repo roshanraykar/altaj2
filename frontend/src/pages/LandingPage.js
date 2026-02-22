@@ -289,7 +289,7 @@ const LandingPage = () => {
       toast({ title: 'Delivery unavailable', description: 'All delivery partners are busy. Try takeaway instead.', variant: 'destructive' });
       return;
     }
-    navigate('/checkout', { state: { cart, selectedBranch, orderType, selectedTable } });
+    navigate('/checkout', { state: { cart, selectedBranch, orderType, selectedTable, userLocation } });
   };
 
   const handleOrderTypeChange = (type) => {
