@@ -1093,15 +1093,30 @@ async def get_my_delivery_profile(current_user: dict = Depends(get_current_user)
 
 @api_router.post("/orders", response_model=Order)
 async def create_order(order_data: OrderCreate):
+    # Auto-assign nearest branch if branch_id not provided
+    branch_id = order_data.branch_id
+    if not branch_id:
+        if order_data.user_latitude is not None and order_data.user_longitude is not None:
+            nearest = await find_nearest_branch(order_data.user_latitude, order_data.user_longitude)
+            if nearest:
+                branch_id = nearest["id"]
+        if not branch_id:
+            # Fallback: assign first active branch
+            fallback = await db.branches.find_one({"is_active": True}, {"_id": 0})
+            if fallback:
+                branch_id = fallback["id"]
+            else:
+                raise HTTPException(status_code=400, detail="No active branches available")
+    
     # Validate branch exists
-    branch = await db.branches.find_one({"id": order_data.branch_id}, {"_id": 0})
+    branch = await db.branches.find_one({"id": branch_id}, {"_id": 0})
     if not branch:
         raise HTTPException(status_code=400, detail="Invalid branch_id")
     
     # For delivery orders, check if delivery is available
     if order_data.order_type == "delivery":
         available_partners = await db.delivery_partners.count_documents({
-            "branch_id": order_data.branch_id,
+            "branch_id": branch_id,
             "status": "available"
         })
         if available_partners == 0:
@@ -1126,6 +1141,10 @@ async def create_order(order_data: OrderCreate):
     order_number = f"ALT{order_count:06d}"
     
     order_dict = order_data.model_dump()
+    order_dict["branch_id"] = branch_id  # Ensure the auto-assigned branch is used
+    # Remove coordinate fields from order document
+    order_dict.pop("user_latitude", None)
+    order_dict.pop("user_longitude", None)
     order_dict.update({
         "order_number": order_number,
         "subtotal": subtotal,
