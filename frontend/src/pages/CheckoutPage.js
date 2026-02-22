@@ -425,10 +425,6 @@ const CheckoutPage = () => {
               <CardContent>
                 <div className="space-y-3 mb-4">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Branch:</span>
-                    <span className="font-medium text-right">{selectedBranch.name}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
                     <span className="text-gray-600">Order Type:</span>
                     <span className="font-medium capitalize">{orderType.replace('_', ' ')}</span>
                   </div>
