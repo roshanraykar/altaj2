@@ -755,8 +755,46 @@ async def facebook_auth(request: FacebookAuthRequest):
         return AuthResponse(access_token=access_token, user=user)
 
 # ============================================================================
+# BRANCH HELPER - Haversine distance calculation
+# ============================================================================
+
+def haversine_distance(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    R = 6371  # Earth's radius in km
+    d_lat = math.radians(lat2 - lat1)
+    d_lon = math.radians(lon2 - lon1)
+    a = math.sin(d_lat / 2) ** 2 + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(d_lon / 2) ** 2
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1 - a))
+    return R * c
+
+async def find_nearest_branch(lat: float, lon: float):
+    branches = await db.branches.find({"is_active": True}, {"_id": 0}).to_list(100)
+    if not branches:
+        return None
+    nearest = None
+    min_dist = float('inf')
+    for branch in branches:
+        b_lat = branch.get("latitude")
+        b_lon = branch.get("longitude")
+        if b_lat is not None and b_lon is not None:
+            dist = haversine_distance(lat, lon, b_lat, b_lon)
+            if dist < min_dist:
+                min_dist = dist
+                nearest = branch
+    return nearest
+
+# ============================================================================
 # BRANCH ROUTES
 # ============================================================================
+
+@api_router.get("/nearest-branch")
+async def get_nearest_branch(latitude: float, longitude: float):
+    branch = await find_nearest_branch(latitude, longitude)
+    if not branch:
+        raise HTTPException(status_code=404, detail="No active branches found")
+    if isinstance(branch.get('created_at'), str):
+        branch['created_at'] = datetime.fromisoformat(branch['created_at'])
+    dist = haversine_distance(latitude, longitude, branch["latitude"], branch["longitude"])
+    return {"branch": branch, "distance_km": round(dist, 1)}
 
 @api_router.post("/branches", response_model=Branch)
 async def create_branch(branch_data: BranchCreate, current_user: dict = Depends(require_role(["admin"]))):
