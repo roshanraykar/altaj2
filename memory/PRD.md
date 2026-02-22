@@ -57,7 +57,7 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 1. Multi-role authentication (JWT)
 2. Branch management (2 branches: Old Hubli, Shirur Park)
 3. Full menu system (14 categories, 183 items)
-4. **Product Image Management** (Feb 2026) - All 183 items have food images, admin can manage via Menu Images tab
+4. **Product Image Management** (Feb 2026) - All 183 items have AI-generated food images
 5. Order system (create, track, update status)
 6. Cart with GST calculation
 7. Razorpay payment integration (LIVE keys)
@@ -72,6 +72,7 @@ Build a comprehensive, enterprise-level multi-branch restaurant management platf
 16. WhatsApp contact button
 17. Accordion-style menu with sticky category navigation
 18. Special category styling (Combos, Raw Meat, Ready to Cook)
+19. **Auto Branch Assignment** (Feb 22, 2026) - Branch selection hidden from customers. Backend auto-assigns nearest branch using GPS (Haversine formula). New `/api/nearest-branch` endpoint. `OrderCreate.branch_id` optional with `user_latitude`/`user_longitude` fallback.
 
 ## Known Issues
 - **Buzzer Sound (P1)**: Does not stop immediately when toggled off (recurring, 2x)
