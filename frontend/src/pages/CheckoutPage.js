@@ -222,13 +222,15 @@ const CheckoutPage = () => {
         customer_name: customerInfo.name.trim(),
         customer_phone: formatPhoneNumber(customerInfo.phone),
         customer_email: customerInfo.email.trim() || null,
-        branch_id: selectedBranch.id,
+        branch_id: selectedBranch?.id || null,
         order_type: orderType,
         items: cart,
         delivery_address: orderType === 'delivery' ? customerInfo.delivery_address.trim() : null,
         table_id: orderType === 'dine_in' && selectedTable ? selectedTable.id : null,
         special_instructions: customerInfo.special_instructions.trim() || null,
-        payment_method: paymentMethod
+        payment_method: paymentMethod,
+        user_latitude: userLocation?.lat || null,
+        user_longitude: userLocation?.lng || null
       };
 
       const response = await axios.post(`${API}/orders`, orderData);
