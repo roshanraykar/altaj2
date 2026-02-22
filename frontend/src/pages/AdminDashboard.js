@@ -291,6 +291,66 @@ const AdminDashboard = () => {
     if (token) fetchReviews();
   }, [reviewFilter]);
 
+  const fetchMenuItems = async () => {
+    try {
+      const response = await axios.get(`${API}/menu/items/all`, { headers });
+      setMenuItems(response.data);
+    } catch (error) {
+      // Fallback to public endpoint
+      try {
+        const response = await axios.get(`${API}/menu/items?limit=500`);
+        setMenuItems(response.data);
+      } catch (err) {
+        console.error('Failed to fetch menu items:', err);
+      }
+    }
+  };
+
+  const fetchMenuCategories = async () => {
+    try {
+      const response = await axios.get(`${API}/menu/categories`);
+      setMenuCategories(response.data);
+    } catch (error) {
+      console.error('Failed to fetch menu categories:', error);
+    }
+  };
+
+  const handleImageUrlChange = (itemId, url) => {
+    setImageEdits(prev => ({ ...prev, [itemId]: url }));
+  };
+
+  const saveItemImage = async (itemId) => {
+    const imageUrl = imageEdits[itemId];
+    if (!imageUrl) return;
+    setSavingImages(prev => ({ ...prev, [itemId]: true }));
+    try {
+      await axios.patch(`${API}/menu/items/${itemId}/image`, { image_url: imageUrl }, { headers });
+      toast({ title: 'Image Updated', description: 'Menu item image saved successfully' });
+      setMenuItems(prev => prev.map(item => item.id === itemId ? { ...item, image_url: imageUrl } : item));
+      setImageEdits(prev => { const n = { ...prev }; delete n[itemId]; return n; });
+    } catch (error) {
+      toast({ title: 'Failed to update image', description: error.response?.data?.detail || 'Try again', variant: 'destructive' });
+    }
+    setSavingImages(prev => ({ ...prev, [itemId]: false }));
+  };
+
+  const getFilteredMenuItems = () => {
+    let items = menuItems;
+    if (menuCategoryFilter !== 'all') {
+      items = items.filter(i => i.category_id === menuCategoryFilter);
+    }
+    if (menuSearchQuery.trim()) {
+      const q = menuSearchQuery.toLowerCase();
+      items = items.filter(i => i.name.toLowerCase().includes(q));
+    }
+    return items;
+  };
+
+  const getCategoryName = (categoryId) => {
+    const cat = menuCategories.find(c => c.id === categoryId);
+    return cat ? cat.name : 'Unknown';
+  };
+
   const handleCreateUser = async () => {
     try {
       // Validate required fields
