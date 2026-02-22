@@ -33,9 +33,9 @@ class TestMenuItemImages:
     
     def test_get_all_menu_items_admin_only(self):
         """Test GET /api/menu/items/all requires admin auth"""
-        # Test without auth - should fail
+        # Test without auth - should fail (403 for role check or 401 for no auth)
         response = requests.get(f"{BASE_URL}/api/menu/items/all")
-        assert response.status_code == 401, "Should require authentication"
+        assert response.status_code in [401, 403], "Should require authentication"
         
         # Test with admin auth - should succeed
         response = requests.get(f"{BASE_URL}/api/menu/items/all", headers=self.headers)
@@ -112,12 +112,12 @@ class TestMenuItemImages:
         items = response.json()
         item_id = items[0]["id"]
         
-        # Try to update without auth
+        # Try to update without auth (403 for role check or 401 for no auth)
         response = requests.patch(
             f"{BASE_URL}/api/menu/items/{item_id}/image",
             json={"image_url": "https://example.com/test.jpg"}
         )
-        assert response.status_code == 401, "Should require authentication"
+        assert response.status_code in [401, 403], "Should require authentication"
         print("✓ Image update correctly requires authentication")
     
     def test_update_nonexistent_item_returns_404(self):
