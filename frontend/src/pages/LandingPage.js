@@ -144,21 +144,12 @@ const LandingPage = () => {
             setBranchDistances(distances);
             if (nearestBranch) {
               setSelectedBranch(nearestBranch);
-              toast({
-                title: '📍 Location detected!',
-                description: `Nearest branch: ${nearestBranch.name} (${distances[nearestBranch.id]} km away)`
-              });
             }
           }
           setLocationLoading(false);
         },
         (error) => {
           console.error('Geolocation error:', error);
-          toast({
-            title: 'Location access denied',
-            description: 'Please select a branch manually',
-            variant: 'destructive'
-          });
           setLocationLoading(false);
         },
         { enableHighAccuracy: true, timeout: 10000 }
