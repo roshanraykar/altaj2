@@ -16,7 +16,7 @@ const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { cart, selectedBranch, orderType, selectedTable } = location.state || {};
+  const { cart, selectedBranch, orderType, selectedTable, userLocation } = location.state || {};
 
   const [customerInfo, setCustomerInfo] = useState({
     name: '',
