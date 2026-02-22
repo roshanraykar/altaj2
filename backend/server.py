@@ -1316,8 +1316,12 @@ async def apply_coupon(data: CouponApply):
     
     if isinstance(valid_from, str):
         valid_from = datetime.fromisoformat(valid_from.replace('Z', '+00:00'))
+    elif isinstance(valid_from, datetime) and valid_from.tzinfo is None:
+        valid_from = valid_from.replace(tzinfo=timezone.utc)
     if isinstance(valid_until, str):
         valid_until = datetime.fromisoformat(valid_until.replace('Z', '+00:00'))
+    elif isinstance(valid_until, datetime) and valid_until.tzinfo is None:
+        valid_until = valid_until.replace(tzinfo=timezone.utc)
     
     if now < valid_from:
         raise HTTPException(status_code=400, detail="Coupon is not yet active")
