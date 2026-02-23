@@ -489,6 +489,13 @@ async def auto_seed_if_empty(db):
         await db.menu_categories.insert_many(docs)
         print(f"[AUTO-SEED] Created {len(docs)} categories")
     else:
+        # Repair: ensure all categories have is_active field
+        result = await db.menu_categories.update_many(
+            {"is_active": {"$exists": False}},
+            {"$set": {"is_active": True}}
+        )
+        if result.modified_count > 0:
+            print(f"[AUTO-SEED] Repaired {result.modified_count} categories (added is_active)")
         existing = await db.menu_categories.find({}, {"_id": 0, "id": 1, "name": 1}).to_list(100)
         cat_ids = {c["name"]: c["id"] for c in existing}
 
