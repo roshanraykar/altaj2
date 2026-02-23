@@ -72,19 +72,26 @@ async def auto_seed_if_empty(db):
         {"name": "Ready to Cook", "description": "Marinated & ready to cook at home", "display_order": 13},
     ]
     cat_ids = {}
-    cat_docs = []
-    for cat in categories_data:
-        cid = str(uuid.uuid4())
-        cat_ids[cat["name"]] = cid
-        cat_docs.append({
-            "id": cid,
-            "name": cat["name"],
-            "description": cat["description"],
-            "display_order": cat["display_order"],
-            "created_at": datetime.now(timezone.utc).isoformat()
-        })
-    await db.menu_categories.insert_many(cat_docs)
-    print(f"[AUTO-SEED] Created {len(cat_docs)} categories")
+
+    if category_count == 0:
+        cat_docs = []
+        for cat in categories_data:
+            cid = str(uuid.uuid4())
+            cat_ids[cat["name"]] = cid
+            cat_docs.append({
+                "id": cid,
+                "name": cat["name"],
+                "description": cat["description"],
+                "display_order": cat["display_order"],
+                "is_active": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            })
+        await db.menu_categories.insert_many(cat_docs)
+        print(f"[AUTO-SEED] Created {len(cat_docs)} categories")
+    else:
+        # Load existing category IDs
+        existing_cats = await db.menu_categories.find({}, {"_id": 0, "id": 1, "name": 1}).to_list(100)
+        cat_ids = {c["name"]: c["id"] for c in existing_cats}
 
     # 3. Menu Items
     menu_items_raw = [
