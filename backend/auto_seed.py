@@ -94,6 +94,7 @@ async def auto_seed_if_empty(db):
         cat_ids = {c["name"]: c["id"] for c in existing_cats}
 
     # 3. Menu Items
+    if item_count == 0 and cat_ids:
     menu_items_raw = [
         # Chinese Thrillers
         {"name": "Chicken Manchuri (Boneless)", "category": "Chinese Thrillers", "price": 260.00, "vegetarian": False},
