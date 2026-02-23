@@ -10,10 +10,14 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 async def auto_seed_if_empty(db):
-    """Check if database is empty and seed if needed."""
+    """Check if database is empty and seed if needed. Also repairs partial seeds."""
     branch_count = await db.branches.count_documents({})
-    if branch_count > 0:
-        return False  # Already seeded
+    category_count = await db.menu_categories.count_documents({})
+    item_count = await db.menu_items.count_documents({})
+    user_count = await db.users.count_documents({})
+
+    if branch_count > 0 and category_count > 0 and item_count > 0 and user_count > 0:
+        return False  # Already fully seeded
 
     print("[AUTO-SEED] Empty database detected. Seeding data...")
 
