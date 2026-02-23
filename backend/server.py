@@ -1935,6 +1935,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+@app.on_event("startup")
+async def startup_auto_seed():
+    from auto_seed import auto_seed_if_empty
+    try:
+        await auto_seed_if_empty(db)
+    except Exception as e:
+        logging.error(f"Auto-seed error: {e}")
+
 @app.on_event("shutdown")
 async def shutdown_db_client():
     client.close()
