@@ -19,36 +19,40 @@ async def auto_seed_if_empty(db):
     if branch_count > 0 and category_count > 0 and item_count > 0 and user_count > 0:
         return False  # Already fully seeded
 
-    print("[AUTO-SEED] Empty database detected. Seeding data...")
+    print("[AUTO-SEED] Incomplete database detected. Seeding missing data...")
 
     # 1. Branches
-    branches = [
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Al Taj Family Restaurant - Old Hubli",
-            "address": "CTS No 5049, Vishal Nagar, Gudihal Road, Old Hubli, Hubballi - 580024",
-            "phone": "+91-836-2245678",
-            "email": "oldhubli@altajrestaurant.com",
-            "latitude": 15.3647,
-            "longitude": 75.1240,
-            "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        },
-        {
-            "id": str(uuid.uuid4()),
-            "name": "Al Taj Restaurant & Fast Food - Shirur Park",
-            "address": "Shirur Park, JC Nagar, Opposite Chetan College, Vidyanagar, Hubballi - 580021",
-            "phone": "+91-836-2356789",
-            "email": "shirurpark@altajrestaurant.com",
-            "latitude": 15.3486,
-            "longitude": 75.1348,
-            "is_active": True,
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-    ]
-    await db.branches.insert_many(branches)
-    branch_ids = [b["id"] for b in branches]
-    print(f"[AUTO-SEED] Created {len(branches)} branches")
+    if branch_count == 0:
+        branches = [
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Al Taj Family Restaurant - Old Hubli",
+                "address": "CTS No 5049, Vishal Nagar, Gudihal Road, Old Hubli, Hubballi - 580024",
+                "phone": "+91-836-2245678",
+                "email": "oldhubli@altajrestaurant.com",
+                "latitude": 15.3647,
+                "longitude": 75.1240,
+                "is_active": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            },
+            {
+                "id": str(uuid.uuid4()),
+                "name": "Al Taj Restaurant & Fast Food - Shirur Park",
+                "address": "Shirur Park, JC Nagar, Opposite Chetan College, Vidyanagar, Hubballi - 580021",
+                "phone": "+91-836-2356789",
+                "email": "shirurpark@altajrestaurant.com",
+                "latitude": 15.3486,
+                "longitude": 75.1348,
+                "is_active": True,
+                "created_at": datetime.now(timezone.utc).isoformat()
+            }
+        ]
+        await db.branches.insert_many(branches)
+        print(f"[AUTO-SEED] Created {len(branches)} branches")
+
+    # Get branch IDs for staff assignment
+    all_branches = await db.branches.find({}, {"_id": 0, "id": 1}).to_list(10)
+    branch_ids = [b["id"] for b in all_branches]
 
     # 2. Categories
     categories_data = [
